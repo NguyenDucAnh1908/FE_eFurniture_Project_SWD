@@ -1,17 +1,8 @@
 import React from 'react'
-import Shop from './pages/Shop'
-import Home from './pages/Home'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Layout from "./components/Layout/Layout";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/shop' element={<Shop/>}/>
-        <Route path='/' element={<Home/>}/>
-      </Routes>
-    </BrowserRouter>
-  )
+  return <Layout />;
 }
 
 export default App
