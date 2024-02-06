@@ -1,5 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import Slider from "react-slick";
+import axios from 'axios';
+import { useEffect } from 'react';
+import { fetchallUser } from '../services/UserService';
 
 function Home() {
     const settings = {
@@ -9,7 +12,56 @@ function Home() {
         slidesToShow: 1,
         slidesToScroll: 1
     };
+    const [listProduct, setListProduct] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [products, setProducts] = useState([]);
 
+    useEffect(() => {
+        getProduct();
+        fetchCategories();
+        fetchProducts();
+    }, []);
+
+    const getProduct = async () => {
+        let res = await fetchallUser();
+        if (res && res.data) {
+            setListProduct(res.data)
+        }
+        console.log("Check res: ", res)
+    }
+
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get("http://localhost:8080/api/v1/categories");
+            if (response && response.data) {
+                setCategories(response.data);
+            }
+        } catch (error) {
+            console.error("Lỗi khi lấy danh sách danh mục:", error);
+        }
+    };
+
+    const fetchProducts = async (categoryId = null) => {
+        let url = 'http://localhost:8080/api/v1/products/category';
+        if (categoryId) {
+            url += `?category_id=${categoryId}`;
+        }
+
+        try {
+            const response = await axios.get(url);
+            if (response && response.data) {
+                setProducts(response.data);
+            }
+        } catch (error) {
+            console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+        }
+    };
+
+    const handleCategoryClick = (categoryId) => {
+        fetchProducts(categoryId);
+    };
+    console.log("product: ", products)
+    console.log(listProduct);
     return (
         <div>
             {/* <div className="preloader is-active">
@@ -269,7 +321,54 @@ function Home() {
                         <div className="section__content">
                             <div className="container">
                                 <div className="row">
-                                    <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
+                                    {listProduct && listProduct.length > 0 &&
+                                        listProduct.map((productItem, index) => {
+                                            return (
+                                                <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30" key={`products-${productItem}`}>
+                                                    <div className="product-r u-h-100">
+                                                        <div className="product-r__container">
+
+                                                            <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
+
+                                                                <img className="aspect__img" src={productItem.thumbnail} alt="" /></a>
+                                                            <div className="product-r__action-wrap">
+                                                                <ul className="product-r__action-list">
+                                                                    <li>
+
+                                                                        <a data-modal="modal" data-modal-id="#quick-look"><i className="fas fa-search-plus"></i></a></li>
+                                                                    <li>
+
+                                                                        <a data-modal="modal" data-modal-id="#add-to-cart"><i className="fas fa-plus-circle"></i></a></li>
+                                                                    <li>
+
+                                                                        <a href="signin.html"><i className="fas fa-heart"></i></a></li>
+                                                                    <li>
+
+                                                                        <a href="signin.html"><i className="fas fa-envelope"></i></a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div className="product-r__info-wrap">
+
+                                                            <span className="product-r__category">
+
+                                                                <a href="shop-side-version-2.html">{productItem.createdAt}</a></span>
+                                                            <div className="product-r__n-p-wrap">
+
+                                                                <span className="product-r__name">
+
+                                                                    <a href="product-detail.html">{productItem.name}</a></span>
+
+                                                                <span className="product-r__price">{productItem.price}</span></div>
+
+                                                            <span className="product-r__description">{productItem.description}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                    {/* <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
                                         <div className="product-r u-h-100">
                                             <div className="product-r__container">
 
@@ -309,8 +408,8 @@ function Home() {
                                                 <span className="product-r__description">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
+                                    </div> */}
+                                    {/* <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
                                         <div className="product-r u-h-100">
                                             <div className="product-r__container">
 
@@ -596,7 +695,7 @@ function Home() {
                                                 <span className="product-r__description">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
@@ -628,7 +727,7 @@ function Home() {
                         {/*====== Section Content ======*/}
                         <div className="section__content">
                             <div className="container">
-                                <div className="row">
+                                {/* <div className="row">
                                     <div className="col-lg-12">
                                         <div className="filter-category-container">
                                             <div className="filter__category-wrapper">
@@ -640,12 +739,6 @@ function Home() {
                                             <div className="filter__category-wrapper">
 
                                                 <button className="btn filter__btn filter__btn--style-2" type="button" data-filter=".bottom">BOTTOM</button></div>
-                                            <div className="filter__category-wrapper">
-
-                                                <button className="btn filter__btn filter__btn--style-2" type="button" data-filter=".footwear">FOOTWEAR</button></div>
-                                            <div className="filter__category-wrapper">
-
-                                                <button className="btn filter__btn filter__btn--style-2" type="button" data-filter=".accessories">ACCESSORIES</button></div>
                                         </div>
                                         <div className="filter__grid-wrapper u-s-m-t-30">
                                             <div className="row">
@@ -692,307 +785,40 @@ function Home() {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item outwear">
-                                                    <div className="product-bs">
-                                                        <div className="product-bs__container">
-                                                            <div className="product-bs__wrap">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12">
+                                        <div className="load-more">
 
+                                            <button className="btn btn--e-brand" type="button">Load More</button></div>
+                                    </div>
+                                </div> */}
+                                <div className="row">
+                                    <div className="col-lg-12">
+                                        <div className="filter-category-container">
+                                            {categories && categories.length > 0 && categories.map((category) => (
+                                                <div className="filter__category-wrapper" key={category.id}>
+                                                    <button className="btn filter__btn filter__btn--style-2" type="button" onClick={() => handleCategoryClick(category.id)}>
+                                                        {category.name}
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="filter__grid-wrapper u-s-m-t-30">
+                                            <div className="row">
+                                                {products && products.length > 0 && products.map((product, index) => (
+                                                    <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item" key={index}>
+                                                        <div className="product-bs">
+                                                            <div className="product-bs__container">
                                                                 <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
-
-                                                                    <img className="aspect__img" src="images/product/women/product15.jpg" alt="" /></a>
-                                                                <div className="product-bs__action-wrap">
-                                                                    <ul className="product-bs__action-list">
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#quick-look"><i className="fas fa-search-plus"></i></a></li>
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#add-to-cart"><i className="fas fa-plus-circle"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-heart"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-envelope"></i></a></li>
-                                                                    </ul>
-                                                                </div>
+                                                                    <img className="aspect__img" src={product.thumbnail} alt="" />
+                                                                </a>
+                                                                {/* Rest of your product details */}
                                                             </div>
-
-                                                            <span className="product-bs__category">
-
-                                                                <a href="shop-side-version-2.html">Women Clothing</a></span>
-
-                                                            <span className="product-bs__name">
-
-                                                                <a href="product-detail.html">Color Yellow Modest A Fashion</a></span>
-                                                            <div className="product-bs__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i>
-
-                                                                <span className="product-bs__review">(23)</span></div>
-
-                                                            <span className="product-bs__price">$125.00
-
-                                                                <span className="product-bs__discount">$160.00</span></span>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item bottom">
-                                                    <div className="product-bs">
-                                                        <div className="product-bs__container">
-                                                            <div className="product-bs__wrap">
-
-                                                                <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
-
-                                                                    <img className="aspect__img" src="images/product/men/product2.jpg" alt="" /></a>
-                                                                <div className="product-bs__action-wrap">
-                                                                    <ul className="product-bs__action-list">
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#quick-look"><i className="fas fa-search-plus"></i></a></li>
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#add-to-cart"><i className="fas fa-plus-circle"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-heart"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-envelope"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                            <span className="product-bs__category">
-
-                                                                <a href="shop-side-version-2.html">Men Clothing</a></span>
-
-                                                            <span className="product-bs__name">
-
-                                                                <a href="product-detail.html">White Full Men Underwear</a></span>
-                                                            <div className="product-bs__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i>
-
-                                                                <span className="product-bs__review">(23)</span></div>
-
-                                                            <span className="product-bs__price">$125.00
-
-                                                                <span className="product-bs__discount">$160.00</span></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item bottom">
-                                                    <div className="product-bs">
-                                                        <div className="product-bs__container">
-                                                            <div className="product-bs__wrap">
-
-                                                                <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
-
-                                                                    <img className="aspect__img" src="images/product/women/product3.jpg" alt="" /></a>
-                                                                <div className="product-bs__action-wrap">
-                                                                    <ul className="product-bs__action-list">
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#quick-look"><i className="fas fa-search-plus"></i></a></li>
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#add-to-cart"><i className="fas fa-plus-circle"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-heart"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-envelope"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                            <span className="product-bs__category">
-
-                                                                <a href="shop-side-version-2.html">Women Clothing</a></span>
-
-                                                            <span className="product-bs__name">
-
-                                                                <a href="product-detail.html">Color Yellow Modest B Fashion</a></span>
-                                                            <div className="product-bs__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i>
-
-                                                                <span className="product-bs__review">(23)</span></div>
-
-                                                            <span className="product-bs__price">$125.00
-
-                                                                <span className="product-bs__discount">$160.00</span></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item accessories">
-                                                    <div className="product-bs">
-                                                        <div className="product-bs__container">
-                                                            <div className="product-bs__wrap">
-
-                                                                <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
-
-                                                                    <img className="aspect__img" src="images/product/men/product3.jpg" alt="" /></a>
-                                                                <div className="product-bs__action-wrap">
-                                                                    <ul className="product-bs__action-list">
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#quick-look"><i className="fas fa-search-plus"></i></a></li>
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#add-to-cart"><i className="fas fa-plus-circle"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-heart"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-envelope"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                            <span className="product-bs__category">
-
-                                                                <a href="shop-side-version-2.html">Men Clothing</a></span>
-
-                                                            <span className="product-bs__name">
-
-                                                                <a href="product-detail.html">Blown Sunglasses For Deux</a></span>
-                                                            <div className="product-bs__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i>
-
-                                                                <span className="product-bs__review">(23)</span></div>
-
-                                                            <span className="product-bs__price">$125.00
-
-                                                                <span className="product-bs__discount">$160.00</span></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item accessories">
-                                                    <div className="product-bs">
-                                                        <div className="product-bs__container">
-                                                            <div className="product-bs__wrap">
-
-                                                                <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
-
-                                                                    <img className="aspect__img" src="images/product/women/product4.jpg" alt="" /></a>
-                                                                <div className="product-bs__action-wrap">
-                                                                    <ul className="product-bs__action-list">
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#quick-look"><i className="fas fa-search-plus"></i></a></li>
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#add-to-cart"><i className="fas fa-plus-circle"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-heart"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-envelope"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                            <span className="product-bs__category">
-
-                                                                <a href="shop-side-version-2.html">Women Clothing</a></span>
-
-                                                            <span className="product-bs__name">
-
-                                                                <a href="product-detail.html">Ladies Black Bag</a></span>
-                                                            <div className="product-bs__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i>
-
-                                                                <span className="product-bs__review">(23)</span></div>
-
-                                                            <span className="product-bs__price">$125.00
-
-                                                                <span className="product-bs__discount">$160.00</span></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item footwear">
-                                                    <div className="product-bs">
-                                                        <div className="product-bs__container">
-                                                            <div className="product-bs__wrap">
-
-                                                                <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
-
-                                                                    <img className="aspect__img" src="images/product/men/product13.jpg" alt="" /></a>
-                                                                <div className="product-bs__action-wrap">
-                                                                    <ul className="product-bs__action-list">
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#quick-look"><i className="fas fa-search-plus"></i></a></li>
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#add-to-cart"><i className="fas fa-plus-circle"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-heart"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-envelope"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                            <span className="product-bs__category">
-
-                                                                <a href="shop-side-version-2.html">Men Clothing</a></span>
-
-                                                            <span className="product-bs__name">
-
-                                                                <a href="product-detail.html">Casual Shoes Independence</a></span>
-                                                            <div className="product-bs__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i>
-
-                                                                <span className="product-bs__review">(23)</span></div>
-
-                                                            <span className="product-bs__price">$125.00
-
-                                                                <span className="product-bs__discount">$160.00</span></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item footwear">
-                                                    <div className="product-bs">
-                                                        <div className="product-bs__container">
-                                                            <div className="product-bs__wrap">
-
-                                                                <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
-
-                                                                    <img className="aspect__img" src="images/product/men/product14.jpg" alt="" /></a>
-                                                                <div className="product-bs__action-wrap">
-                                                                    <ul className="product-bs__action-list">
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#quick-look"><i className="fas fa-search-plus"></i></a></li>
-                                                                        <li>
-
-                                                                            <a data-modal="modal" data-modal-id="#add-to-cart"><i className="fas fa-plus-circle"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-heart"></i></a></li>
-                                                                        <li>
-
-                                                                            <a href="signin.html"><i className="fas fa-envelope"></i></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                            <span className="product-bs__category">
-
-                                                                <a href="shop-side-version-2.html">Men Clothing</a></span>
-
-                                                            <span className="product-bs__name">
-
-                                                                <a href="product-detail.html">Men Casual Shoes Charcoal</a></span>
-                                                            <div className="product-bs__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i>
-
-                                                                <span className="product-bs__review">(23)</span></div>
-
-                                                            <span className="product-bs__price">$125.00
-
-                                                                <span className="product-bs__discount">$160.00</span></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                ))}
                                             </div>
                                         </div>
                                     </div>
