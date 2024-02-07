@@ -1,6 +1,7 @@
 import React, { useEffect , useState} from 'react';
 import Slider from 'react-slick';
 import { fetchallUser, fetchallBrand} from '../../services/BrandApi/BrandApi';
+import './BrandSlider.css';
 //import {fetchallBrand} from '../services/';
 // import 'slick-carousel/slick/slick.css';
 // import 'slick-carousel/slick/slick-theme.css';
@@ -69,7 +70,7 @@ const BrandSlider = () => {
                         {listBrand && listBrand.map((brandItem, index) => (
                             <div className="brand-slide" key={index}>
                                 <a href="shop-side-version-2.html">
-                                    <img src={brandItem.logo} alt="" style={{ width: '186px', height: '60px' }} />
+                                    <img src={brandItem.logo} alt="" />
                                 </a>
                             </div>
                         ))}
