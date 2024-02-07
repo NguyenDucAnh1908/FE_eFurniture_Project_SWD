@@ -8,5 +8,8 @@ const fetchallUser = (page) => {
 const fetchAllProductByCategory = (category) => {
     return axios.get("http://localhost:8080/api/v1/categories");
 };
+const fetchallBrand = () => {
+    return axios.get("http://localhost:8080/api/v1/brand");
+}
 
-export {fetchallUser};
+export {fetchallUser, fetchallBrand};

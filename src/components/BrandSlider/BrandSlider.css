@@ -1,0 +1,9 @@
+.brand-slide {
+    padding: 10px;
+}
+
+.brand-slide img {
+    width: 230px; 
+    height: 60px; 
+    object-fit: contain; 
+}
