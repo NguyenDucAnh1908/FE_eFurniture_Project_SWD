@@ -3,24 +3,23 @@ import Slider from "react-slick";
 import axios from 'axios';
 import { useEffect } from 'react';
 import { fetchallUser } from '../services/UserService';
+import './ProductList.css';
+import {TransitionGroup, CSSTransition} from "react-transition-group";
 
 function Home() {
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1
-    };
     const [listProduct, setListProduct] = useState([]);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     useEffect(() => {
         getProduct();
         fetchCategories();
-        fetchProducts();
+        //fetchProducts();
     }, []);
+    const ProductList = () => {
+        // ...
+    };
 
     const getProduct = async () => {
         let res = await fetchallUser();
@@ -29,6 +28,10 @@ function Home() {
         }
         console.log("Check res: ", res)
     }
+
+    useEffect(() => {
+        fetchProducts(selectedCategory);
+    }, [selectedCategory]);
 
     const fetchCategories = async () => {
         try {
@@ -58,10 +61,10 @@ function Home() {
     };
 
     const handleCategoryClick = (categoryId) => {
-        fetchProducts(categoryId);
+        setSelectedCategory(categoryId);
     };
-    console.log("product: ", products)
-    console.log(listProduct);
+    // console.log("product: ", products)
+    // console.log(listProduct);
     return (
         <div>
             {/* <div className="preloader is-active">
@@ -749,7 +752,8 @@ function Home() {
 
                                                                 <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
-                                                                    <img className="aspect__img" src="images/product/men/product11.jpg" alt="" /></a>
+                                                                    <img className="aspect__img" src="images/product/men/product11.jpg" alt="" />
+                                                                    </a>
                                                                 <div className="product-bs__action-wrap">
                                                                     <ul className="product-bs__action-list">
                                                                         <li>
@@ -797,34 +801,70 @@ function Home() {
                                 <div className="row">
                                     <div className="col-lg-12">
                                         <div className="filter-category-container">
+                                            <div className="filter__category-wrapper">
+                                                <button className={`btn filter__btn filter__btn--style-2 ${selectedCategory === null ? 'js-checked' : ''}`} type="button" onClick={() => handleCategoryClick(null)}>ALL</button>
+                                            </div>
                                             {categories && categories.length > 0 && categories.map((category) => (
                                                 <div className="filter__category-wrapper" key={category.id}>
-                                                    <button className="btn filter__btn filter__btn--style-2" type="button" onClick={() => handleCategoryClick(category.id)}>
+                                                    <button className={`btn filter__btn filter__btn--style-2 ${selectedCategory === category.id ? 'js-checked' : ''}`} type="button" onClick={() => handleCategoryClick(category.id)}>
                                                         {category.name}
                                                     </button>
                                                 </div>
                                             ))}
                                         </div>
                                         <div className="filter__grid-wrapper u-s-m-t-30">
-                                            <div className="row">
-                                                {products && products.length > 0 && products.map((product, index) => (
-                                                    <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item" key={index}>
-                                                        <div className="product-bs">
-                                                            <div className="product-bs__container">
-                                                                <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
-                                                                    <img className="aspect__img" src={product.thumbnail} alt="" />
-                                                                </a>
-                                                                {/* Rest of your product details */}
+                                            <TransitionGroup className="row">
+                                                
+                                                    {products && products.length > 0 && products.map((product, index) => (
+                                                        <CSSTransition key={index} timeout={500} classNames="item">
+                                                        <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item" key={index}>
+                                                            <div className="product-bs">
+                                                                <div className="product-bs__container">
+                                                                    <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
+                                                                        <img className="aspect__img" src={product.thumbnail} alt="" />
+                                                                    </a>
+                                                                    <div className="product-bs__action-wrap">
+                                                                        <ul className="product-bs__action-list">
+                                                                            <li>
+
+                                                                                <a data-modal="modal" data-modal-id="#quick-look"><i className="fas fa-search-plus"></i></a></li>
+                                                                            <li>
+
+                                                                                <a data-modal="modal" data-modal-id="#add-to-cart"><i className="fas fa-plus-circle"></i></a></li>
+                                                                            <li>
+
+                                                                                <a href="signin.html"><i className="fas fa-heart"></i></a></li>
+                                                                            <li>
+
+                                                                                <a href="signin.html"><i className="fas fa-envelope"></i></a></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    {/* Rest of your product details */}
+                                                                    <span className="product-bs__category">
+
+                                                                        <a href="shop-side-version-2.html">Men Clothing</a></span>
+
+                                                                    <span className="product-bs__name">
+
+                                                                        <a href="product-detail.html">Black &amp; White Sweater</a></span>
+                                                                    <div className="product-bs__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i>
+
+                                                                        <span className="product-bs__review">(23)</span></div>
+
+                                                                    <span className="product-bs__price">$125.00
+
+                                                                        <span className="product-bs__discount">$160.00</span></span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                ))}
-                                            </div>
+                                                        </CSSTransition>
+                                                    ))}
+                                                
+                                            </TransitionGroup>
                                         </div>
                                     </div>
                                     <div className="col-lg-12">
                                         <div className="load-more">
-
                                             <button className="btn btn--e-brand" type="button">Load More</button></div>
                                     </div>
                                 </div>
