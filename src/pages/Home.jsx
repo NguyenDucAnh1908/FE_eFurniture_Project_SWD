@@ -4,7 +4,8 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { fetchallUser } from '../services/UserService';
 import './ProductList.css';
-import {TransitionGroup, CSSTransition} from "react-transition-group";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+import BrandSlider from '../components/BrandSlider/BrandSlider';
 
 function Home() {
     const [listProduct, setListProduct] = useState([]);
@@ -814,9 +815,9 @@ function Home() {
                                         </div>
                                         <div className="filter__grid-wrapper u-s-m-t-30">
                                             <TransitionGroup className="row">
-                                                
-                                                    {products && products.length > 0 && products.map((product, index) => (
-                                                        <CSSTransition key={index} timeout={500} classNames="item">
+
+                                                {products && products.length > 0 && products.map((product, index) => (
+                                                    <CSSTransition key={index} timeout={500} classNames="item">
                                                         <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item" key={index}>
                                                             <div className="product-bs">
                                                                 <div className="product-bs__container">
@@ -857,9 +858,9 @@ function Home() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        </CSSTransition>
-                                                    ))}
-                                                
+                                                    </CSSTransition>
+                                                ))}
+
                                             </TransitionGroup>
                                         </div>
                                     </div>
@@ -899,94 +900,36 @@ function Home() {
                         <div className="section__content">
                             <div className="container">
                                 <div className="row">
-                                    <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
-                                        <div className="product-short u-h-100">
-                                            <div className="product-short__container">
-                                                <div className="product-short__img-wrap">
+                                    {listProduct && listProduct.length > 0 &&
+                                        listProduct.map((productItem, index) => {
+                                            return (
+                                                <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
+                                                    <div className="product-short u-h-100">
+                                                        <div className="product-short__container">
+                                                            <div className="product-short__img-wrap">
 
-                                                    <a className="aspect aspect--bg-grey-fb aspect--square u-d-block" href="product-detail.html">
+                                                                <a className="aspect aspect--bg-grey-fb aspect--square u-d-block" href="product-detail.html">
 
-                                                        <img className="aspect__img product-short__img" src="images/product/women/product16.jpg" alt="" /></a></div>
-                                                <div className="product-short__info">
+                                                                    <img className="aspect__img product-short__img" src={productItem.thumbnail} alt="" />
+                                                                </a></div>
+                                                            <div className="product-short__info">
 
-                                                    <span className="product-short__price">$126.77</span>
+                                                                <span className="product-short__price">$126.77</span>
 
-                                                    <span className="product-short__name">
+                                                                <span className="product-short__name">
 
-                                                        <a href="product-detail.html">New Dress A Nice Elegant</a></span>
+                                                                    <a href="product-detail.html">New Dress A Nice Elegant</a></span>
 
-                                                    <span className="product-short__category">
+                                                                <span className="product-short__category">
 
-                                                        <a href="shop-side-version-2.html">Women Clothing</a></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
-                                        <div className="product-short u-h-100">
-                                            <div className="product-short__container">
-                                                <div className="product-short__img-wrap">
+                                                                    <a href="shop-side-version-2.html">Women Clothing</a></span></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
 
-                                                    <a className="aspect aspect--bg-grey-fb aspect--square u-d-block" href="product-detail.html">
-
-                                                        <img className="aspect__img product-short__img" src="images/product/women/product17.jpg" alt="" /></a></div>
-                                                <div className="product-short__info">
-
-                                                    <span className="product-short__price">$126.77</span>
-
-                                                    <span className="product-short__name">
-
-                                                        <a href="product-detail.html">New Dress B Nice Elegant</a></span>
-
-                                                    <span className="product-short__category">
-
-                                                        <a href="shop-side-version-2.html">Women Clothing</a></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
-                                        <div className="product-short u-h-100">
-                                            <div className="product-short__container">
-                                                <div className="product-short__img-wrap">
-
-                                                    <a className="aspect aspect--bg-grey-fb aspect--square u-d-block" href="product-detail.html">
-
-                                                        <img className="aspect__img product-short__img" src="images/product/women/product18.jpg" alt="" /></a></div>
-                                                <div className="product-short__info">
-
-                                                    <span className="product-short__price">$126.77</span>
-
-                                                    <span className="product-short__name">
-
-                                                        <a href="product-detail.html">New Dress C Nice Elegant</a></span>
-
-                                                    <span className="product-short__category">
-
-                                                        <a href="shop-side-version-2.html">Women Clothing</a></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
-                                        <div className="product-short u-h-100">
-                                            <div className="product-short__container">
-                                                <div className="product-short__img-wrap">
-
-                                                    <a className="aspect aspect--bg-grey-fb aspect--square u-d-block" href="product-detail.html">
-
-                                                        <img className="aspect__img product-short__img" src="images/product/women/product19.jpg" alt="" /></a></div>
-                                                <div className="product-short__info">
-
-                                                    <span className="product-short__price">$126.77</span>
-
-                                                    <span className="product-short__name">
-
-                                                        <a href="product-detail.html">New Dress D Nice Elegant</a></span>
-
-                                                    <span className="product-short__category">
-
-                                                        <a href="shop-side-version-2.html">Women Clothing</a></span></div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1007,66 +950,33 @@ function Home() {
 
                                             <span className="column-product__title u-c-secondary u-s-m-b-25">SPECIAL PRODUCTS</span>
                                             <ul className="column-product__list">
-                                                <li className="column-product__item">
-                                                    <div className="product-l">
-                                                        <div className="product-l__img-wrap">
+                                                {listProduct && listProduct.length > 0 &&
+                                                    listProduct.map((productItem, index) => {
+                                                        return (
+                                                            <li className="column-product__item">
+                                                                <div className="product-l">
+                                                                    <div className="product-l__img-wrap">
 
-                                                            <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
+                                                                        <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
 
-                                                                <img className="aspect__img" src="images/product/men/product9.jpg" alt="" /></a></div>
-                                                        <div className="product-l__info-wrap">
+                                                                            <img className="aspect__img" src={productItem.thumbnail} alt="" /></a></div>
+                                                                    <div className="product-l__info-wrap">
 
-                                                            <span className="product-l__category">
+                                                                        <span className="product-l__category">
 
-                                                                <a href="shop-side-version-2.html">Men Clothing</a></span>
+                                                                            <a href="shop-side-version-2.html">Men Clothing</a></span>
 
-                                                            <span className="product-l__name">
+                                                                        <span className="product-l__name">
 
-                                                                <a href="product-detail.html">New Fashion A Nice Elegant</a></span>
+                                                                            <a href="product-detail.html">New Fashion A Nice Elegant</a></span>
 
-                                                            <span className="product-l__price">$125.00</span></div>
-                                                    </div>
-                                                </li>
-                                                <li className="column-product__item">
-                                                    <div className="product-l">
-                                                        <div className="product-l__img-wrap">
+                                                                        <span className="product-l__price">$125.00</span></div>
+                                                                </div>
+                                                            </li>
+                                                        )
+                                                    })
+                                                }
 
-                                                            <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
-
-                                                                <img className="aspect__img" src="images/product/men/product10.jpg" alt="" /></a></div>
-                                                        <div className="product-l__info-wrap">
-
-                                                            <span className="product-l__category">
-
-                                                                <a href="shop-side-version-2.html">Men Clothing</a></span>
-
-                                                            <span className="product-l__name">
-
-                                                                <a href="product-detail.html">New Fashion B Nice Elegant</a></span>
-
-                                                            <span className="product-l__price">$125.00</span></div>
-                                                    </div>
-                                                </li>
-                                                <li className="column-product__item">
-                                                    <div className="product-l">
-                                                        <div className="product-l__img-wrap">
-
-                                                            <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
-
-                                                                <img className="aspect__img" src="images/product/women/product9.jpg" alt="" /></a></div>
-                                                        <div className="product-l__info-wrap">
-
-                                                            <span className="product-l__category">
-
-                                                                <a href="shop-side-version-2.html">Women Clothing</a></span>
-
-                                                            <span className="product-l__name">
-
-                                                                <a href="product-detail.html">New Dress A Nice Elegant</a></span>
-
-                                                            <span className="product-l__price">$125.00</span></div>
-                                                    </div>
-                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -1075,72 +985,32 @@ function Home() {
 
                                             <span className="column-product__title u-c-secondary u-s-m-b-25">WEEKLY PRODUCTS</span>
                                             <ul className="column-product__list">
-                                                <li className="column-product__item">
-                                                    <div className="product-l">
-                                                        <div className="product-l__img-wrap">
+                                                {listProduct && listProduct.length > 0 &&
+                                                    listProduct.map((productItem, index) => {
+                                                        return (
+                                                            <li className="column-product__item">
+                                                                <div className="product-l">
+                                                                    <div className="product-l__img-wrap">
 
-                                                            <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
+                                                                        <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
 
-                                                                <img className="aspect__img" src="images/product/women/product10.jpg" alt="" /></a></div>
-                                                        <div className="product-l__info-wrap">
+                                                                            <img className="aspect__img" src={productItem.thumbnail} alt="" /></a></div>
+                                                                    <div className="product-l__info-wrap">
 
-                                                            <span className="product-l__category">
+                                                                        <span className="product-l__category">
 
-                                                                <a href="shop-side-version-2.html">Women Clothing</a></span>
+                                                                            <a href="shop-side-version-2.html">Men Clothing</a></span>
 
-                                                            <span className="product-l__name">
+                                                                        <span className="product-l__name">
 
-                                                                <a href="product-detail.html">New Dress B Nice Elegant</a></span>
+                                                                            <a href="product-detail.html">New Fashion A Nice Elegant</a></span>
 
-                                                            <span className="product-l__price">$125.00
-
-                                                                <span className="product-l__discount">$160</span></span></div>
-                                                    </div>
-                                                </li>
-                                                <li className="column-product__item">
-                                                    <div className="product-l">
-                                                        <div className="product-l__img-wrap">
-
-                                                            <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
-
-                                                                <img className="aspect__img" src="images/product/women/product11.jpg" alt="" /></a></div>
-                                                        <div className="product-l__info-wrap">
-
-                                                            <span className="product-l__category">
-
-                                                                <a href="shop-side-version-2.html">Women Clothing</a></span>
-
-                                                            <span className="product-l__name">
-
-                                                                <a href="product-detail.html">New Dress C Nice Elegant</a></span>
-
-                                                            <span className="product-l__price">$125.00
-
-                                                                <span className="product-l__discount">$160</span></span></div>
-                                                    </div>
-                                                </li>
-                                                <li className="column-product__item">
-                                                    <div className="product-l">
-                                                        <div className="product-l__img-wrap">
-
-                                                            <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
-
-                                                                <img className="aspect__img" src="images/product/women/product12.jpg" alt="" /></a></div>
-                                                        <div className="product-l__info-wrap">
-
-                                                            <span className="product-l__category">
-
-                                                                <a href="shop-side-version-2.html">Women Clothing</a></span>
-
-                                                            <span className="product-l__name">
-
-                                                                <a href="product-detail.html">New Dress D Nice Elegant</a></span>
-
-                                                            <span className="product-l__price">$125.00
-
-                                                                <span className="product-l__discount">$160</span></span></div>
-                                                    </div>
-                                                </li>
+                                                                        <span className="product-l__price">$125.00</span></div>
+                                                                </div>
+                                                            </li>
+                                                        )
+                                                    })
+                                                }
                                             </ul>
                                         </div>
                                     </div>
@@ -1149,72 +1019,32 @@ function Home() {
 
                                             <span className="column-product__title u-c-secondary u-s-m-b-25">FLASH PRODUCTS</span>
                                             <ul className="column-product__list">
-                                                <li className="column-product__item">
-                                                    <div className="product-l">
-                                                        <div className="product-l__img-wrap">
+                                                {listProduct && listProduct.length > 0 &&
+                                                    listProduct.map((productItem, index) => {
+                                                        return (
+                                                            <li className="column-product__item">
+                                                                <div className="product-l">
+                                                                    <div className="product-l__img-wrap">
 
-                                                            <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
+                                                                        <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
 
-                                                                <img className="aspect__img" src="images/product/women/product13.jpg" alt="" /></a></div>
-                                                        <div className="product-l__info-wrap">
-                                                            <div className="product-l__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i><i className="far fa-star"></i></div>
+                                                                            <img className="aspect__img" src={productItem.thumbnail} alt="" /></a></div>
+                                                                    <div className="product-l__info-wrap">
 
-                                                            <span className="product-l__category">
+                                                                        <span className="product-l__category">
 
-                                                                <a href="shop-side-version-2.html">Women Clothing</a></span>
+                                                                            <a href="shop-side-version-2.html">Men Clothing</a></span>
 
-                                                            <span className="product-l__name">
+                                                                        <span className="product-l__name">
 
-                                                                <a href="product-detail.html">New Dress E Nice Elegant</a></span>
+                                                                            <a href="product-detail.html">New Fashion A Nice Elegant</a></span>
 
-                                                            <span className="product-l__price">$125.00</span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li className="column-product__item">
-                                                    <div className="product-l">
-                                                        <div className="product-l__img-wrap">
-
-                                                            <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
-
-                                                                <img className="aspect__img" src="images/product/women/product1.jpg" alt="" /></a></div>
-                                                        <div className="product-l__info-wrap">
-                                                            <div className="product-l__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i><i className="far fa-star"></i></div>
-
-                                                            <span className="product-l__category">
-
-                                                                <a href="shop-side-version-2.html">Women Clothing</a></span>
-
-                                                            <span className="product-l__name">
-
-                                                                <a href="product-detail.html">Women intimate Bra</a></span>
-
-                                                            <span className="product-l__price">$125.00</span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li className="column-product__item">
-                                                    <div className="product-l">
-                                                        <div className="product-l__img-wrap">
-
-                                                            <a className="aspect aspect--bg-grey aspect--square u-d-block product-l__link" href="product-detail.html">
-
-                                                                <img className="aspect__img" src="images/product/women/product2.jpg" alt="" /></a></div>
-                                                        <div className="product-l__info-wrap">
-                                                            <div className="product-l__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i><i className="far fa-star"></i></div>
-
-                                                            <span className="product-l__category">
-
-                                                                <a href="shop-side-version-2.html">Women Clothing</a></span>
-
-                                                            <span className="product-l__name">
-
-                                                                <a href="product-detail.html">Women Wedding Event Dress</a></span>
-
-                                                            <span className="product-l__price">$125.00</span>
-                                                        </div>
-                                                    </div>
-                                                </li>
+                                                                        <span className="product-l__price">$125.00</span></div>
+                                                                </div>
+                                                            </li>
+                                                        )
+                                                    })
+                                                }
                                             </ul>
                                         </div>
                                     </div>
@@ -1227,52 +1057,7 @@ function Home() {
 
 
                     {/*====== Section 7 ======*/}
-                    <div className="u-s-p-b-60">
-
-                        {/*====== Section Content ======*/}
-                        <div className="section__content">
-                            <div className="container">
-
-                                {/*====== Brand Slider ======*/}
-                                <div className="slider-fouc">
-                                    <div className="owl-carousel" id="brand-slider" data-item="5">
-                                        <div className="brand-slide">
-
-                                            <a href="shop-side-version-2.html">
-
-                                                <img src="images/brand/b1.png" alt="" /></a></div>
-                                        <div className="brand-slide">
-
-                                            <a href="shop-side-version-2.html">
-
-                                                <img src="images/brand/b2.png" alt="" /></a></div>
-                                        <div className="brand-slide">
-
-                                            <a href="shop-side-version-2.html">
-
-                                                <img src="images/brand/b3.png" alt="" /></a></div>
-                                        <div className="brand-slide">
-
-                                            <a href="shop-side-version-2.html">
-
-                                                <img src="images/brand/b4.png" alt="" /></a></div>
-                                        <div className="brand-slide">
-
-                                            <a href="shop-side-version-2.html">
-
-                                                <img src="images/brand/b5.png" alt="" /></a></div>
-                                        <div className="brand-slide">
-
-                                            <a href="shop-side-version-2.html">
-
-                                                <img src="images/brand/b6.png" alt="" /></a></div>
-                                    </div>
-                                </div>
-                                {/*====== End - Brand Slider ======*/}
-                            </div>
-                        </div>
-                        {/*====== End - Section Content ======*/}
-                    </div>
+                    <BrandSlider />
                     {/*====== End - Section 7 ======*/}
                 </div>
             </div>
