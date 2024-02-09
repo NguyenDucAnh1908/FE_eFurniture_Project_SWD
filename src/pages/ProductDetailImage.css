@@ -1,0 +1,15 @@
+.slick-arrow {
+    display: none;
+}
+
+/* .slick-arrow:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+} */
+
+.slick-next {
+    right: 10px; /* Dịch chuyển nút điều hướng sang phải */
+}
+
+.slick-prev {
+    left: 10px; /* Dịch chuyển nút điều hướng sang trái */
+}
