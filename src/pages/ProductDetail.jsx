@@ -1,18 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactImageMagnify from 'react-image-magnify';
 import Slider from 'react-slick';
 import './ProductDetailImage.css'
+import axios from 'axios';
 
 const ProductDetail = () => {
-    const images = [
-        { original: 'http://res.cloudinary.com/dbzzkebfm/image/upload/v1706433112/drfyn4wfvb289zyyioiv.jpg', thumbnail: 'http://res.cloudinary.com/dbzzkebfm/image/upload/v1706433112/drfyn4wfvb289zyyioiv.jpg' },
-        { original: 'http://res.cloudinary.com/dbzzkebfm/image/upload/v1706433114/hrct3nczbdjae3xxfxag.jpg', thumbnail: 'http://res.cloudinary.com/dbzzkebfm/image/upload/v1706433114/hrct3nczbdjae3xxfxag.jpg' },
-        { original: 'http://res.cloudinary.com/dbzzkebfm/image/upload/v1706433119/hl0vx4wgnbmgw3nohga7.jpg', thumbnail: 'http://res.cloudinary.com/dbzzkebfm/image/upload/v1706433119/hl0vx4wgnbmgw3nohga7.jpg' },
-        { original: 'http://res.cloudinary.com/dbzzkebfm/image/upload/v1706449916/qgwsol5zlk9t2alay9if.jpg', thumbnail: 'http://res.cloudinary.com/dbzzkebfm/image/upload/v1706449916/qgwsol5zlk9t2alay9if.jpg' },
-        { original: 'http://res.cloudinary.com/dbzzkebfm/image/upload/v1706466980/hah8skpblyfdnxdglwb9.jpg', thumbnail: 'http://res.cloudinary.com/dbzzkebfm/image/upload/v1706466980/hah8skpblyfdnxdglwb9.jpg' }
-    ];
+    const [images, setImages] = useState([]);
+    const [largeImage, setLargeImage] = useState('');
+    const [productDetail, setProductDetail] = useState(null);
 
-    const [largeImage, setLargeImage] = useState(images[0].original);
+    useEffect(() => {
+        fetchProductImages();
+        fetchProductDetail();
+    }, []);
+
+    const fetchProductImages = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/v1/product_image/product/1');
+            setImages(response.data);
+            setLargeImage(response.data[0].imageUrl);
+            //console.log("Check images: ", response)
+        } catch (error) {
+            console.error('Error fetching product images:', error);
+        }
+    };
+
+    const fetchProductDetail = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/v1/products/1');
+            setProductDetail(response.data);
+            console.log("Check product detail: ", response.data);
+        } catch (error) {
+            console.error('Error fetching product detail:', error);
+        }
+    };
 
     const settings = {
         dots: false,
@@ -74,139 +95,141 @@ const ProductDetail = () => {
 
                                 {/*--====== Product Detail Zoom ======*/}
                                 <div className="pd u-s-m-b-30">
-            <div className="u-s-m-t-15">
-                <ReactImageMagnify {...{
-                    smallImage: {
-                        alt: '',
-                        isFluidWidth: true,
-                        src: largeImage
-                    },
-                    largeImage: {
-                        src: largeImage,
-                        width: 1200,
-                        height: 1800
-                    },
-                    lensStyle: { backgroundColor: 'rgba(0,0,0,.6)' }
-                }} />
-            </div>
-            <br/>
-            <div className="pd-wrap">
-                <Slider {...settings}>
-                    {images.map((image, index) => (
-                        <div key={index} className="pd-o-img-wrap" onClick={() => handleImageClick(image.original)}>
-                            <img className="u-img-fluid" src={image.thumbnail} alt="" />
-                        </div>
-                    ))}
-                </Slider>
-            </div>
-        </div>
+                                    <div className="u-s-m-t-15">
+                                        <ReactImageMagnify {...{
+                                            smallImage: {
+                                                alt: '',
+                                                isFluidWidth: true,
+                                                src: largeImage
+                                            },
+                                            largeImage: {
+                                                src: largeImage,
+                                                width: 1200,
+                                                height: 1800
+                                            },
+                                            lensStyle: { backgroundColor: 'rgba(0,0,0,.6)' }
+                                        }} />
+                                    </div>
+                                    <br />
+                                    <div className="pd-wrap">
+                                        <Slider {...settings}>
+                                            {images.map((image, index) => (
+                                                <div key={index} className="pd-o-img-wrap" onClick={() => handleImageClick(image.imageUrl)}>
+                                                    <img className="u-img-fluid" src={image.imageUrl} alt="" />
+                                                </div>
+                                            ))}
+                                        </Slider>
+                                    </div>
+                                </div>
                                 {/*--====== End - Product Detail Zoom ======*/}
                             </div>
                             <div className="col-lg-7">
 
                                 {/*--====== Product Right Side Details ======*/}
-                                <div className="pd-detail">
-                                    <div>
+                                {productDetail && (
+                                            <div className="pd-detail">
+                                                <div>
 
-                                        <span className="pd-detail__name">Nikon Camera 4k Lens Zoom Pro</span></div>
-                                    <div>
-                                        <div className="pd-detail__inline">
+                                                    <span className="pd-detail__name">{productDetail.name}</span></div>
+                                                <div>
+                                                    <div className="pd-detail__inline">
 
-                                            <span className="pd-detail__price">$6.99</span>
+                                                        <span className="pd-detail__price">$6.99</span>
 
-                                            <span className="pd-detail__discount">(76% OFF)</span><del className="pd-detail__del">$28.97</del></div>
-                                    </div>
-                                    <div className="u-s-m-b-15">
-                                        <div className="pd-detail__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star-half-alt"></i>
-
-                                            <span className="pd-detail__review u-s-m-l-4">
-
-                                                <a data-click-scroll="#view-review">23 Reviews</a></span></div>
-                                    </div>
-                                    <div className="u-s-m-b-15">
-                                        <div className="pd-detail__inline">
-
-                                            <span className="pd-detail__stock">200 in stock</span>
-
-                                            <span className="pd-detail__left">Only 2 left</span></div>
-                                    </div>
-                                    <div className="u-s-m-b-15">
-
-                                        <span className="pd-detail__preview-desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</span></div>
-                                    <div className="u-s-m-b-15">
-                                        <div className="pd-detail__inline">
-
-                                            <span className="pd-detail__click-wrap"><i className="far fa-heart u-s-m-r-6"></i>
-
-                                                <a href="signin.html">Add to Wishlist</a>
-
-                                                <span className="pd-detail__click-count">(222)</span></span></div>
-                                    </div>
-                                    <div className="u-s-m-b-15">
-                                        <div className="pd-detail__inline">
-
-                                            <span className="pd-detail__click-wrap"><i className="far fa-envelope u-s-m-r-6"></i>
-
-                                                <a href="signin.html">Email me When the price drops</a>
-
-                                                <span className="pd-detail__click-count">(20)</span></span></div>
-                                    </div>
-                                    <div className="u-s-m-b-15">
-                                        <ul className="pd-social-list">
-                                            <li>
-
-                                                <a className="s-fb--color-hover" href="#"><i className="fab fa-facebook-f"></i></a></li>
-                                            <li>
-
-                                                <a className="s-tw--color-hover" href="#"><i className="fab fa-twitter"></i></a></li>
-                                            <li>
-
-                                                <a className="s-insta--color-hover" href="#"><i className="fab fa-instagram"></i></a></li>
-                                            <li>
-
-                                                <a className="s-wa--color-hover" href="#"><i className="fab fa-whatsapp"></i></a></li>
-                                            <li>
-
-                                                <a className="s-gplus--color-hover" href="#"><i className="fab fa-google-plus-g"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <div className="u-s-m-b-15">
-                                        <form className="pd-detail__form">
-                                            <div className="pd-detail-inline-2">
+                                                        <span className="pd-detail__discount">(76% OFF)</span><del className="pd-detail__del">$28.97</del></div>
+                                                </div>
                                                 <div className="u-s-m-b-15">
+                                                    <div className="pd-detail__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star-half-alt"></i>
 
-                                                    {/*--====== Input Counter ======*/}
-                                                    <div className="input-counter">
+                                                        <span className="pd-detail__review u-s-m-l-4">
 
-                                                        <span className="input-counter__minus fas fa-minus"></span>
+                                                            <a data-click-scroll="#view-review">23 Reviews</a></span></div>
+                                                </div>
+                                                <div className="u-s-m-b-15">
+                                                    <div className="pd-detail__inline">
 
-                                                        <input className="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000" />
+                                                        <span className="pd-detail__stock">200 in stock</span>
 
-                                                        <span className="input-counter__plus fas fa-plus"></span></div>
-                                                    {/*--====== End - Input Counter ======*/}
+                                                        <span className="pd-detail__left">Only 2 left</span></div>
                                                 </div>
                                                 <div className="u-s-m-b-15">
 
-                                                    <button className="btn btn--e-brand-b-2" type="submit">Add to Cart</button></div>
+                                                    <span className="pd-detail__preview-desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</span></div>
+                                                <div className="u-s-m-b-15">
+                                                    <div className="pd-detail__inline">
+
+                                                        <span className="pd-detail__click-wrap"><i className="far fa-heart u-s-m-r-6"></i>
+
+                                                            <a href="signin.html">Add to Wishlist</a>
+
+                                                            <span className="pd-detail__click-count">(222)</span></span></div>
+                                                </div>
+                                                <div className="u-s-m-b-15">
+                                                    <div className="pd-detail__inline">
+
+                                                        <span className="pd-detail__click-wrap"><i className="far fa-envelope u-s-m-r-6"></i>
+
+                                                            <a href="signin.html">Email me When the price drops</a>
+
+                                                            <span className="pd-detail__click-count">(20)</span></span></div>
+                                                </div>
+                                                <div className="u-s-m-b-15">
+                                                    <ul className="pd-social-list">
+                                                        <li>
+
+                                                            <a className="s-fb--color-hover" href="#"><i className="fab fa-facebook-f"></i></a></li>
+                                                        <li>
+
+                                                            <a className="s-tw--color-hover" href="#"><i className="fab fa-twitter"></i></a></li>
+                                                        <li>
+
+                                                            <a className="s-insta--color-hover" href="#"><i className="fab fa-instagram"></i></a></li>
+                                                        <li>
+
+                                                            <a className="s-wa--color-hover" href="#"><i className="fab fa-whatsapp"></i></a></li>
+                                                        <li>
+
+                                                            <a className="s-gplus--color-hover" href="#"><i className="fab fa-google-plus-g"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                                <div className="u-s-m-b-15">
+                                                    <form className="pd-detail__form">
+                                                        <div className="pd-detail-inline-2">
+                                                            <div className="u-s-m-b-15">
+
+                                                                {/*--====== Input Counter ======*/}
+                                                                <div className="input-counter">
+
+                                                                    <span className="input-counter__minus fas fa-minus"></span>
+
+                                                                    <input className="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000" />
+
+                                                                    <span className="input-counter__plus fas fa-plus"></span></div>
+                                                                {/*--====== End - Input Counter ======*/}
+                                                            </div>
+                                                            <div className="u-s-m-b-15">
+
+                                                                <button className="btn btn--e-brand-b-2" type="submit">Add to Cart</button></div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div className="u-s-m-b-15">
+
+                                                    <span className="pd-detail__label u-s-m-b-8">Product Policy:</span>
+                                                    <ul className="pd-detail__policy-list">
+                                                        <li><i className="fas fa-check-circle u-s-m-r-8"></i>
+
+                                                            <span>Buyer Protection.</span></li>
+                                                        <li><i className="fas fa-check-circle u-s-m-r-8"></i>
+
+                                                            <span>Full Refund if you don't receive your order.</span></li>
+                                                        <li><i className="fas fa-check-circle u-s-m-r-8"></i>
+
+                                                            <span>Returns accepted if product not as described.</span></li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div className="u-s-m-b-15">
-
-                                        <span className="pd-detail__label u-s-m-b-8">Product Policy:</span>
-                                        <ul className="pd-detail__policy-list">
-                                            <li><i className="fas fa-check-circle u-s-m-r-8"></i>
-
-                                                <span>Buyer Protection.</span></li>
-                                            <li><i className="fas fa-check-circle u-s-m-r-8"></i>
-
-                                                <span>Full Refund if you don't receive your order.</span></li>
-                                            <li><i className="fas fa-check-circle u-s-m-r-8"></i>
-
-                                                <span>Returns accepted if product not as described.</span></li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                        )}
                                 {/*--====== End - Product Right Side Details ======*/}
                             </div>
                         </div>
