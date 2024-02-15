@@ -3,6 +3,8 @@ import Slider from "react-slick";
 import axios from 'axios';
 import { useEffect } from 'react';
 import { fetchallUser } from '../services/UserService';
+import {fetchAllProductByCategory, fetchallProduct} from '../services/productApi/ProductApi';
+import {fetchallCategory} from '../services/CategoryApi/CategoryApi';
 import './ProductList.css';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import BrandSlider from '../components/BrandSlider/BrandSlider';
@@ -28,7 +30,7 @@ function Home() {
         if (res && res.data) {
             setListProduct(res.data)
         }
-        console.log("Check res: ", res)
+        console.log("Check product all res: ", res)
     }
 
     useEffect(() => {
@@ -37,14 +39,32 @@ function Home() {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/v1/categories");
+            const response = await fetchallCategory();
             if (response && response.data) {
                 setCategories(response.data);
             }
+            console.log("Check la category: ", response)
         } catch (error) {
             console.error("Lỗi khi lấy danh sách danh mục:", error);
         }
     };
+
+
+    // const fetchProducts = async (categoryId = null) => {
+    //     let url = await fetchAllProductByCategory();
+    //     if (categoryId) {
+    //         url += `?category_id=${categoryId}`;
+    //     }
+
+    //     try {
+    //         const response = await axios.get(url);
+    //         if (response && response.data) {
+    //             setProducts(response.data);
+    //         }
+    //     } catch (error) {
+    //         console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+    //     }
+    // }
 
     const fetchProducts = async (categoryId = null) => {
         let url = 'http://localhost:8080/api/v1/products/category';
@@ -60,7 +80,7 @@ function Home() {
         } catch (error) {
             console.error("Lỗi khi lấy danh sách sản phẩm:", error);
         }
-    };
+    }
 
     const handleCategoryClick = (categoryId) => {
         setSelectedCategory(categoryId);
