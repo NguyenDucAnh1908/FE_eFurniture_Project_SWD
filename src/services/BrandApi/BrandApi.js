@@ -1,8 +1,8 @@
 //import axios from './customize-axios'
-import axios from 'axios';
+import axios from '../customize-axios';
 
 const fetchallBrand = () => {
-    return axios.get("http://localhost:8080/api/v1/brand");
+    return axios.get("/brand");
 }
 
 

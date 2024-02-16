@@ -57,24 +57,24 @@ function Shop() {
 
   const getCategory = async () => {
     let resCate = await fetchallCategory();
-    if (resCate && resCate.data) {
-      setCategories(resCate.data)
+    if (resCate) {
+      setCategories(resCate)
     }
-    console.log("check category: ", resCate)
+    //console.log("check category: ", resCate)
   };
 
   const getbrand = async () => {
     let resbrand = await fetchallBrand();
-    if (resbrand && resbrand.data) {
-      setBrands(resbrand.data)
+    if (resbrand) {
+      setBrands(resbrand)
     }
-    console.log("check brand: ", resbrand)
+    //console.log("check brand: ", resbrand)
   };
 
   const gettagProduct = async () => {
     let resTag = await fetchallTagProduct();
-    if (resTag && resTag.data) {
-      setTagProducts(resTag.data)
+    if (resTag) {
+      setTagProducts(resTag)
     }
     console.log("check tagProducts: ", resTag)
   };

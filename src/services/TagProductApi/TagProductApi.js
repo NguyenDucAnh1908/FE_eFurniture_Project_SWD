@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios from '../customize-axios';
 
 const fetchallTagProduct = () => {
-    return axios.get("http://localhost:8080/api/v1/tag_product");
+    return axios.get("/tag_product");
 }
 
 export {fetchallTagProduct};

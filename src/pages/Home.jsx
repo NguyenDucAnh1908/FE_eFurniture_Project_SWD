@@ -1,14 +1,15 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState } from 'react';
 import Slider from "react-slick";
 import axios from 'axios';
 import { useEffect } from 'react';
 import { fetchallUser } from '../services/UserService';
-import {fetchAllProductByCategory, fetchallProduct} from '../services/productApi/ProductApi';
-import {fetchallCategory} from '../services/CategoryApi/CategoryApi';
+import { fetchAllProductByCategory, fetchallProduct } from '../services/productApi/ProductApi';
+import { fetchallCategory } from '../services/CategoryApi/CategoryApi';
 import './ProductList.css';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import BrandSlider from '../components/BrandSlider/BrandSlider';
 import HomeSlider from '../components/HomeSlider/HomeSlider';
+import { Link } from 'react-router-dom';
 
 function Home() {
     const [listProduct, setListProduct] = useState([]);
@@ -26,11 +27,9 @@ function Home() {
     };
 
     const getProduct = async () => {
-        let res = await fetchallUser();
-        if (res && res.data) {
-            setListProduct(res.data)
-        }
-        console.log("Check product all res: ", res)
+        let res = await fetchallProduct();
+            setListProduct(res)
+        //console.log("Check product all res: ", res)
     }
 
     useEffect(() => {
@@ -40,10 +39,10 @@ function Home() {
     const fetchCategories = async () => {
         try {
             const response = await fetchallCategory();
-            if (response && response.data) {
-                setCategories(response.data);
+            if (response && response) {
+                setCategories(response);
             }
-            console.log("Check la category: ", response)
+            //console.log("Check la category: ", response)
         } catch (error) {
             console.error("Lỗi khi lấy danh sách danh mục:", error);
         }
@@ -290,15 +289,17 @@ function Home() {
                             <div className="container">
                                 <div className="row">
                                     {listProduct && listProduct.length > 0 &&
+
                                         listProduct.map((productItem, index) => {
                                             return (
                                                 <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30" key={`products-${productItem}`}>
                                                     <div className="product-r u-h-100">
                                                         <div className="product-r__container">
 
-                                                            <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
+                                                            <Link className="aspect aspect--bg-grey aspect--square u-d-block" to={`/product-detail/${productItem.id}`}>
 
-                                                                <img className="aspect__img" src={productItem.thumbnail} alt="" /></a>
+                                                                <img className="aspect__img" src={productItem.thumbnail} alt="" />
+                                                            </Link>
                                                             <div className="product-r__action-wrap">
                                                                 <ul className="product-r__action-list">
                                                                     <li>
@@ -325,7 +326,7 @@ function Home() {
 
                                                                 <span className="product-r__name">
 
-                                                                    <a href="product-detail.html">{productItem.name}</a></span>
+                                                                    <Link to={`/product-detail/${productItem.id}`}>{productItem.name}</Link></span>
 
                                                                 <span className="product-r__price">{productItem.price}</span></div>
 
@@ -389,9 +390,9 @@ function Home() {
                                                         <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item" key={index}>
                                                             <div className="product-bs">
                                                                 <div className="product-bs__container">
-                                                                    <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
+                                                                    <Link className="aspect aspect--bg-grey aspect--square u-d-block" to={`/product-detail/${product.id}`}>
                                                                         <img className="aspect__img" src={product.thumbnail} alt="" />
-                                                                    </a>
+                                                                    </Link>
                                                                     <div className="product-bs__action-wrap">
                                                                         <ul className="product-bs__action-list">
                                                                             <li>
@@ -411,11 +412,11 @@ function Home() {
                                                                     {/* Rest of your product details */}
                                                                     <span className="product-bs__category">
 
-                                                                        <a href="shop-side-version-2.html">Men Clothing</a></span>
+                                                                        <Link to={`/product-detail/${product.id}`}>Men Clothing</Link></span>
 
                                                                     <span className="product-bs__name">
 
-                                                                        <a href="product-detail.html">Black &amp; White Sweater</a></span>
+                                                                        <Link to={`/product-detail/${product.id}`}>Black &amp; White Sweater</Link></span>
                                                                     <div className="product-bs__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i>
 
                                                                         <span className="product-bs__review">(23)</span></div>
@@ -476,21 +477,22 @@ function Home() {
                                                         <div className="product-short__container">
                                                             <div className="product-short__img-wrap">
 
-                                                                <a className="aspect aspect--bg-grey-fb aspect--square u-d-block" href="product-detail.html">
+                                                                <Link className="aspect aspect--bg-grey-fb aspect--square u-d-block" to={`/product-detail/${productItem.id}`}>
 
                                                                     <img className="aspect__img product-short__img" src={productItem.thumbnail} alt="" />
-                                                                </a></div>
+                                                                </Link>
+                                                            </div>
                                                             <div className="product-short__info">
 
                                                                 <span className="product-short__price">$126.77</span>
 
                                                                 <span className="product-short__name">
 
-                                                                    <a href="product-detail.html">New Dress A Nice Elegant</a></span>
+                                                                    <Link to={`/product-detail/${productItem.id}`}>New Dress A Nice Elegant</Link></span>
 
                                                                 <span className="product-short__category">
 
-                                                                    <a href="shop-side-version-2.html">Women Clothing</a></span></div>
+                                                                    <Link to={`/product-detail/${productItem.id}`}>Women Clothing</Link></span></div>
                                                         </div>
                                                     </div>
                                                 </div>

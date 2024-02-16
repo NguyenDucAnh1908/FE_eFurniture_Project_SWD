@@ -1,12 +1,11 @@
-import axios from 'axios';
+//import axios from 'axios';
+import axios from '../customize-axios'
 
-const fetchallProduct = (page) => {
-    return axios.get("http://localhost:8080/api/v1/products/get_all");
-}
-
-const fetchAllProductByCategory = () => {
-    return axios.get(`http://localhost:8080/api/v1/products/category`);
+const fetchallProduct = () => {
+    return axios.get("/products/get_all");
 }
 
 
-export {fetchallProduct, fetchAllProductByCategory};
+
+
+export {fetchallProduct};

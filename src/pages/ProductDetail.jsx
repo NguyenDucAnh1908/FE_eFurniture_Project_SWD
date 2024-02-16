@@ -3,20 +3,22 @@ import ReactImageMagnify from 'react-image-magnify';
 import Slider from 'react-slick';
 import './ProductDetailImage.css'
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const ProductDetail = () => {
     const [images, setImages] = useState([]);
     const [largeImage, setLargeImage] = useState('');
     const [productDetail, setProductDetail] = useState(null);
+    const { id } = useParams();
 
     useEffect(() => {
         fetchProductImages();
         fetchProductDetail();
-    }, []);
+    }, [id]);
 
     const fetchProductImages = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/product_image/product/1');
+            const response = await axios.get(`http://localhost:8080/api/v1/product_image/product/${id}`);
             setImages(response.data);
             setLargeImage(response.data[0].imageUrl);
             //console.log("Check images: ", response)
@@ -27,7 +29,7 @@ const ProductDetail = () => {
 
     const fetchProductDetail = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/v1/products/1');
+            const response = await axios.get(`http://localhost:8080/api/v1/products/${id}`);
             setProductDetail(response.data);
             console.log("Check product detail: ", response.data);
         } catch (error) {
