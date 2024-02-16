@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios from '../customize-axios'
 
 const fetchallCategory = () => {
-    return axios.get("http://localhost:8080/api/v1/categories");
+    return axios.get("/categories");
 }
 
 export {fetchallCategory};

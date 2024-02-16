@@ -27,11 +27,9 @@ function Home() {
     };
 
     const getProduct = async () => {
-        let res = await fetchallUser();
-        if (res && res.data) {
-            setListProduct(res.data)
-        }
-        console.log("Check product all res: ", res)
+        let res = await fetchallProduct();
+            setListProduct(res)
+        //console.log("Check product all res: ", res)
     }
 
     useEffect(() => {
@@ -41,10 +39,10 @@ function Home() {
     const fetchCategories = async () => {
         try {
             const response = await fetchallCategory();
-            if (response && response.data) {
-                setCategories(response.data);
+            if (response && response) {
+                setCategories(response);
             }
-            console.log("Check la category: ", response)
+            //console.log("Check la category: ", response)
         } catch (error) {
             console.error("Lỗi khi lấy danh sách danh mục:", error);
         }

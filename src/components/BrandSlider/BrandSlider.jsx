@@ -1,6 +1,6 @@
 import React, { useEffect , useState} from 'react';
 import Slider from 'react-slick';
-import { fetchallUser, fetchallBrand} from '../../services/BrandApi/BrandApi';
+import { fetchallBrand} from '../../services/BrandApi/BrandApi';
 import './BrandSlider.css';
 //import {fetchallBrand} from '../services/';
 // import 'slick-carousel/slick/slick.css';
@@ -15,8 +15,8 @@ const BrandSlider = () => {
 
     const getBrand = async () => {
         let res = await fetchallBrand();
-        if (res && res.data) {
-            setListbrand(res.data)
+        if (res) {
+            setListbrand(res)
         }
         console.log("Check res brand: ", res)
     };
