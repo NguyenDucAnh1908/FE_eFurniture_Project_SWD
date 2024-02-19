@@ -8,6 +8,7 @@ import CheckOut from '../pages/CheckOut'
 import Blog from '../pages/Blog'
 import Test from '../pages/test'
 import BlogDetail from '../pages/BlogDetail'
+import MyProfile from '../pages/Account/MyProfile'
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
@@ -22,6 +23,7 @@ function Routers() {
         <Route path='/check-out' element={<CheckOut/>}/>
         <Route path='/blog' element={<Blog/>}/>
         <Route path='/blog-detail' element={<BlogDetail/>}/>
+        <Route path='/my-profile' element={<MyProfile/>}/>
         <Route path='/test' element={<Test/>}/>
       </Routes>
     </BrowserRouter>
