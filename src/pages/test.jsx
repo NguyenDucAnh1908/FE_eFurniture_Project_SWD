@@ -1,45 +1,68 @@
 
 import React from 'react';
-import ReactImageMagnify from 'react-image-magnify';
+
 
 const test = () => {
-    const watchImg300 = 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/09/instagram-image-size.jpg'
-    const watchImg1200 = 'https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/09/instagram-image-size.jpg'
-
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        responsive: [
-            {
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 3
-                }
-            },
-            {
-                breakpoint: 576,
-                settings: {
-                    slidesToShow: 2
-                }
-            }
-        ]
-    };
     return (
-        <ReactImageMagnify {...{
-            smallImage: {
-                alt: 'Wristwatch by Ted Baker London',
-                isFluidWidth: true,
-                src: watchImg300
-            },
-            largeImage: {
-                src: watchImg1200,
-                width: 1200,
-                height: 1800
-            }
-        }} />
+        <>
+            {/* <!--====== Section Content ======*/}
+            <div className="section__content">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-5 col-md-5 u-s-m-b-30">
+
+                            <a className="collection" href="shop-side-version-2.html">
+                                <div className="aspect aspect--bg-grey aspect--square">
+
+                                    <img className="aspect__img collection__img" src="images/collection/coll-1.jpg" alt="" /></div>
+                            </a>
+                        </div>
+                        <div className="col-lg-7 col-md-7 u-s-m-b-30">
+
+                            <a className="collection" href="shop-side-version-2.html">
+                                <div className="aspect aspect--bg-grey aspect--1286-890">
+
+                                    <img className="aspect__img collection__img" src="images/collection/coll-2.jpg" alt="" /></div>
+                            </a>
+                        </div>
+                        <div className="col-lg-4 col-md-5 u-s-m-b-30">
+
+                            <a className="collection" href="shop-side-version-2.html">
+                                <div className="aspect aspect--bg-grey aspect--square">
+
+                                    <img className="aspect__img collection__img" src="images/collection/coll-4.jpg" alt="" /></div>
+                            </a>
+                        </div>
+                        {/* <div className="col-lg-4 col-md-7 u-s-m-b-30">
+
+                            <a className="collection" href="shop-side-version-2.html">
+                                <div className="aspect aspect--bg-grey aspect--1286-890">
+
+                                    <img className="aspect__img collection__img" src="images/collection/coll-3.jpg" alt="" /></div>
+                            </a>
+                        </div> */}
+                        <div className="col-lg-4 col-md-5 u-s-m-b-30">
+
+                            <a className="collection" href="shop-side-version-2.html">
+                                <div className="aspect aspect--bg-grey aspect--square">
+
+                                    <img className="aspect__img collection__img" src="images/collection/coll-4.jpg" alt="" /></div>
+                            </a>
+                        </div>
+                        <div className="col-lg-4 col-md-5 u-s-m-b-30">
+
+                            <a className="collection" href="shop-side-version-2.html">
+                                <div className="aspect aspect--bg-grey aspect--square">
+
+                                    <img className="aspect__img collection__img" src="images/collection/coll-4.jpg" alt="" /></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* <!--====== Section Content ======*/}
+        </>
 
     )
 }
