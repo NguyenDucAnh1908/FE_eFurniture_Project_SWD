@@ -28,7 +28,7 @@ function Home() {
 
     const getProduct = async () => {
         let res = await fetchallProduct();
-            setListProduct(res)
+        setListProduct(res)
         //console.log("Check product all res: ", res)
     }
 
@@ -207,14 +207,15 @@ function Home() {
                         <div className="section__content">
                             <div className="container">
                                 <div className="container">
-                                    <div className="row">
+                                    {/* <div className="row">
                                         <div className="col-lg-6 col-md-12">
 
                                             <a className="i3-banner" href="shop-side-version-2.html">
                                                 <div className="aspect aspect--bg-grey-fb aspect--square">
 
                                                     <img className="aspect__img i3-banner__img" src="images/banners/i3-banner-1.jpg" alt="" /></div>
-                                            </a></div>
+                                            </a>
+                                        </div>
                                         <div className="col-lg-6 col-md-12">
                                             <div className="row">
                                                 {listProduct && listProduct.length > 0 &&
@@ -255,7 +256,8 @@ function Home() {
                                                     </a></div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
+                                    
                                 </div>
                             </div>
                         </div>
