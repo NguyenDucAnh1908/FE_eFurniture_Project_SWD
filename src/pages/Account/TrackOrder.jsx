@@ -1,8 +1,9 @@
 import React from 'react'
 
-const MyProfile = () => {
+const TrackOrder = () => {
     return (
         <div>
+
             {/*====== App Content ======*/}
             <div className="app-content">
 
@@ -20,7 +21,7 @@ const MyProfile = () => {
                                             <a href="index">Home</a></li>
                                         <li className="is-marked">
 
-                                            <a href="/my-profile">My Account</a></li>
+                                            <a href="/track-order">My Account</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -51,13 +52,13 @@ const MyProfile = () => {
                                                         <a href="/dashboard">Manage My Account</a></li>
                                                     <li>
 
-                                                        <a className="dash-active" href="/my-profile">My Profile</a></li>
+                                                        <a href="/my-profile">My Profile</a></li>
                                                     <li>
 
                                                         <a href="/address-book">Address Book</a></li>
                                                     <li>
 
-                                                        <a href="/track-order">Track Order</a></li>
+                                                        <a className="dash-active" href="/track-order">Track Order</a></li>
                                                     <li>
 
                                                         <a href="/my-order">My Orders</a></li>
@@ -106,57 +107,27 @@ const MyProfile = () => {
                                         {/*====== End - Dashboard Features ======*/}
                                     </div>
                                     <div className="col-lg-9 col-md-12">
-                                        <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+                                        <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
                                             <div className="dash__pad-2">
-                                                <h1 className="dash__h1 u-s-m-b-14">My Profile</h1>
+                                                <h1 className="dash__h1 u-s-m-b-14">Track your Order</h1>
 
-                                                <span className="dash__text u-s-m-b-30">Look all your info, you could customize your profile.</span>
-                                                <div className="row">
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Full Name</h2>
+                                                <span className="dash__text u-s-m-b-30">To track your order please enter your Order ID in the box below and press the "Track" button. This was given to you on your receipt and in the confirmation email you should have received.</span>
+                                                <form className="/track-order">
+                                                    <div className="gl-inline">
+                                                        <div className="u-s-m-b-30">
 
-                                                        <span className="dash__text">John Doe</span>
+                                                            <label className="gl-label" for="order-id">Order ID *</label>
+
+                                                            <input className="input-text input-text--primary-style" type="text" id="order-id" placeholder="Found in your confirmation email" /></div>
+                                                        <div className="u-s-m-b-30">
+
+                                                            <label className="gl-label" for="track-email">Email *</label>
+
+                                                            <input className="input-text input-text--primary-style" type="text" id="track-email" placeholder="Email you used during checkout" /></div>
                                                     </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">E-mail</h2>
 
-                                                        <span className="dash__text">johndoe@domain.com</span>
-                                                        <div className="dash__link dash__link--secondary">
-
-                                                            <a href="#">Change</a></div>
-                                                    </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Phone</h2>
-
-                                                        <span className="dash__text">Please enter your mobile</span>
-                                                        <div className="dash__link dash__link--secondary">
-
-                                                            <a href="#">Add</a></div>
-                                                    </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Birthday</h2>
-
-                                                        <span className="dash__text">1991-02-02</span>
-                                                    </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Gender</h2>
-
-                                                        <span className="dash__text">Male</span>
-                                                    </div>
-                                                </div>
-                                                <div className="row">
-                                                    <div className="col-lg-12">
-                                                        <div className="dash__link dash__link--secondary u-s-m-b-30">
-
-                                                            <a data-modal="modal" data-modal-id="#/newsletter">Subscribe Newsletter</a></div>
-                                                        <div className="u-s-m-b-16">
-
-                                                            <a className="dash__custom-link btn--e-transparent-brand-b-2" href="/edit-profile">Edit Profile</a></div>
-                                                        <div>
-
-                                                            <a className="dash__custom-link btn--e-brand-b-2" href="#">Change Password</a></div>
-                                                    </div>
-                                                </div>
+                                                    <button className="btn btn--e-brand-b-2" type="submit">TRACK</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -173,4 +144,4 @@ const MyProfile = () => {
     )
 }
 
-export default MyProfile
+export default TrackOrder
