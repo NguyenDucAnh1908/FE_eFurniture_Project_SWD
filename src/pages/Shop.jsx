@@ -12,7 +12,7 @@ function Shop() {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [tagProducts, setTagProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,7 +40,8 @@ function Shop() {
           maxPrice: '',
           brandId: selectedBrands.map(brand => brand.id).join(','),
           tagsProductId: '',
-          categoryId: selectedCategory ? selectedCategory.id : ''
+          // categoryId: selectedCategory ? selectedCategory.id : ''
+          categoryId: selectedCategory.map(category => category.id).join(',')
         }
       });
       setProducts(response.data.products);
@@ -102,6 +103,14 @@ function Shop() {
       setSelectedBrands([...selectedBrands, brand]);
     }
   };
+  const handleCategoryToggle = (category) => {
+    const isSelected = selectedCategory.includes(category);
+    if (isSelected) {
+      setSelectedCategory(selectedCategory.filter((c) => c !== category));
+    } else {
+      setSelectedCategory([...selectedCategory, category]);
+    }
+  };
 
   return (
     <div>
@@ -118,7 +127,7 @@ function Shop() {
 
                     <span>FILTERS</span></h1>
                   <div className="shop-w-master__sidebar sidebar--bg-snow">
-                    <div className="u-s-m-b-30">
+                    {/* <div className="u-s-m-b-30">
                       <div className="shop-w">
                         <div className="shop-w__intro-wrap">
                           <h1 className="shop-w__h">CATEGORY</h1>
@@ -133,6 +142,32 @@ function Shop() {
                                   {category.name}
                                 </a>
                                 <span className="category-list__text u-s-m-l-6">({category.count})</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div> */}
+                    <div className="u-s-m-b-30">
+                      <div className="shop-w">
+                        <div className="shop-w__intro-wrap">
+                          <h1 className="shop-w__h">CATEGORY</h1>
+
+                          <span className="fas fa-minus shop-w__toggle" data-target="#s-manufacturer" data-toggle="collapse"></span>
+                        </div>
+                        <div className="shop-w__wrap collapse show" id="s-manufacturer">
+                          <ul className="shop-w__list-2">
+                            {categories.map((category) => (
+                              <li key={category.id}>
+                                <div className="list__content">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedCategory.includes(category)}
+                                    onChange={() => handleCategoryToggle(category)}
+                                  />
+                                  <span>{category.name}</span>
+                                </div>
+                                <span className="shop-w__total-text">(23)</span>
                               </li>
                             ))}
                           </ul>
@@ -453,12 +488,18 @@ function Shop() {
                       <span className="shop-p__meta-text-1">FOUND 18 RESULTS</span>
                       <div className="shop-p__meta-text-2">
                         <span>Related Searches:</span>
-                        {selectedCategory && (
+                        {/* {selectedCategory && (
                           <a className="gl-tag btn--e-brand-shadow" href="#">
                             {selectedCategory.name}
                             <i className="fas fa-trash" onClick={clearSelectedCategory} style={{ marginLeft: '5px' }}></i>
                           </a>
-                        )}
+                        )} */}
+                        {selectedCategory.map((category) => (
+                          <a className="gl-tag btn--e-brand-shadow" key={category.id} href="#">
+                            {category.name}
+                            {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
+                          </a>
+                        ))}
                         {selectedBrands.map((brand) => (
                           <a className="gl-tag btn--e-brand-shadow" key={brand.id} href="#">
                             {brand.name}
@@ -526,18 +567,23 @@ function Shop() {
                             <div className="product-m__content">
                               <div className="product-m__category">
 
-                                <a href="shop-side-version-2.html">{product.name}</a></div>
+                                <a href="shop-side-version-2.html">{product.category_id.name}</a>
+                              </div>
                               <div className="product-m__name">
 
-                                <a href="product-detail.html">New Fashion B Nice Elegant</a></div>
+                                <a href="product-detail.html">{product.name}</a></div>
                               <div className="product-m__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star-half-alt"></i><i className="far fa-star"></i><i className="far fa-star"></i>
 
-                                <span className="product-m__review">(23)</span></div>
-                              <div className="product-m__price">$125.00</div>
+                                {/* <span className="product-m__review">(23)</span> */}
+                              </div>
+                              <div class="product-m__price">${product.price_sale}
+
+                                <span class="product-m__discount">${product.price}</span>
+                              </div>
                               <div className="product-m__hover">
                                 <div className="product-m__preview-description">
 
-                                  <span>Mô tả</span></div>
+                                  <span>{product.description}</span></div>
                                 <div className="product-m__wishlist">
 
                                   <a className="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>

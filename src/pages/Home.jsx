@@ -84,7 +84,7 @@ function Home() {
     const handleCategoryClick = (categoryId) => {
         setSelectedCategory(categoryId);
     };
-    // console.log("product: ", products)
+    console.log("Check product by category: ", products)
     // console.log(listProduct);
     return (
         <div>
@@ -372,14 +372,14 @@ function Home() {
 
                                                             <span className="product-r__category">
 
-                                                                <a href="shop-side-version-2.html">{productItem.createdAt}</a></span>
+                                                                <a href="shop-side-version-2.html">{productItem.category_id.name}</a></span>
                                                             <div className="product-r__n-p-wrap">
 
                                                                 <span className="product-r__name">
 
                                                                     <Link to={`/product-detail/${productItem.id}`}>{productItem.name}</Link></span>
 
-                                                                <span className="product-r__price">{productItem.price}</span></div>
+                                                                <span className="product-r__price">{productItem.price_sale}</span></div>
 
                                                             <span className="product-r__description">{productItem.description}</span>
                                                         </div>
@@ -463,18 +463,19 @@ function Home() {
                                                                     {/* Rest of your product details */}
                                                                     <span className="product-bs__category">
 
-                                                                        <Link to={`/product-detail/${product.id}`}>Men Clothing</Link></span>
+                                                                        <Link to={`/product-detail/${product.id}`}>{product.category_id.name}</Link></span>
 
                                                                     <span className="product-bs__name">
 
-                                                                        <Link to={`/product-detail/${product.id}`}>Black &amp; White Sweater</Link></span>
+                                                                        <Link to={`/product-detail/${product.id}`}>{product.name}</Link></span>
                                                                     <div className="product-bs__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="far fa-star"></i>
 
-                                                                        <span className="product-bs__review">(23)</span></div>
+                                                                        {/* <span className="product-bs__review">(23)</span> */}
+                                                                    </div>
 
-                                                                    <span className="product-bs__price">$125.00
+                                                                    <span className="product-bs__price">${product.price_sale}
 
-                                                                        <span className="product-bs__discount">$160.00</span></span>
+                                                                        <span className="product-bs__discount">${product.price}</span></span>
                                                                 </div>
                                                             </div>
                                                         </div>
