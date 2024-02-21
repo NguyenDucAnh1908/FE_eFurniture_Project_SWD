@@ -9,6 +9,11 @@ import Blog from '../pages/Blog'
 import Test from '../pages/test'
 import BlogDetail from '../pages/BlogDetail'
 import MyProfile from '../pages/Account/MyProfile'
+import AddressBook from '../pages/Account/AddressBook'  
+import TrackOrder from '../pages/Account/TrackOrder'
+import MyOrder from '../pages/Account/MyOrder'
+import Cancellation from '../pages/Account/Cancellation'
+import PaymentOption from '../pages/Account/PaymentOption' 
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
@@ -25,6 +30,12 @@ function Routers() {
         <Route path='/blog-detail' element={<BlogDetail/>}/>
         <Route path='/my-profile' element={<MyProfile/>}/>
         <Route path='/test' element={<Test/>}/>
+        <Route path='/address-book' element={<AddressBook/>}/>
+        <Route path='/my-order' element={<MyOrder/>}/>
+        <Route path='/track-order' element={<TrackOrder/>}/>
+        <Route path='/cancellation' element={<Cancellation/>}/>
+        <Route path='/payment-option' element={<PaymentOption/>}/>
+
       </Routes>
     </BrowserRouter>
   )
