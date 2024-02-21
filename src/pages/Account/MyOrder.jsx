@@ -1,6 +1,6 @@
 import React from 'react'
 
-const MyProfile = () => {
+const MyOrder = () => {
     return (
         <div>
             {/*====== App Content ======*/}
@@ -20,7 +20,7 @@ const MyProfile = () => {
                                             <a href="index">Home</a></li>
                                         <li className="is-marked">
 
-                                            <a href="/my-profile">My Account</a></li>
+                                            <a href="/my-order">My Account</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@ const MyProfile = () => {
                                                         <a href="/dashboard">Manage My Account</a></li>
                                                     <li>
 
-                                                        <a className="dash-active" href="/my-profile">My Profile</a></li>
+                                                        <a href="/my-profile">My Profile</a></li>
                                                     <li>
 
                                                         <a href="/address-book">Address Book</a></li>
@@ -60,7 +60,7 @@ const MyProfile = () => {
                                                         <a href="/track-order">Track Order</a></li>
                                                     <li>
 
-                                                        <a href="/my-order">My Orders</a></li>
+                                                        <a className="dash-active" href="/my-order">My Orders</a></li>
                                                     <li>
 
                                                         <a href="/payment-option">My Payment Options</a></li>
@@ -148,7 +148,7 @@ const MyProfile = () => {
                                                     <div className="col-lg-12">
                                                         <div className="dash__link dash__link--secondary u-s-m-b-30">
 
-                                                            <a data-modal="modal" data-modal-id="#/newsletter">Subscribe Newsletter</a></div>
+                                                            <a data-modal="modal" data-modal-id="#newsletter">Subscribe Newsletter</a></div>
                                                         <div className="u-s-m-b-16">
 
                                                             <a className="dash__custom-link btn--e-transparent-brand-b-2" href="/edit-profile">Edit Profile</a></div>
@@ -173,4 +173,4 @@ const MyProfile = () => {
     )
 }
 
-export default MyProfile
+export default MyOrder
