@@ -14,6 +14,7 @@ function Shop() {
   const [tagProducts, setTagProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectTagProducts, setSelectTagProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -29,19 +30,19 @@ function Shop() {
   }, [selectedCategory, selectedBrands, currentPage]);
 
 
-  const fetchProducts = async (page) => {
+  const fetchProducts = async (page, minPrice, maxPrice) => {
     try {
       const response = await axios.get('http://localhost:8080/api/v1/products', {
         params: {
           keyword: '',
           page: currentPage - 1,
           limit: 1,
-          minPrice: '',
-          maxPrice: '',
-          brandId: selectedBrands.map(brand => brand.id).join(','),
-          tagsProductId: '',
+          minPrice: minPrice,
+          maxPrice: maxPrice,
+          brandIds: selectedBrands.map(brand => brand.id).join(','),
+          tagsProductIds: '',
           // categoryId: selectedCategory ? selectedCategory.id : ''
-          categoryId: selectedCategory.map(category => category.id).join(',')
+          categoryIds: selectedCategory.map(category => category.id).join(',')
         }
       });
       setProducts(response.data.products);
@@ -96,6 +97,21 @@ function Shop() {
       setSelectedCategory([...selectedCategory, category]);
     }
   };
+
+  const handleProductTagToggle = (productTag) => {
+    const isSelected = selectTagProducts.includes(productTag);
+    if (isSelected) {
+      setSelectedCategory(selectTagProducts.filter((t) => t !== productTag));
+    } else {
+      setSelectedCategory([...selectTagProducts, productTag]);
+    }
+  };
+  const handleSubmitPriceFilter = (event) => {
+    event.preventDefault(); // Ngăn chặn sự kiện mặc định của form
+    const minPrice = document.getElementById('price-min').value; // Lấy giá trị của ô nhập giá tiền tối thiểu
+    const maxPrice = document.getElementById('price-max').value; // Lấy giá trị của ô nhập giá tiền tối đa
+    fetchProducts(1, minPrice, maxPrice); // Gọi hàm fetchProducts với giá tiền đã nhập
+};
 
   return (
     <div>
@@ -266,18 +282,18 @@ function Shop() {
                           <span className="fas fa-minus shop-w__toggle" data-target="#s-price" data-toggle="collapse"></span>
                         </div>
                         <div className="shop-w__wrap collapse show" id="s-price">
-                          <form className="shop-w__form-p">
+                          <form className="shop-w__form-p" onSubmit={handleSubmitPriceFilter}>
                             <div className="shop-w__form-p-wrap">
                               <div>
 
                                 <label for="price-min"></label>
 
-                                <input className="input-text input-text--primary-style" type="text" id="price-min" placeholder="Min" /></div>
+                                <input className="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min" /></div>
                               <div>
 
                                 <label for="price-max"></label>
 
-                                <input className="input-text input-text--primary-style" type="text" id="price-max" placeholder="Max" /></div>
+                                <input className="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max" /></div>
                               <div>
 
                                 <button className="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" type="submit"></button></div>
