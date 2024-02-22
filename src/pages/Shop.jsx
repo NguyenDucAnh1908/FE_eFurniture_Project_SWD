@@ -18,6 +18,7 @@ function Shop() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0); // Khởi tạo totalProducts với giá trị ban đầu là 0
 
   useEffect(() => {
     getCategory();
@@ -40,13 +41,14 @@ function Shop() {
           minPrice: minPrice,
           maxPrice: maxPrice,
           brandIds: selectedBrands.map(brand => brand.id).join(','),
-          tagsProductIds: '',
+          tagsProductIds: selectTagProducts.map(tagProduct => tagProduct.id).join(','),
           // categoryId: selectedCategory ? selectedCategory.id : ''
           categoryIds: selectedCategory.map(category => category.id).join(',')
         }
       });
       setProducts(response.data.products);
       setTotalPages(response.data.totalPages);
+      setTotalProducts(response.data.totalProducts);
       console.log("Check product: ", response.data.products)
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -98,20 +100,21 @@ function Shop() {
     }
   };
 
-  const handleProductTagToggle = (productTag) => {
-    const isSelected = selectTagProducts.includes(productTag);
+  const handleProductTagToggle = (tagProduct) => {
+    const isSelected = selectTagProducts.includes(tagProduct);
     if (isSelected) {
-      setSelectedCategory(selectTagProducts.filter((t) => t !== productTag));
+      setSelectTagProducts(selectTagProducts.filter((t) => t !== tagProduct));
     } else {
-      setSelectedCategory([...selectTagProducts, productTag]);
+      setSelectTagProducts([...selectTagProducts, tagProduct]);
     }
   };
+
   const handleSubmitPriceFilter = (event) => {
     event.preventDefault(); // Ngăn chặn sự kiện mặc định của form
-    const minPrice = document.getElementById('price-min').value; // Lấy giá trị của ô nhập giá tiền tối thiểu
-    const maxPrice = document.getElementById('price-max').value; // Lấy giá trị của ô nhập giá tiền tối đa
-    fetchProducts(1, minPrice, maxPrice); // Gọi hàm fetchProducts với giá tiền đã nhập
-};
+    const minPrice = document.getElementById('price-min').value;
+    const maxPrice = document.getElementById('price-max').value;
+    fetchProducts(1, minPrice, maxPrice);
+  };
 
   return (
     <div>
@@ -137,7 +140,7 @@ function Shop() {
                         </div>
                         <div className="shop-w__wrap collapse show" id="s-category">
                           <ul className="shop-w__category-list gl-scroll">
-                          {categories.map((category) => (
+                            {categories.map((category) => (
                               <li key={category.id}>
                                 <div className="list__content">
                                   <input
@@ -247,28 +250,29 @@ function Shop() {
                         </div>
                       </div>
                     </div>
-                    {/* SHIPPING */}
+                    {/* TAGPRODUCT */}
                     <div className="u-s-m-b-30">
                       <div className="shop-w">
                         <div className="shop-w__intro-wrap">
-                          <h1 className="shop-w__h">SHIPPING</h1>
+                          <h1 className="shop-w__h">TAG PRODUCT</h1>
 
                           <span className="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
                         </div>
                         <div className="shop-w__wrap collapse show" id="s-shipping">
                           <ul className="shop-w__list gl-scroll">
-                            <li>
-
-                              {/*====== Check Box ======*/}
-                              <div className="check-box">
-
-                                <input type="checkbox" id="free-shipping" />
-                                <div className="check-box__state check-box__state--primary">
-
-                                  <label className="check-box__label" for="free-shipping">Free Shipping</label></div>
-                              </div>
-                              {/*====== End - Check Box ======*/}
-                            </li>
+                          {tagProducts.map((tagProduct) => (
+                              <li key={tagProduct.id}>
+                                <div className="list__content">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectTagProducts.includes(tagProduct)}
+                                    onChange={() => handleProductTagToggle(tagProduct)}
+                                  />
+                                  <span>{tagProduct.name}</span>
+                                </div>
+                                {/* <span className="shop-w__total-text">(23)</span> */}
+                              </li>
+                            ))}
                           </ul>
                         </div>
                       </div>
@@ -491,9 +495,9 @@ function Shop() {
                   <div className="shop-p__toolbar u-s-m-b-30">
                     <div className="shop-p__meta-wrap u-s-m-b-60">
 
-                      <span className="shop-p__meta-text-1">FOUND 18 RESULTS</span>
+                      <span className="shop-p__meta-text-1">FOUND {totalProducts} RESULTS</span>
                       <div className="shop-p__meta-text-2">
-                        <span>Related Searches:</span>
+                        <span>Related Searches:&nbsp;&nbsp;</span>
                         {/* {selectedCategory && (
                           <a className="gl-tag btn--e-brand-shadow" href="#">
                             {selectedCategory.name}
@@ -509,6 +513,13 @@ function Shop() {
                         {selectedBrands.map((brand) => (
                           <a className="gl-tag btn--e-brand-shadow" key={brand.id} href="#">
                             {brand.name}
+                            {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
+                          </a>
+                        ))}
+
+                        {selectTagProducts.map((tagProduct) => (
+                          <a className="gl-tag btn--e-brand-shadow" key={tagProduct.id} href="#">
+                            {tagProduct.name}
                             {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
                           </a>
                         ))}
