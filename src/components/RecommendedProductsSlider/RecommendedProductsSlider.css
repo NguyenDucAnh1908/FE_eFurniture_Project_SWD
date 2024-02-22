@@ -1,0 +1,9 @@
+.product-recomment-slide {
+    padding: 10px;
+}
+
+.product-recomment-slide img {
+    width: 600px; 
+    height: 600px; 
+    object-fit: contain; 
+}

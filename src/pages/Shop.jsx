@@ -12,11 +12,13 @@ function Shop() {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [tagProducts, setTagProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectTagProducts, setSelectTagProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0); // Khởi tạo totalProducts với giá trị ban đầu là 0
 
   useEffect(() => {
     getCategory();
@@ -29,22 +31,24 @@ function Shop() {
   }, [selectedCategory, selectedBrands, currentPage]);
 
 
-  const fetchProducts = async (page) => {
+  const fetchProducts = async (page, minPrice, maxPrice) => {
     try {
       const response = await axios.get('http://localhost:8080/api/v1/products', {
         params: {
           keyword: '',
           page: currentPage - 1,
           limit: 1,
-          minPrice: '',
-          maxPrice: '',
-          brandId: selectedBrands.map(brand => brand.id).join(','),
-          tagsProductId: '',
-          categoryId: selectedCategory ? selectedCategory.id : ''
+          minPrice: minPrice,
+          maxPrice: maxPrice,
+          brandIds: selectedBrands.map(brand => brand.id).join(','),
+          tagsProductIds: selectTagProducts.map(tagProduct => tagProduct.id).join(','),
+          // categoryId: selectedCategory ? selectedCategory.id : ''
+          categoryIds: selectedCategory.map(category => category.id).join(',')
         }
       });
       setProducts(response.data.products);
       setTotalPages(response.data.totalPages);
+      setTotalProducts(response.data.totalProducts);
       console.log("Check product: ", response.data.products)
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -79,21 +83,6 @@ function Shop() {
     console.log("check tagProducts: ", resTag)
   };
 
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-  };
-
-  const clearSelectedCategory = () => {
-    setSelectedCategory(null); // Xóa selectedCategory bằng cách set giá trị thành null
-  };
-
-  // const handleBrandClick = (brand) => {
-  //   setSelectedBrand(brand);
-  // };
-
-  const clearSelectedBrand = () => {
-    setSelectedBrands(null);
-  };
   const handleBrandToggle = (brand) => {
     const isSelected = selectedBrands.includes(brand);
     if (isSelected) {
@@ -101,6 +90,30 @@ function Shop() {
     } else {
       setSelectedBrands([...selectedBrands, brand]);
     }
+  };
+  const handleCategoryToggle = (category) => {
+    const isSelected = selectedCategory.includes(category);
+    if (isSelected) {
+      setSelectedCategory(selectedCategory.filter((c) => c !== category));
+    } else {
+      setSelectedCategory([...selectedCategory, category]);
+    }
+  };
+
+  const handleProductTagToggle = (tagProduct) => {
+    const isSelected = selectTagProducts.includes(tagProduct);
+    if (isSelected) {
+      setSelectTagProducts(selectTagProducts.filter((t) => t !== tagProduct));
+    } else {
+      setSelectTagProducts([...selectTagProducts, tagProduct]);
+    }
+  };
+
+  const handleSubmitPriceFilter = (event) => {
+    event.preventDefault(); // Ngăn chặn sự kiện mặc định của form
+    const minPrice = document.getElementById('price-min').value;
+    const maxPrice = document.getElementById('price-max').value;
+    fetchProducts(1, minPrice, maxPrice);
   };
 
   return (
@@ -129,16 +142,47 @@ function Shop() {
                           <ul className="shop-w__category-list gl-scroll">
                             {categories.map((category) => (
                               <li key={category.id}>
-                                <a href="#" onClick={() => handleCategoryClick(category)}>
-                                  {category.name}
-                                </a>
-                                <span className="category-list__text u-s-m-l-6">({category.count})</span>
+                                <div className="list__content">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedCategory.includes(category)}
+                                    onChange={() => handleCategoryToggle(category)}
+                                  />
+                                  <span>{category.name}</span>
+                                </div>
+                                {/* <span className="shop-w__total-text">(23)</span> */}
                               </li>
                             ))}
                           </ul>
                         </div>
                       </div>
                     </div>
+                    {/* <div className="u-s-m-b-30">
+                      <div className="shop-w">
+                        <div className="shop-w__intro-wrap">
+                          <h1 className="shop-w__h">CATEGORY</h1>
+
+                          <span className="fas fa-minus shop-w__toggle" data-target="#s-manufacturer" data-toggle="collapse"></span>
+                        </div>
+                        <div className="shop-w__wrap collapse show" id="s-manufacturer">
+                          <ul className="shop-w__list-2">
+                            {categories.map((category) => (
+                              <li key={category.id}>
+                                <div className="list__content">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedCategory.includes(category)}
+                                    onChange={() => handleCategoryToggle(category)}
+                                  />
+                                  <span>{category.name}</span>
+                                </div>
+                                <span className="shop-w__total-text">(23)</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div> */}
                     {/* RATING */}
                     <div className="u-s-m-b-30">
                       <div className="shop-w">
@@ -206,28 +250,29 @@ function Shop() {
                         </div>
                       </div>
                     </div>
-                    {/* SHIPPING */}
+                    {/* TAGPRODUCT */}
                     <div className="u-s-m-b-30">
                       <div className="shop-w">
                         <div className="shop-w__intro-wrap">
-                          <h1 className="shop-w__h">SHIPPING</h1>
+                          <h1 className="shop-w__h">TAG PRODUCT</h1>
 
                           <span className="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
                         </div>
                         <div className="shop-w__wrap collapse show" id="s-shipping">
                           <ul className="shop-w__list gl-scroll">
-                            <li>
-
-                              {/*====== Check Box ======*/}
-                              <div className="check-box">
-
-                                <input type="checkbox" id="free-shipping" />
-                                <div className="check-box__state check-box__state--primary">
-
-                                  <label className="check-box__label" for="free-shipping">Free Shipping</label></div>
-                              </div>
-                              {/*====== End - Check Box ======*/}
-                            </li>
+                          {tagProducts.map((tagProduct) => (
+                              <li key={tagProduct.id}>
+                                <div className="list__content">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectTagProducts.includes(tagProduct)}
+                                    onChange={() => handleProductTagToggle(tagProduct)}
+                                  />
+                                  <span>{tagProduct.name}</span>
+                                </div>
+                                {/* <span className="shop-w__total-text">(23)</span> */}
+                              </li>
+                            ))}
                           </ul>
                         </div>
                       </div>
@@ -241,18 +286,18 @@ function Shop() {
                           <span className="fas fa-minus shop-w__toggle" data-target="#s-price" data-toggle="collapse"></span>
                         </div>
                         <div className="shop-w__wrap collapse show" id="s-price">
-                          <form className="shop-w__form-p">
+                          <form className="shop-w__form-p" onSubmit={handleSubmitPriceFilter}>
                             <div className="shop-w__form-p-wrap">
                               <div>
 
                                 <label for="price-min"></label>
 
-                                <input className="input-text input-text--primary-style" type="text" id="price-min" placeholder="Min" /></div>
+                                <input className="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min" /></div>
                               <div>
 
                                 <label for="price-max"></label>
 
-                                <input className="input-text input-text--primary-style" type="text" id="price-max" placeholder="Max" /></div>
+                                <input className="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max" /></div>
                               <div>
 
                                 <button className="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" type="submit"></button></div>
@@ -450,18 +495,31 @@ function Shop() {
                   <div className="shop-p__toolbar u-s-m-b-30">
                     <div className="shop-p__meta-wrap u-s-m-b-60">
 
-                      <span className="shop-p__meta-text-1">FOUND 18 RESULTS</span>
+                      <span className="shop-p__meta-text-1">FOUND {totalProducts} RESULTS</span>
                       <div className="shop-p__meta-text-2">
-                        <span>Related Searches:</span>
-                        {selectedCategory && (
+                        <span>Related Searches:&nbsp;&nbsp;</span>
+                        {/* {selectedCategory && (
                           <a className="gl-tag btn--e-brand-shadow" href="#">
                             {selectedCategory.name}
                             <i className="fas fa-trash" onClick={clearSelectedCategory} style={{ marginLeft: '5px' }}></i>
                           </a>
-                        )}
+                        )} */}
+                        {selectedCategory.map((category) => (
+                          <a className="gl-tag btn--e-brand-shadow" key={category.id} href="#">
+                            {category.name}
+                            {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
+                          </a>
+                        ))}
                         {selectedBrands.map((brand) => (
                           <a className="gl-tag btn--e-brand-shadow" key={brand.id} href="#">
                             {brand.name}
+                            {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
+                          </a>
+                        ))}
+
+                        {selectTagProducts.map((tagProduct) => (
+                          <a className="gl-tag btn--e-brand-shadow" key={tagProduct.id} href="#">
+                            {tagProduct.name}
                             {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
                           </a>
                         ))}
@@ -526,18 +584,23 @@ function Shop() {
                             <div className="product-m__content">
                               <div className="product-m__category">
 
-                                <a href="shop-side-version-2.html">{product.name}</a></div>
+                                <a href="shop-side-version-2.html">{product.category_id.name}</a>
+                              </div>
                               <div className="product-m__name">
 
-                                <a href="product-detail.html">New Fashion B Nice Elegant</a></div>
+                                <a href="product-detail.html">{product.name}</a></div>
                               <div className="product-m__rating gl-rating-style"><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star-half-alt"></i><i className="far fa-star"></i><i className="far fa-star"></i>
 
-                                <span className="product-m__review">(23)</span></div>
-                              <div className="product-m__price">$125.00</div>
+                                {/* <span className="product-m__review">(23)</span> */}
+                              </div>
+                              <div class="product-m__price">${product.price_sale}
+
+                                <span class="product-m__discount">${product.price}</span>
+                              </div>
                               <div className="product-m__hover">
                                 <div className="product-m__preview-description">
 
-                                  <span>Mô tả</span></div>
+                                  <span>{product.description}</span></div>
                                 <div className="product-m__wishlist">
 
                                   <a className="far fa-heart" href="#" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"></a></div>
@@ -559,7 +622,8 @@ function Shop() {
                         <a className="fas fa-angle-right" href="#" onClick={() => handlePageChange(currentPage + 1)}></a>
                       </li>
                     </ul>
-                  </div>                </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
