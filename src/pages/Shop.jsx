@@ -80,21 +80,6 @@ function Shop() {
     console.log("check tagProducts: ", resTag)
   };
 
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-  };
-
-  const clearSelectedCategory = () => {
-    setSelectedCategory(null); // Xóa selectedCategory bằng cách set giá trị thành null
-  };
-
-  // const handleBrandClick = (brand) => {
-  //   setSelectedBrand(brand);
-  // };
-
-  const clearSelectedBrand = () => {
-    setSelectedBrands(null);
-  };
   const handleBrandToggle = (brand) => {
     const isSelected = selectedBrands.includes(brand);
     if (isSelected) {
@@ -127,7 +112,7 @@ function Shop() {
 
                     <span>FILTERS</span></h1>
                   <div className="shop-w-master__sidebar sidebar--bg-snow">
-                    {/* <div className="u-s-m-b-30">
+                    <div className="u-s-m-b-30">
                       <div className="shop-w">
                         <div className="shop-w__intro-wrap">
                           <h1 className="shop-w__h">CATEGORY</h1>
@@ -136,19 +121,24 @@ function Shop() {
                         </div>
                         <div className="shop-w__wrap collapse show" id="s-category">
                           <ul className="shop-w__category-list gl-scroll">
-                            {categories.map((category) => (
+                          {categories.map((category) => (
                               <li key={category.id}>
-                                <a href="#" onClick={() => handleCategoryClick(category)}>
-                                  {category.name}
-                                </a>
-                                <span className="category-list__text u-s-m-l-6">({category.count})</span>
+                                <div className="list__content">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedCategory.includes(category)}
+                                    onChange={() => handleCategoryToggle(category)}
+                                  />
+                                  <span>{category.name}</span>
+                                </div>
+                                {/* <span className="shop-w__total-text">(23)</span> */}
                               </li>
                             ))}
                           </ul>
                         </div>
                       </div>
-                    </div> */}
-                    <div className="u-s-m-b-30">
+                    </div>
+                    {/* <div className="u-s-m-b-30">
                       <div className="shop-w">
                         <div className="shop-w__intro-wrap">
                           <h1 className="shop-w__h">CATEGORY</h1>
@@ -173,7 +163,7 @@ function Shop() {
                           </ul>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     {/* RATING */}
                     <div className="u-s-m-b-30">
                       <div className="shop-w">
@@ -605,7 +595,8 @@ function Shop() {
                         <a className="fas fa-angle-right" href="#" onClick={() => handlePageChange(currentPage + 1)}></a>
                       </li>
                     </ul>
-                  </div>                </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
