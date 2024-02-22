@@ -3,6 +3,7 @@ import React from 'react'
 const MyOrder = () => {
     return (
         <div>
+
             {/*====== App Content ======*/}
             <div className="app-content">
 
@@ -48,7 +49,7 @@ const MyOrder = () => {
                                                 <ul className="dash__f-list">
                                                     <li>
 
-                                                        <a href="/dashboard">Manage My Account</a></li>
+                                                        <a href="dashboard">Manage My Account</a></li>
                                                     <li>
 
                                                         <a href="/my-profile">My Profile</a></li>
@@ -108,53 +109,135 @@ const MyOrder = () => {
                                     <div className="col-lg-9 col-md-12">
                                         <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                             <div className="dash__pad-2">
-                                                <h1 className="dash__h1 u-s-m-b-14">My Profile</h1>
+                                                <h1 className="dash__h1 u-s-m-b-14">My Orders</h1>
 
-                                                <span className="dash__text u-s-m-b-30">Look all your info, you could customize your profile.</span>
-                                                <div className="row">
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Full Name</h2>
+                                                <span className="dash__text u-s-m-b-30">Here you can see all products that have been delivered.</span>
+                                                <form className="m-order u-s-m-b-30">
+                                                    <div className="m-order__select-wrapper">
 
-                                                        <span className="dash__text">John Doe</span>
+                                                        <label className="u-s-m-r-8" for="my-order-sort">Show:</label><select className="select-box select-box--primary-style" id="my-order-sort">
+                                                            <option selected>Last 5 orders</option>
+                                                            <option>Last 15 days</option>
+                                                            <option>Last 30 days</option>
+                                                            <option>Last 6 months</option>
+                                                            <option>Orders placed in 2018</option>
+                                                            <option>All Orders</option>
+                                                        </select></div>
+                                                </form>
+                                                <div className="m-order__list">
+                                                    <div className="m-order__get">
+                                                        <div className="manage-o__header u-s-m-b-30">
+                                                            <div className="dash-l-r">
+                                                                <div>
+                                                                    <div className="manage-o__text-2 u-c-secondary">Order #305423126</div>
+                                                                    <div className="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
+                                                                </div>
+                                                                <div>
+                                                                    <div className="dash__link dash__link--brand">
+
+                                                                        <a href="/manage-order">MANAGE</a></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="manage-o__description">
+                                                            <div className="description__container">
+                                                                <div className="description__img-wrap">
+
+                                                                    <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt="" /></div>
+                                                                <div className="description-title">Yellow Wireless Headphone</div>
+                                                            </div>
+                                                            <div className="description__info-wrap">
+                                                                <div>
+
+                                                                    <span className="manage-o__badge badge--processing">Processing</span></div>
+                                                                <div>
+
+                                                                    <span className="manage-o__text-2 u-c-silver">Quantity:
+
+                                                                        <span className="manage-o__text-2 u-c-secondary">1</span></span></div>
+                                                                <div>
+
+                                                                    <span className="manage-o__text-2 u-c-silver">Total:
+
+                                                                        <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">E-mail</h2>
+                                                    <div className="m-order__get">
+                                                        <div className="manage-o__header u-s-m-b-30">
+                                                            <div className="dash-l-r">
+                                                                <div>
+                                                                    <div className="manage-o__text-2 u-c-secondary">Order #305423126</div>
+                                                                    <div className="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
+                                                                </div>
+                                                                <div>
+                                                                    <div className="dash__link dash__link--brand">
 
-                                                        <span className="dash__text">johndoe@domain.com</span>
-                                                        <div className="dash__link dash__link--secondary">
+                                                                        <a href="/manage-order">MANAGE</a></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="manage-o__description">
+                                                            <div className="description__container">
+                                                                <div className="description__img-wrap">
 
-                                                            <a href="#">Change</a></div>
+                                                                    <img className="u-img-fluid" src="images/product/women/product8.jpg" alt="" /></div>
+                                                                <div className="description-title">New Dress D Nice Elegant</div>
+                                                            </div>
+                                                            <div className="description__info-wrap">
+                                                                <div>
+
+                                                                    <span className="manage-o__badge badge--shipped">Shipped</span></div>
+                                                                <div>
+
+                                                                    <span className="manage-o__text-2 u-c-silver">Quantity:
+
+                                                                        <span className="manage-o__text-2 u-c-secondary">1</span></span></div>
+                                                                <div>
+
+                                                                    <span className="manage-o__text-2 u-c-silver">Total:
+
+                                                                        <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Phone</h2>
+                                                    <div className="m-order__get">
+                                                        <div className="manage-o__header u-s-m-b-30">
+                                                            <div className="dash-l-r">
+                                                                <div>
+                                                                    <div className="manage-o__text-2 u-c-secondary">Order #305423126</div>
+                                                                    <div className="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
+                                                                </div>
+                                                                <div>
+                                                                    <div className="dash__link dash__link--brand">
 
-                                                        <span className="dash__text">Please enter your mobile</span>
-                                                        <div className="dash__link dash__link--secondary">
+                                                                        <a href="/manage-order">MANAGE</a></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="manage-o__description">
+                                                            <div className="description__container">
+                                                                <div className="description__img-wrap">
 
-                                                            <a href="#">Add</a></div>
-                                                    </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Birthday</h2>
+                                                                    <img className="u-img-fluid" src="images/product/men/product8.jpg" alt="" /></div>
+                                                                <div className="description-title">New Fashion D Nice Elegant</div>
+                                                            </div>
+                                                            <div className="description__info-wrap">
+                                                                <div>
 
-                                                        <span className="dash__text">1991-02-02</span>
-                                                    </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Gender</h2>
+                                                                    <span className="manage-o__badge badge--delivered">Delivered</span></div>
+                                                                <div>
 
-                                                        <span className="dash__text">Male</span>
-                                                    </div>
-                                                </div>
-                                                <div className="row">
-                                                    <div className="col-lg-12">
-                                                        <div className="dash__link dash__link--secondary u-s-m-b-30">
+                                                                    <span className="manage-o__text-2 u-c-silver">Quantity:
 
-                                                            <a data-modal="modal" data-modal-id="#newsletter">Subscribe Newsletter</a></div>
-                                                        <div className="u-s-m-b-16">
+                                                                        <span className="manage-o__text-2 u-c-secondary">1</span></span></div>
+                                                                <div>
 
-                                                            <a className="dash__custom-link btn--e-transparent-brand-b-2" href="/edit-profile">Edit Profile</a></div>
-                                                        <div>
+                                                                    <span className="manage-o__text-2 u-c-silver">Total:
 
-                                                            <a className="dash__custom-link btn--e-brand-b-2" href="#">Change Password</a></div>
+                                                                        <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -169,6 +252,7 @@ const MyOrder = () => {
                 {/*====== End - Section 2 ======*/}
             </div>
             {/*====== End - App Content ======*/}
+
         </div>
     )
 }
