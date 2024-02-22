@@ -15,6 +15,7 @@ import MyOrder from '../pages/Account/MyOrder'
 import Cancellation from '../pages/Account/Cancellation'
 import PaymentOption from '../pages/Account/PaymentOption' 
 import Wishlist from '../pages/Account/Wishlist'
+import AddressAdd from '../pages/Account/AddAddress'
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
@@ -39,6 +40,8 @@ function Routers() {
         <Route path='/my-profile' element={<MyProfile/>}/>
 
         <Route path='/address-book' element={<AddressBook/>}/>
+        
+        <Route path='/address-add' element={<AddressAdd/>}/>
 
         <Route path='/my-order' element={<MyOrder/>}/>
 
