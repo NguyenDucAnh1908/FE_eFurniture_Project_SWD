@@ -18,7 +18,7 @@ const BrandSlider = () => {
         if (res) {
             setListbrand(res)
         }
-        console.log("Check res brand: ", res)
+        //console.log("Check res brand: ", res)
     };
 
     // Determine the number of slides to show based on the number of items in the listBrand array
@@ -31,7 +31,7 @@ const BrandSlider = () => {
         slidesToShow: slidesToShow,
         slidesToScroll: 1,
         autoplay: true, // Autoplay enabled
-        autoplaySpeed: 3000, // Autoplay speed set to 3 seconds
+        autoplaySpeed: 2000, // Autoplay speed set to 3 seconds
         prevArrow: <div className="b-prev"><i className="fas fa-angle-left"></i></div>,
         nextArrow: <div className="b-next"><i className="fas fa-angle-right"></i></div>,
         responsive: [
