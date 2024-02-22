@@ -15,7 +15,8 @@ import MyOrder from '../pages/Account/MyOrder'
 import Cancellation from '../pages/Account/Cancellation'
 import PaymentOption from '../pages/Account/PaymentOption' 
 import Wishlist from '../pages/Account/Wishlist'
-
+import EditProfile from '../pages/Account/EditProfile'
+import ManagerOrderDetail from '../pages/Account/ManagerOrderDetail'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function Routers() {
@@ -42,6 +43,8 @@ function Routers() {
 
         <Route path='/my-order' element={<MyOrder/>}/>
 
+        <Route path='/edit-profile' element={<EditProfile/>}/>
+        <Route path='/manager-orderdetail' element={<ManagerOrderDetail/>}/>
         <Route path='/track-order' element={<TrackOrder/>}/>
 
         <Route path='/cancellation' element={<Cancellation/>}/>
