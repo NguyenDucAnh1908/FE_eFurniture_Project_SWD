@@ -5,10 +5,12 @@ import axios from 'axios';
 import { fetchallBrand } from '../services/BrandApi/BrandApi';
 import { fetchallCategory } from '../services/CategoryApi/CategoryApi';
 import { fetchallTagProduct } from '../services/TagProductApi/TagProductApi';
+import { useCart } from 'react-use-cart';
 import { wait } from '@testing-library/user-event/dist/utils';
 import Pagination from '../components/Pagination/Pagination';
 
 function Shop() {
+  const { addItem } = useCart();
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [tagProducts, setTagProducts] = useState([]);
@@ -115,6 +117,19 @@ function Shop() {
     const maxPrice = document.getElementById('price-max').value;
     fetchProducts(1, minPrice, maxPrice);
   };
+
+  const addToCart = (product) => {
+    // Lấy danh sách sản phẩm đã lưu trong session, nếu không có thì khởi tạo một mảng rỗng
+    let cartItems = JSON.parse(sessionStorage.getItem('cart')) || [];
+    // Thêm sản phẩm mới vào danh sách
+    cartItems.push(product);
+    // Lưu danh sách sản phẩm vào session
+    sessionStorage.setItem('cart', JSON.stringify(cartItems));
+    // Thông báo cho người dùng biết sản phẩm đã được thêm vào giỏ hàng
+    alert('Product added to cart!');
+    console.log("Check ad to cart: ", cartItems)
+  };
+ 
 
   return (
     <div>
@@ -260,7 +275,7 @@ function Shop() {
                         </div>
                         <div className="shop-w__wrap collapse show" id="s-shipping">
                           <ul className="shop-w__list gl-scroll">
-                          {tagProducts.map((tagProduct) => (
+                            {tagProducts.map((tagProduct) => (
                               <li key={tagProduct.id}>
                                 <div className="list__content">
                                   <input
@@ -566,10 +581,10 @@ function Shop() {
                   <div className="shop-p__collection">
                     <div className="row is-grid-active">
                       {/* Here product */}
-                      {products.map(product => (
-                        <div className="col-lg-4 col-md-6 col-sm-6">
-                          <div className="product-m">
-                            <div className="product-m__thumb">
+                      {products.map((product) => (
+                        <div  className="col-lg-4 col-md-6 col-sm-6">
+                          <div key={product.id} className="product-m">
+                            <div  className="product-m__thumb">
 
                               <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 
@@ -579,7 +594,7 @@ function Shop() {
                                 <a className="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
                               <div className="product-m__add-cart">
 
-                                <a className="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart">Add to Cart</a></div>
+                                <a className="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart" onClick={() => addItem(product)}>Add to Cart</a></div>
                             </div>
                             <div className="product-m__content">
                               <div className="product-m__category">
