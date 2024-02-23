@@ -608,9 +608,9 @@ function Shop() {
 
                                 {/* <span className="product-m__review">(23)</span> */}
                               </div>
-                              <div class="product-m__price">${product.price_sale}
+                              <div class="product-m__price">${product.price}
 
-                                <span class="product-m__discount">${product.price}</span>
+                                <span class="product-m__discount">${product.price_sale}</span>
                               </div>
                               <div className="product-m__hover">
                                 <div className="product-m__preview-description">

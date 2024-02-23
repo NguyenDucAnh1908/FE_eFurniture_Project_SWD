@@ -14,6 +14,8 @@ const Cart = () => {
     } = useCart();
 
 
+
+
     if (isEmpty) return
     <h1>Chua mua hang kia DMM</h1>
     return (
@@ -93,9 +95,10 @@ const Cart = () => {
                                                 <span>CONTINUE SHOPPING</span></a></div>
                                         <div className="route-box__g2">
 
-                                            <a className="route-box__link" href="cart.html"><i className="fas fa-trash"></i>
+                                            <a className="route-box__link" href="/"><i className="fas fa-trash"></i>
 
-                                                <span>CLEAR CART</span></a>
+                                                <span onClick={() => emptyCart()}>CLEAR CART</span>
+                                            </a>
 
                                             {/* <a className="route-box__link" href="cart.html"><i className="fas fa-sync"></i>
 
@@ -130,7 +133,8 @@ const Cart = () => {
 
                                                         {/*====== Select Box ======*/}
 
-                                                        <label className="gl-label" for="shipping-country">COUNTRY *</label><select className="select-box select-box--primary-style" id="shipping-country">
+                                                        <label className="gl-label" for="shipping-country">COUNTRY *</label>
+                                                        <select className="select-box select-box--primary-style" id="shipping-country">
                                                             <option selected value="">Choose Country</option>
                                                             <option value="uae">United Arab Emirate (UAE)</option>
                                                             <option value="uk">United Kingdom (UK)</option>
@@ -179,7 +183,7 @@ const Cart = () => {
                                                             <tbody>
                                                                 <tr>
                                                                     <td>SHIPPING</td>
-                                                                    <td>$4.00</td>
+                                                                    <td>${cartTotal}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>TAX</td>
@@ -187,7 +191,7 @@ const Cart = () => {
                                                                 </tr>
                                                                 <tr>
                                                                     <td>SUBTOTAL</td>
-                                                                    <td>$379.00</td>
+                                                                    <td>${cartTotal}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>GRAND TOTAL</td>

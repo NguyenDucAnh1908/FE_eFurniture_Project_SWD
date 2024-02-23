@@ -10,7 +10,7 @@ const CartItem = (props) => {
                     <td>
                         <div className="table-p__box">
                             <div className="table-p__img-wrap">
-                                <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt="" />
+                                <img className="u-img-fluid" src={item.thumbnail} alt="" />
                             </div>
                             <div className="table-p__info">
                                 <span className="table-p__name">
@@ -31,7 +31,7 @@ const CartItem = (props) => {
                         </div>
                     </td>
                     <td>
-                        <span className="table-p__price">${item.price_sale}</span>
+                        <span className="table-p__price">${item.price}</span>
                     </td>
                     <td>
                         <div className="table-p__input-counter-wrap">
