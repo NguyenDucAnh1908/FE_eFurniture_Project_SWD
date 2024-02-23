@@ -129,7 +129,7 @@ function Shop() {
     alert('Product added to cart!');
     console.log("Check ad to cart: ", cartItems)
   };
- 
+
 
   return (
     <div>
@@ -582,9 +582,9 @@ function Shop() {
                     <div className="row is-grid-active">
                       {/* Here product */}
                       {products.map((product) => (
-                        <div  className="col-lg-4 col-md-6 col-sm-6">
+                        <div className="col-lg-4 col-md-6 col-sm-6">
                           <div key={product.id} className="product-m">
-                            <div  className="product-m__thumb">
+                            <div className="product-m__thumb">
 
                               <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
 

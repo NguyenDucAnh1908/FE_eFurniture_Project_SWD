@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import CartItem from '../components/CartItem/CartItem'
 import { useCart } from 'react-use-cart'
+import axios from 'axios';
 const Cart = () => {
+    const [provinceData, setProvinceData] = useState([]);
+    const [districtData, setDistrictData] = useState([]);
+    const [selectedProvince, setSelectedProvince] = useState('');
+    const [selectedDistrict, setSelectedDistrict] = useState('');
+    const [wardData, setWardData] = useState([]);
+    const [loading, setLoading] = useState(false);
     const {
         isEmpty,
         totalUniqueItems,
@@ -14,7 +21,72 @@ const Cart = () => {
     } = useCart();
 
 
+    useEffect(() => {
+        // Hàm gọi API sẽ được gọi khi component được tạo ra
+        const fetchData = async () => {
+            try {
+                // Cấu hình headers chứa token
+                const config = {
+                    headers: {
+                        'token': '05e9c956-d27f-11ee-9414-ce214539f696'
+                    }
+                };
 
+                // Gọi API từ URL đã cung cấp và truyền cấu hình headers
+                const response = await axios.get('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', config);
+
+                // Lấy dữ liệu từ phản hồi API và lưu vào state
+                setProvinceData(response.data.data);
+            } catch (error) {
+                // Xử lý lỗi nếu có
+                console.error('Error fetching data:', error);
+                setLoading(false);
+            }
+        };
+
+        // Gọi hàm fetchData để lấy dữ liệu từ API
+        fetchData();
+    }, []);
+
+    const handleProvinceChange = async (e) => {
+        const selectedProvinceID = e.target.value;
+        setSelectedProvince(selectedProvinceID);
+        try {
+            // Cấu hình headers chứa token
+            const config = {
+                headers: {
+                    'token': '05e9c956-d27f-11ee-9414-ce214539f696'
+                }
+            };
+            setLoading(true);
+            const response = await axios.get(`https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${selectedProvinceID}`, config);
+            setDistrictData(response.data.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching district data:', error);
+            setLoading(false);
+        }
+    };
+
+    const handleDistrictChange = async (e) => {
+        const selectedDistrictID = e.target.value;
+        setSelectedDistrict(selectedDistrictID);
+        try {
+            // Cấu hình headers chứa token
+            const config = {
+                headers: {
+                    'token': '05e9c956-d27f-11ee-9414-ce214539f696'
+                }
+            };
+            setLoading(true);
+            const response = await axios.get(`https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${selectedDistrictID}`, config);
+            setWardData(response.data.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching ward data:', error);
+            setLoading(false);
+        }
+    };
 
     if (isEmpty) return
     <h1>Chua mua hang kia DMM</h1>
@@ -132,33 +204,39 @@ const Cart = () => {
                                                     <div className="u-s-m-b-30">
 
                                                         {/*====== Select Box ======*/}
-
-                                                        <label className="gl-label" for="shipping-country">COUNTRY *</label>
-                                                        <select className="select-box select-box--primary-style" id="shipping-country">
-                                                            <option selected value="">Choose Country</option>
-                                                            <option value="uae">United Arab Emirate (UAE)</option>
-                                                            <option value="uk">United Kingdom (UK)</option>
-                                                            <option value="us">United States (US)</option>
+                                                        <label className="gl-label" htmlFor="shipping-state">STATE/PROVINCE *</label>
+                                                        <select className="select-box select-box--primary-style" id="shipping-state" onChange={handleProvinceChange} value={selectedProvince}>
+                                                            <option value="">Choose State/Province</option>
+                                                            {provinceData.map(province => (
+                                                                <option key={province.ProvinceID} value={province.ProvinceID}>{province.ProvinceName}</option>
+                                                            ))}
                                                         </select>
+
                                                         {/*====== End - Select Box ======*/}
                                                     </div>
                                                     <div className="u-s-m-b-30">
 
                                                         {/*====== Select Box ======*/}
 
-                                                        <label className="gl-label" for="shipping-state">STATE/PROVINCE *</label><select className="select-box select-box--primary-style" id="shipping-state">
-                                                            <option selected value="">Choose State/Province</option>
-                                                            <option value="al">Alabama</option>
-                                                            <option value="al">Alaska</option>
-                                                            <option value="ny">New York</option>
+                                                        <label className="gl-label" htmlFor="shipping-district">DISTRICT *</label>
+                                                        <select className="select-box select-box--primary-style" id="shipping-district" onChange={handleDistrictChange} value={selectedDistrict}>
+                                                            <option value="">Choose District</option>
+                                                            {districtData.map(district => (
+                                                                <option key={district.DistrictID} value={district.DistrictID}>{district.DistrictName}</option>
+                                                            ))}
                                                         </select>
                                                         {/*====== End - Select Box ======*/}
                                                     </div>
                                                     <div className="u-s-m-b-30">
 
-                                                        <label className="gl-label" for="shipping-zip">ZIP/POSTAL CODE *</label>
-
-                                                        <input className="input-text input-text--primary-style" type="text" id="shipping-zip" placeholder="Zip/Postal Code" /></div>
+                                                        <label className="gl-label" htmlFor="shipping-ward">WARD *</label>
+                                                        <select className="select-box select-box--primary-style" id="shipping-ward">
+                                                            <option value="">Choose Ward</option>
+                                                            {wardData.map(ward => (
+                                                                <option key={ward.WardCode} value={ward.WardName}>{ward.WardName}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
                                                     <div className="u-s-m-b-30">
 
                                                         <a className="f-cart__ship-link btn--e-transparent-brand-b-2" href="cart.html">CALCULATE SHIPPING</a></div>

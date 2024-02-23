@@ -312,9 +312,9 @@ function Header() {
                                             <div className="mini-cart">
 
                                                 {/*====== Mini Product Container ======*/}
-                                                <CartMini 
-                                                items={items}
-                                                removeItem={removeItem}
+                                                <CartMini
+                                                    items={items}
+                                                    removeItem={removeItem}
                                                 />
                                                 {/*====== End - Mini Product Container ======*/}
 
