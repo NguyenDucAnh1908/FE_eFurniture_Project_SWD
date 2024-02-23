@@ -1,6 +1,21 @@
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import CartItem from '../components/CartItem/CartItem'
+import { useCart } from 'react-use-cart'
 const Cart = () => {
+    const {
+        isEmpty,
+        totalUniqueItems,
+        items,
+        totalItems,
+        cartTotal,
+        updateItemQuantity,
+        removeItem,
+        emptyCart,
+    } = useCart();
+
+
+    if (isEmpty) return
+    <h1>Chua mua hang kia DMM</h1>
     return (
         <div>
             {/*====== App Content ======*/}
@@ -58,162 +73,13 @@ const Cart = () => {
                                             <tbody>
 
                                                 {/*====== Row ======*/}
-                                                <tr>
-                                                    <td>
-                                                        <div className="table-p__box">
-                                                            <div className="table-p__img-wrap">
-
-                                                                <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt=""/></div>
-                                                            <div className="table-p__info">
-
-                                                                <span className="table-p__name">
-
-                                                                    <a href="product-detail.html">Yellow Wireless Headphone</a></span>
-
-                                                                <span className="table-p__category">
-
-                                                                    <a href="shop-side-version-2.html">Electronics</a></span>
-                                                                <ul className="table-p__variant-list">
-                                                                    <li>
-
-                                                                        <span>Size: 22</span></li>
-                                                                    <li>
-
-                                                                        <span>Color: Red</span></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-
-                                                        <span className="table-p__price">$125.00</span></td>
-                                                    <td>
-                                                        <div className="table-p__input-counter-wrap">
-
-                                                            {/*====== Input Counter ======*/}
-                                                            <div className="input-counter">
-
-                                                                <span className="input-counter__minus fas fa-minus"></span>
-
-                                                                <input className="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000"/>
-
-                                                                    <span className="input-counter__plus fas fa-plus"></span></div>
-                                                            {/*====== End - Input Counter ======*/}
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="table-p__del-wrap">
-
-                                                            <a className="far fa-trash-alt table-p__delete-link" href="#"></a></div>
-                                                    </td>
-                                                </tr>
+                                                <CartItem
+                                                    items={items}
+                                                    updateItemQuantity={updateItemQuantity}
+                                                    removeItem={removeItem}
+                                                />
                                                 {/*====== End - Row ======*/}
 
-
-                                                {/*====== Row ======*/}
-                                                <tr>
-                                                    <td>
-                                                        <div className="table-p__box">
-                                                            <div className="table-p__img-wrap">
-
-                                                                <img className="u-img-fluid" src="images/product/women/product8.jpg" alt=""/></div>
-                                                            <div className="table-p__info">
-
-                                                                <span className="table-p__name">
-
-                                                                    <a href="product-detail.html">New Dress D Nice Elegant</a></span>
-
-                                                                <span className="table-p__category">
-
-                                                                    <a href="shop-side-version-2.html">Women Clothing</a></span>
-                                                                <ul className="table-p__variant-list">
-                                                                    <li>
-
-                                                                        <span>Size: 22</span></li>
-                                                                    <li>
-
-                                                                        <span>Color: Red</span></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-
-                                                        <span className="table-p__price">$125.00</span></td>
-                                                    <td>
-                                                        <div className="table-p__input-counter-wrap">
-
-                                                            {/*====== Input Counter ======*/}
-                                                            <div className="input-counter">
-
-                                                                <span className="input-counter__minus fas fa-minus"></span>
-
-                                                                <input className="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000"/>
-
-                                                                    <span className="input-counter__plus fas fa-plus"></span></div>
-                                                            {/*====== End - Input Counter ======*/}
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="table-p__del-wrap">
-
-                                                            <a className="far fa-trash-alt table-p__delete-link" href="#"></a></div>
-                                                    </td>
-                                                </tr>
-                                                {/*====== End - Row ======*/}
-
-
-                                                {/*====== Row ======*/}
-                                                <tr>
-                                                    <td>
-                                                        <div className="table-p__box">
-                                                            <div className="table-p__img-wrap">
-
-                                                                <img className="u-img-fluid" src="images/product/men/product8.jpg" alt=""/></div>
-                                                            <div className="table-p__info">
-
-                                                                <span className="table-p__name">
-
-                                                                    <a href="product-detail.html">New Fashion D Nice Elegant</a></span>
-
-                                                                <span className="table-p__category">
-
-                                                                    <a href="shop-side-version-2.html">Men Clothing</a></span>
-                                                                <ul className="table-p__variant-list">
-                                                                    <li>
-
-                                                                        <span>Size: 22</span></li>
-                                                                    <li>
-
-                                                                        <span>Color: Red</span></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-
-                                                        <span className="table-p__price">$125.00</span></td>
-                                                    <td>
-                                                        <div className="table-p__input-counter-wrap">
-
-                                                            {/*====== Input Counter ======*/}
-                                                            <div className="input-counter">
-
-                                                                <span className="input-counter__minus fas fa-minus"></span>
-
-                                                                <input className="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000"/>
-
-                                                                    <span className="input-counter__plus fas fa-plus"></span></div>
-                                                            {/*====== End - Input Counter ======*/}
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="table-p__del-wrap">
-
-                                                            <a className="far fa-trash-alt table-p__delete-link" href="#"></a></div>
-                                                    </td>
-                                                </tr>
-                                                {/*====== End - Row ======*/}
                                             </tbody>
                                         </table>
                                     </div>
@@ -231,9 +97,10 @@ const Cart = () => {
 
                                                 <span>CLEAR CART</span></a>
 
-                                            <a className="route-box__link" href="cart.html"><i className="fas fa-sync"></i>
+                                            {/* <a className="route-box__link" href="cart.html"><i className="fas fa-sync"></i>
 
-                                                <span>UPDATE CART</span></a></div>
+                                                <span>UPDATE CART</span></a> */}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -287,7 +154,7 @@ const Cart = () => {
 
                                                         <label className="gl-label" for="shipping-zip">ZIP/POSTAL CODE *</label>
 
-                                                        <input className="input-text input-text--primary-style" type="text" id="shipping-zip" placeholder="Zip/Postal Code"/></div>
+                                                        <input className="input-text input-text--primary-style" type="text" id="shipping-zip" placeholder="Zip/Postal Code" /></div>
                                                     <div className="u-s-m-b-30">
 
                                                         <a className="f-cart__ship-link btn--e-transparent-brand-b-2" href="cart.html">CALCULATE SHIPPING</a></div>
@@ -324,7 +191,7 @@ const Cart = () => {
                                                                 </tr>
                                                                 <tr>
                                                                     <td>GRAND TOTAL</td>
-                                                                    <td>$379.00</td>
+                                                                    <td>${cartTotal}</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
