@@ -35,7 +35,7 @@ const BlogDetail = () => {
 
                                     <span className="bp-detail__author">
 
-                                        <a href="blog-right-sidebar.html">Dayle</a></span></span>
+                                        <a href="blog-right-sidebar.html">Daylse</a></span></span>
 
                                 <span className="bp-detail__stat-wrap">
 
