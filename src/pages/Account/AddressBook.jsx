@@ -16,7 +16,7 @@ const AddressBook = () => {
                     <ul className="breadcrumb__list">
                         <li className="has-separator">
 
-                            <a href="index">Home</a></li>
+                            <a href="/">Home</a></li>
                         <li className="is-marked">
 
                             <a href="address-book">My Account</a></li>

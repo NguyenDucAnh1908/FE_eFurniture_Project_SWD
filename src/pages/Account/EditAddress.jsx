@@ -14,7 +14,7 @@ const EditAddress = () => {
                                 <div className="breadcrumb__wrap">
                                     <ul className="breadcrumb__list">
                                         <li className="has-separator">
-                                            <a href="index">Home</a></li>
+                                            <a href="/">Home</a></li>
                                         <li className="is-marked">
                                             <a href="/address-edit">My Account</a></li>
                                     </ul>
