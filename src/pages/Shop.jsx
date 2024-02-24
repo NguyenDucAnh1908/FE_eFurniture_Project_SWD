@@ -6,6 +6,7 @@ import { fetchallBrand } from '../services/BrandApi/BrandApi';
 import { fetchallCategory } from '../services/CategoryApi/CategoryApi';
 import { fetchallTagProduct } from '../services/TagProductApi/TagProductApi';
 import { useCart } from 'react-use-cart';
+import { Link } from 'react-router-dom';
 import { wait } from '@testing-library/user-event/dist/utils';
 import Pagination from '../components/Pagination/Pagination';
 
@@ -586,9 +587,9 @@ function Shop() {
                           <div key={product.id} className="product-m">
                             <div className="product-m__thumb">
 
-                              <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
+                              <Link className="aspect aspect--bg-grey aspect--square u-d-block" to={`/product-detail-test/${product.id}`}>
 
-                                <img className="aspect__img" src={product.thumbnail} alt="" /></a>
+                                <img className="aspect__img" src={product.thumbnail} alt="" /></Link>
                               <div className="product-m__quick-look">
 
                                 <a className="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>

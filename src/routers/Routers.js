@@ -6,7 +6,6 @@ import ProductDetail from '../pages/ProductDetail'
 import Cart from '../pages/Cart'
 import CheckOut from '../pages/CheckOut'
 import Blog from '../pages/Blog'
-import Test from '../pages/test'
 import BlogDetail from '../pages/BlogDetail'
 import MyProfile from '../pages/Account/MyProfile'
 import AddressBook from '../pages/Account/AddressBook'  
@@ -16,6 +15,9 @@ import Cancellation from '../pages/Account/Cancellation'
 import PaymentOption from '../pages/Account/PaymentOption' 
 import Wishlist from '../pages/Account/Wishlist'
 import AddressAdd from '../pages/Account/AddAddress'
+
+import Test from '../pages/test'
+import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
@@ -54,6 +56,9 @@ function Routers() {
         <Route path='/wish-list' element={<Wishlist/>}/>
 
         <Route path='/test' element={<Test/>}/>
+
+        <Route exact path='/product-detail-test' element={<IndexProductDetail/>}/>
+
       </Routes>
     </BrowserRouter>
   )
