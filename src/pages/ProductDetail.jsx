@@ -11,6 +11,9 @@ const ProductDetail = () => {
     const [largeImage, setLargeImage] = useState('');
     const [productDetail, setProductDetail] = useState(null);
     const [reviews, setReviews] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
     const [loading, setLoading] = useState(true);
     const [averageRating, setAverageRating] = useState(null);
     const [rating, setRating] = useState(0);
@@ -23,6 +26,15 @@ const ProductDetail = () => {
 
     const handleReviewTextChange = (event) => {
         setReviewText(event.target.value);
+    };
+
+    const handlePageChange = (newPage) => {
+        // Check if the new page is within bounds
+        if (newPage >= 0 && newPage < totalPages) {
+            setCurrentPage(newPage);
+            // Fetch reviews for the new page
+            fetchFeedback(newPage);
+        }
     };
 
     useEffect(() => {
@@ -52,7 +64,7 @@ const ProductDetail = () => {
         }
     };
 
-    const fetchFeedback = async () => {
+    const fetchFeedback = async (newPage) => {
         try {
             const response1 = await axios.get(`http://localhost:8080/api/v1/feedbacks/product/${id}`);
             setReviews(response1.data.content);
@@ -60,6 +72,11 @@ const ProductDetail = () => {
             const response2 = await axios.get(`http://localhost:8080/api/v1/feedbacks/average-rating/${id}`);
             setAverageRating(response2.data)
 
+
+            setReviews(response1.data.content);
+            setCurrentPage(response1.number);
+            setTotalPages(response1.data.totalPages);
+            setTotalElements(response1.data.totalElements);
             setLoading(false);
             console.log("Check feedback: ", response1.data);
             console.log("Check feedback: ", response2.data);
@@ -442,7 +459,7 @@ const ProductDetail = () => {
                                                     {reviews.length > 0 && averageRating !== null && !isNaN(averageRating) && (
                                                         <div class="pd-tab__rev-score">
                                                             <div class="u-s-m-b-8">
-                                                                <h2>{reviews.length} Reviews - {averageRating.toFixed(1)} (Overall)</h2>
+                                                                <h2>{totalElements} Reviews - {averageRating.toFixed(1)} (Overall)</h2>
                                                             </div>
                                                             <div class="gl-rating-style-2 u-s-m-b-8">
                                                                 {generateStarRating(averageRating)}
@@ -460,7 +477,7 @@ const ProductDetail = () => {
                                                             <div class="u-s-m-b-15">
                                                                 <div>
                                                                     {productDetail && (
-                                                                        <h2>{reviews.length} Review(s) for {productDetail.name}</h2>
+                                                                        <h2>{totalElements} Review(s) for {productDetail.name}</h2>
                                                                     )}
                                                                 </div>
                                                             </div>
@@ -474,13 +491,13 @@ const ProductDetail = () => {
                                                         {loading ? (
                                                             <p>Loading reviews...</p>
                                                         ) : (
-                                                            reviews.map((review, index) => {
-                                                                console.log("Review Data:", review);
-                                                                return (
+                                                            <>
+                                                                {reviews.map((review, index) => (
                                                                     <div key={index} className="review-o u-s-m-b-15">
-                                                                        <div class="review-o__info u-s-m-b-8">
-                                                                            <span class="review-o__name">{review.userFullName}</span>
-                                                                            <span class="review-o__date">{review.createDate}</span></div>
+                                                                        <div className="review-o__info u-s-m-b-8">
+                                                                            <span className="review-o__name">{review.userFullName}</span>
+                                                                            <span className="review-o__date">{review.createDate}</span>
+                                                                        </div>
                                                                         <div key={index} className="review-o__item">
                                                                             <div className="review-o__rating gl-rating-style u-s-m-b-8">
                                                                                 {generateStarRating(review.rating)}
@@ -489,9 +506,25 @@ const ProductDetail = () => {
                                                                         </div>
                                                                         <p className="review-o__text">{parseHtml(review.comment)}</p>
                                                                     </div>
-                                                                );
-                                                            })
+                                                                ))}
+
+                                                                {/* Pagination controls */}
+                                                                {totalPages > 1 && (
+                                                                    <div className="pagination">
+                                                                        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+                                                                            Previous
+                                                                        </button>
+                                                                        <span>{`Page ${currentPage + 1} of ${totalPages}`}</span>
+                                                                        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+                                                                            Next
+                                                                        </button>
+
+                                                                    </div>
+                                                                )}
+                                                            </>
                                                         )}
+
+
                                                     </form>
                                                 </div>
                                                 <div className="u-s-m-b-30">
