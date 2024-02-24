@@ -16,6 +16,7 @@ import Cancellation from '../pages/Account/Cancellation'
 import PaymentOption from '../pages/Account/PaymentOption' 
 import Wishlist from '../pages/Account/Wishlist'
 
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function Routers() {
@@ -34,7 +35,7 @@ function Routers() {
 
         <Route path='/blog' element={<Blog/>}/>
 
-        <Route path='/blog-detail' element={<BlogDetail/>}/>
+        <Route path='/blog-detail/:id' element={<BlogDetail/>}/>
 
         <Route path='/my-profile' element={<MyProfile/>}/>
 
