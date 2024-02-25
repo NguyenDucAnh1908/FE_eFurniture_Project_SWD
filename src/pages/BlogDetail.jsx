@@ -7,6 +7,8 @@ const BlogDetail = () => {
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [tags, setTags] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -18,10 +20,31 @@ const BlogDetail = () => {
                 setError('Failed to fetch blog detail');
                 setLoading(false);
             }
-        }
+        };
 
         fetchBlog();
-    }, [id]); 
+    }, [id]);
+
+    useEffect(() => {
+        const fetchTagsAndCategories = async () => {
+            if (blog) {
+                try {
+                    const tagResponses = await Promise.all(blog.tagsBlog.map(tag => axios.get(`http://localhost:8080/api/tags-blog/${tag.id}`)));
+                    const categoryResponses = await Promise.all(blog.categories.map(category => axios.get(`http://localhost:8080/api/categories-blog/${category.id}`)));
+
+                    const fetchedTags = tagResponses.map(response => response.data);
+                    const fetchedCategories = categoryResponses.map(response => response.data);
+
+                    setTags(fetchedTags);
+                    setCategories(fetchedCategories);
+                } catch (error) {
+                    console.error('Failed to fetch tags and categories', error);
+                }
+            }
+        };
+
+        fetchTagsAndCategories();
+    }, [blog]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -30,7 +53,6 @@ const BlogDetail = () => {
     if (error) {
         return <div>Error: {error}</div>;
     }
-
 
 
     return (
@@ -75,22 +97,42 @@ const BlogDetail = () => {
 
                                         <span className="bp-detail__category">
 
-                                            <a href="blog-right-sidebar.html">Learning</a>
 
-                                            <a href="blog-right-sidebar.html">News</a>
+                                            {/* Display categories */}
 
-                                            <a href="blog-right-sidebar.html">Health</a></span></span></div>
+                                            {categories.map((category, index) => (
+                                                <React.Fragment key={category.id}>
+                                                    <span>{category.name}</span>
+                                                    {index < categories.length - 1 && ' '}
+                                                </React.Fragment>
+                                            ))}
+
+
+
+                                        </span></span>
+                                </div>
 
                                 <span className="bp-detail__h1">
 
                                     <a href="blog-detail.html">{blog.title}</a></span>
+
+
                                 <div className="blog-t-w">
+                                    {/* Hiển thị thẻ (tag) của blog */}
+                                    <div>
 
-                                    <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-right-sidebar.html">Travel</a>
+                                        {tags.map((tag, index) => (
+                                            <React.Fragment key={tag.id}>
+                                                <span className="gl-tag btn--e-transparent-hover-brand-b-2" >{tag.tagName}</span>
+                                                {index < tags.length - 1 && ' '}
+                                            </React.Fragment>
+                                        ))}
 
-                                    <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-right-sidebar.html">Culture</a>
+                                    </div>
 
-                                    <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-right-sidebar.html">Place</a></div>
+                                </div>
+
+
 
                                 <p className="bp-detail__p" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
 

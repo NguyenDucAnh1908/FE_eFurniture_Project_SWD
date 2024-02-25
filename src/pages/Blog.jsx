@@ -7,6 +7,8 @@ const Blog = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
+    const [tags, setTags] = useState({});
+    const [categories, setCategories] = useState({});
 
     useEffect(() => {
         const fetchBlogs = async () => {
@@ -23,9 +25,61 @@ const Blog = () => {
         fetchBlogs();
     }, [currentPage]);
 
+    // Hàm để gọi API và lấy thông tin về một tag dựa trên id của nó
+    const fetchTag = async (tagId) => {
+        try {
+            // Thực hiện cuộc gọi API để lấy thông tin về tag dựa trên id
+            const response = await axios.get(`http://localhost:8080/api/tags-blog/${tagId}`);
+            // Lưu thông tin của tag vào state
+            setTags(prevState => ({
+                ...prevState,
+                [tagId]: response.data // Lưu thông tin tag với key là id của tag
+            }));
+        } catch (error) {
+            console.error(`Failed to fetch tag with id ${tagId}`, error);
+        }
+    };
+
+    useEffect(() => {
+        // Lấy danh sách các tagIds từ các blogs hiện tại và gọi fetchTag cho mỗi tagId
+        blogs.forEach(blog => {
+            blog.tagBlogIds.forEach(tagId => {
+                if (!tags[tagId]) { // Kiểm tra xem thông tin tag đã được lấy hay chưa
+                    fetchTag(tagId);
+                }
+            });
+        });
+    }, [blogs]);
+
+
+
+    const fetchTag2 = async (categoryId) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/categories-blog/${categoryId}`);
+            setCategories(prevState => ({
+                ...prevState,
+                [categoryId]: response.data // Lưu thông tin tag với key là id của tag
+            }));
+        } catch (error) {
+            console.error(`Failed to fetch categoryId with id ${categoryId}`, error);
+        }
+    };
+
+    useEffect(() => {
+        blogs.forEach(blog => {
+            blog.categoryBlogIds.forEach(categoryId => {
+                if (!categories[categoryId]) {
+                    fetchTag2(categoryId);
+                }
+            });
+        });
+    }, [blogs]);
+
+
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+
 
     const truncateText = (text, maxLength) => {
         if (text.length > maxLength) {
@@ -42,6 +96,7 @@ const Blog = () => {
     if (error) {
         return <div>Error: {error}</div>;
     }
+
 
     return (
         <div>
@@ -283,36 +338,70 @@ const Blog = () => {
 
                                                             <a href="blog-left-sidebar.html">Dayle</a></span></span>
 
-                                                    <span className="bp__stat-wrap">
-
+                                                    {/* <span className="bp__stat-wrap">
                                                         <span className="bp__comment">
-
                                                             <a href="blog-detail"><i className="far fa-comments u-s-m-r-4"></i>
-
-                                                                <span>8</span></a></span></span>
+                                                                <span></span></a>
+                                                        </span>
+                                                    </span> */}
 
                                                     <span className="bp__stat-wrap">
 
                                                         <span className="bp__category">
 
-                                                            <a href="blog-left-sidebar.html">Learning</a>
+                                                            {/* get-category */}
 
-                                                            <a href="blog-left-sidebar.html">News</a>
+                                                            {blog.categoryBlogIds.map((categoryId, index) => {
+                                                                const categorie = categories[categoryId];
+                                                                if (categorie) {
+                                                                    return (
+                                                                        <React.Fragment key={categorie.id}>
+                                                                            <a className="bp__category" href="blog-left-sidebar.html">{categorie.name}</a>
+                                                                            {index < blog.categoryBlogIds.length - 1 && ' '} {/* Thêm khoảng trắng nếu chưa phải là thẻ cuối cùng */}
+                                                                        </React.Fragment>
+                                                                    );
+                                                                } else {
+                                                                    return null;
+                                                                }
+                                                            })}
 
-                                                            <a href="blog-left-sidebar.html">Health</a></span></span></div>
+
+
+                                                        </span></span>
+
+
+
+
+                                                </div>
 
                                                 <span className="bp__h1">
 
-                                                    <a href="blog-detail">{blog.title}</a></span>
 
-                                                <span className="bp__h2">A post with the image</span>
+                                                    <Link to={`/blog-detail/${blog.id}`} className="bp__h1">
+                                                        {blog.title}
+                                                    </Link>
+
+                                                </span>
+
+                                                {/* <span className="bp__h2">A post with the image</span> */}
                                                 <div className="blog-t-w">
 
-                                                    <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">Travel</a>
 
-                                                    <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">Culture</a>
+                                                    {/* get-tagName */}
+                                                    <div>
+                                                        {blog.tagBlogIds.map(tagId => {
+                                                            const tag = tags[tagId];
+                                                            if (tag) {
+                                                                return (
+                                                                    <a key={tag.id} className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">{tag.tagName}</a>
+                                                                );
+                                                            } else {
+                                                                return null;
+                                                            }
+                                                        })}
+                                                    </div>
 
-                                                    <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">Place</a></div>
+                                                </div>
 
 
                                                 <p>{truncateText(blog.content.replace(/<[^>]*>/g, ''), 240)}</p>
@@ -350,7 +439,7 @@ const Blog = () => {
                                 <nav className="post-center-wrap u-s-p-y-60">
                                     {/*====== Pagination ======*/}
                                     <ul className="blog-pg">
-                                        {[1, 2, 3, 4].map(page => (
+                                        {[1, 2].map(page => (
                                             <li key={page} className={currentPage === page - 1 ? 'blog-pg--active' : ''}>
                                                 <button onClick={() => handlePageChange(page - 1)}>{page}</button>
                                             </li>
