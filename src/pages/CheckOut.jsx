@@ -1,109 +1,129 @@
-import React from 'react'
+import React, { useState } from 'react'
+import FormCheckOut from '../components/FormCheckOut/FormCheckOut'
+import OrderSummary from '../components/FormCheckOut/OrderSummary'
 
 const CheckOut = () => {
-  return (
-    <div>
-               {/*====== App Content ======*/} 
-        <div className="app-content">
+    const [userId, setUserId] = useState("");
+    const [phone_number, setPhoneNumber] = useState('');
+    const [email, setEmail] = useState('');
+    const [fullName, setFullName] = useState('');
+    const [discounts, setDiscounts] = useState('');
+    const [notes, setNotes] = useState('');
+    const [status, setStatus] = useState('');
+    const [shipping_date, setShippingDate] = useState('');
+    const [shipping_method, setShippingMethod] = useState('');
+    const [tracking_number, setTrackingNumber] = useState('');
+    const [shipping_address, setShippingAddress] = useState('');
+    const [payment_method, setPaymentMethod] = useState('');
+    const [coupon_id, setCouponId] = useState('');
+    const [total_amount, setTotalAmount] = useState('');
 
-            {/*====== Section 1 ======*/}
-            <div className="u-s-p-y-60">
 
-                {/*====== Section Content ======*/}
-                <div className="section__content">
-                    <div className="container">
-                        <div className="breadcrumb">
-                            <div className="breadcrumb__wrap">
-                                <ul className="breadcrumb__list">
-                                    <li className="has-separator">
+    const handlePlaceOrder = () => {
+        console.log("Check place order: ", "userId: ", userId);
+    };
+    return (
+        <div>
+            {/*====== App Content ======*/}
+            <div className="app-content">
 
-                                        <a href="index.html">Home</a></li>
-                                    <li className="is-marked">
+                {/*====== Section 1 ======*/}
+                <div className="u-s-p-y-60">
 
-                                        <a href="checkout.html">Checkout</a></li>
-                                </ul>
+                    {/*====== Section Content ======*/}
+                    <div className="section__content">
+                        <div className="container">
+                            <div className="breadcrumb">
+                                <div className="breadcrumb__wrap">
+                                    <ul className="breadcrumb__list">
+                                        <li className="has-separator">
+
+                                            <a href="index.html">Home</a></li>
+                                        <li className="is-marked">
+
+                                            <a href="checkout.html">Checkout</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {/*====== End - Section 1 ======*/}
+                {/*====== End - Section 1 ======*/}
 
 
-            {/*====== Section 2 ======*/}
-            <div className="u-s-p-b-60">
+                {/*====== Section 2 ======*/}
+                <div className="u-s-p-b-60">
 
-                {/*====== Section Content ======*/}
-                <div className="section__content">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <div id="checkout-msg-group">
-                                    <div className="msg u-s-m-b-30">
+                    {/*====== Section Content ======*/}
+                    <div className="section__content">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    <div id="checkout-msg-group">
+                                        <div className="msg u-s-m-b-30">
 
-                                        <span className="msg__text">Returning customer?
+                                            <span className="msg__text">Returning customer?
 
-                                            <a className="gl-link" href="#return-customer" data-toggle="collapse">Click here to login</a></span>
-                                        <div className="collapse" id="return-customer" data-parent="#checkout-msg-group">
-                                            <div className="l-f u-s-m-b-16">
+                                                <a className="gl-link" href="#return-customer" data-toggle="collapse">Click here to login</a></span>
+                                            <div className="collapse" id="return-customer" data-parent="#checkout-msg-group">
+                                                <div className="l-f u-s-m-b-16">
 
-                                                <span className="gl-text u-s-m-b-16">If you have an account with us, please log in.</span>
-                                                <form className="l-f__form">
-                                                    <div className="gl-inline">
-                                                        <div className="u-s-m-b-15">
+                                                    <span className="gl-text u-s-m-b-16">If you have an account with us, please log in.</span>
+                                                    <form className="l-f__form">
+                                                        <div className="gl-inline">
+                                                            <div className="u-s-m-b-15">
 
-                                                            <label className="gl-label" for="login-email">E-MAIL *</label>
+                                                                <label className="gl-label" for="login-email">E-MAIL *</label>
 
-                                                            <input className="input-text input-text--primary-style" type="text" id="login-email" placeholder="Enter E-mail"/></div>
-                                                        <div className="u-s-m-b-15">
+                                                                <input className="input-text input-text--primary-style" type="text" id="login-email" placeholder="Enter E-mail" /></div>
+                                                            <div className="u-s-m-b-15">
 
-                                                            <label className="gl-label" for="login-password">PASSWORD *</label>
+                                                                <label className="gl-label" for="login-password">PASSWORD *</label>
 
-                                                            <input className="input-text input-text--primary-style" type="text" id="login-password" placeholder="Enter Password"/></div>
-                                                    </div>
-                                                    <div className="gl-inline">
-                                                        <div className="u-s-m-b-15">
+                                                                <input className="input-text input-text--primary-style" type="text" id="login-password" placeholder="Enter Password" /></div>
+                                                        </div>
+                                                        <div className="gl-inline">
+                                                            <div className="u-s-m-b-15">
 
-                                                            <button className="btn btn--e-transparent-brand-b-2" type="submit">LOGIN</button></div>
-                                                        <div className="u-s-m-b-15">
+                                                                <button className="btn btn--e-transparent-brand-b-2" type="submit">LOGIN</button></div>
+                                                            <div className="u-s-m-b-15">
 
-                                                            <a className="gl-link" href="lost-password.html">Lost Your Password?</a></div>
-                                                    </div>
-
-                                                    {/*====== Check Box ======*/}
-                                                    <div className="check-box">
-
-                                                        <input type="checkbox" id="remember-me"/>
-                                                        <div className="check-box__state check-box__state--primary">
-
-                                                            <label className="check-box__label" for="remember-me">Remember Me</label></div>
-                                                    </div>
-                                                    {/*====== End - Check Box ======*/}
-                                                </form>
+                                                                <a className="gl-link" href="lost-password.html">Lost Your Password?</a></div>
+                                                        </div>
+                                                        {/*====== Check Box ======*/}
+                                                        <div className="check-box">
+                                                            <input type="checkbox" id="remember-me" />
+                                                            <div className="check-box__state check-box__state--primary">
+                                                                <label className="check-box__label" for="remember-me">Remember Me</label>
+                                                            </div>
+                                                        </div>
+                                                        {/*====== End - Check Box ======*/}
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="msg">
+                                        <div className="msg">
 
-                                        <span className="msg__text">Have a coupon?
+                                            <span className="msg__text">Have a coupon?
 
-                                            <a className="gl-link" href="#have-coupon" data-toggle="collapse">Click Here to enter your code</a></span>
-                                        <div className="collapse" id="have-coupon" data-parent="#checkout-msg-group">
-                                            <div className="c-f u-s-m-b-16">
+                                                <a className="gl-link" href="#have-coupon" data-toggle="collapse">Click Here to enter your code</a></span>
+                                            <div className="collapse" id="have-coupon" data-parent="#checkout-msg-group">
+                                                <div className="c-f u-s-m-b-16">
 
-                                                <span className="gl-text u-s-m-b-16">Enter your coupon code if you have one.</span>
-                                                <form className="c-f__form">
-                                                    <div className="u-s-m-b-16">
-                                                        <div className="u-s-m-b-15">
+                                                    <span className="gl-text u-s-m-b-16">Enter your coupon code if you have one.</span>
+                                                    <form className="c-f__form">
+                                                        <div className="u-s-m-b-16">
+                                                            <div className="u-s-m-b-15">
 
-                                                            <label for="coupon"></label>
+                                                                <label for="coupon"></label>
 
-                                                            <input className="input-text input-text--primary-style" type="text" id="coupon" placeholder="Coupon Code"/></div>
-                                                        <div className="u-s-m-b-15">
+                                                                <input className="input-text input-text--primary-style" type="text" id="coupon" placeholder="Coupon Code" /></div>
+                                                            <div className="u-s-m-b-15">
 
-                                                            <button className="btn btn--e-transparent-brand-b-2" type="submit">APPLY</button></div>
-                                                    </div>
-                                                </form>
+                                                                <button className="btn btn--e-transparent-brand-b-2" type="submit">APPLY</button></div>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -111,30 +131,30 @@ const CheckOut = () => {
                             </div>
                         </div>
                     </div>
+                    {/*====== End - Section Content ======*/}
                 </div>
-                {/*====== End - Section Content ======*/}
-            </div>
-            {/*====== End - Section 2 ======*/}
+                {/*====== End - Section 2 ======*/}
 
 
-            {/*====== Section 3 ======*/}
-            <div className="u-s-p-b-60">
+                {/*====== Section 3 ======*/}
+                <div className="u-s-p-b-60">
 
-                {/*====== Section Content ======*/}
-                <div className="section__content">
-                    <div className="container">
-                        <div className="checkout-f">
-                            <div className="row">
-                                <div className="col-lg-6">
-                                    <h1 className="checkout-f__h1">DELIVERY INFORMATION</h1>
-                                    <form className="checkout-f__delivery">
+                    {/*====== Section Content ======*/}
+                    <div className="section__content">
+                        <div className="container">
+                            <div className="checkout-f">
+                                <div className="row">
+                                    {/* FormCheckOut */}
+                                    <div className="col-lg-6">
+                                        <h1 className="checkout-f__h1">DELIVERY INFORMATION</h1>
+                                        {/* <form className="checkout-f__delivery"> */}
                                         <div className="u-s-m-b-30">
                                             <div className="u-s-m-b-15">
 
                                                 {/*====== Check Box ======*/}
                                                 <div className="check-box">
 
-                                                    <input type="checkbox" id="get-address"/>
+                                                    <input type="checkbox" id="get-address" />
                                                     <div className="check-box__state check-box__state--primary">
 
                                                         <label className="check-box__label" for="get-address">Use default shipping and billing address from account</label></div>
@@ -148,12 +168,15 @@ const CheckOut = () => {
 
                                                     <label className="gl-label" for="billing-fname">FIRST NAME *</label>
 
-                                                    <input className="input-text input-text--primary-style" type="text" id="billing-fname" data-bill=""/></div>
+                                                    <input className="input-text input-text--primary-style" type="text" id="billing-fname" data-bill=""
+                                                        value={userId}
+                                                        onChange={(event) => setUserId(event.target.value)}
+                                                    /></div>
                                                 <div className="u-s-m-b-15">
 
                                                     <label className="gl-label" for="billing-lname">LAST NAME *</label>
 
-                                                    <input className="input-text input-text--primary-style" type="text" id="billing-lname" data-bill=""/></div>
+                                                    <input className="input-text input-text--primary-style" type="text" id="billing-lname" data-bill="" /></div>
                                             </div>
                                             {/*====== End - First Name, Last Name ======*/}
 
@@ -163,7 +186,7 @@ const CheckOut = () => {
 
                                                 <label className="gl-label" for="billing-email">E-MAIL *</label>
 
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""/></div>
+                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill="" /></div>
                                             {/*====== End - E-MAIL ======*/}
 
 
@@ -172,7 +195,7 @@ const CheckOut = () => {
 
                                                 <label className="gl-label" for="billing-phone">PHONE *</label>
 
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-phone" data-bill=""/></div>
+                                                <input className="input-text input-text--primary-style" type="text" id="billing-phone" data-bill="" /></div>
                                             {/*====== End - PHONE ======*/}
 
 
@@ -181,12 +204,12 @@ const CheckOut = () => {
 
                                                 <label className="gl-label" for="billing-street">STREET ADDRESS *</label>
 
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-street" placeholder="House name and street name" data-bill=""/></div>
+                                                <input className="input-text input-text--primary-style" type="text" id="billing-street" placeholder="House name and street name" data-bill="" /></div>
                                             <div className="u-s-m-b-15">
 
                                                 <label for="billing-street-optional"></label>
 
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-street-optional" placeholder="Apartment, suite unit etc. (optional)" data-bill=""/></div>
+                                                <input className="input-text input-text--primary-style" type="text" id="billing-street-optional" placeholder="Apartment, suite unit etc. (optional)" data-bill="" /></div>
                                             {/*====== End - Street Address ======*/}
 
 
@@ -198,8 +221,6 @@ const CheckOut = () => {
                                                 <label className="gl-label" for="billing-country">COUNTRY *</label><select className="select-box select-box--primary-style" id="billing-country" data-bill="">
                                                     <option selected value="">Choose Country</option>
                                                     <option value="uae">United Arab Emirate (UAE)</option>
-                                                    <option value="uk">United Kingdom (UK)</option>
-                                                    <option value="us">United States (US)</option>
                                                 </select>
                                                 {/*====== End - Select Box ======*/}
                                             </div>
@@ -211,7 +232,7 @@ const CheckOut = () => {
 
                                                 <label className="gl-label" for="billing-town-city">TOWN/CITY *</label>
 
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-town-city" data-bill=""/></div>
+                                                <input className="input-text input-text--primary-style" type="text" id="billing-town-city" data-bill="" /></div>
                                             {/*====== End - Town / City ======*/}
 
 
@@ -236,14 +257,14 @@ const CheckOut = () => {
 
                                                 <label className="gl-label" for="billing-zip">ZIP/POSTAL CODE *</label>
 
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-zip" placeholder="Zip/Postal Code" data-bill=""/></div>
+                                                <input className="input-text input-text--primary-style" type="text" id="billing-zip" placeholder="Zip/Postal Code" data-bill="" /></div>
                                             {/*====== End - ZIP/POSTAL ======*/}
                                             <div className="u-s-m-b-10">
 
                                                 {/*====== Check Box ======*/}
                                                 <div className="check-box">
 
-                                                    <input type="checkbox" id="make-default-address" data-bill=""/>
+                                                    <input type="checkbox" id="make-default-address" data-bill="" />
                                                     <div className="check-box__state check-box__state--primary">
 
                                                         <label className="check-box__label" for="make-default-address">Make default shipping and billing address</label></div>
@@ -260,151 +281,152 @@ const CheckOut = () => {
 
                                                     <label className="gl-label" for="reg-password">Account Password *</label>
 
-                                                    <input className="input-text input-text--primary-style" type="text" data-bill id="reg-password"/></div>
+                                                    <input className="input-text input-text--primary-style" type="text" data-bill id="reg-password" /></div>
                                             </div>
                                             <div className="u-s-m-b-10">
 
                                                 <label className="gl-label" for="order-note">ORDER NOTE</label><textarea className="text-area text-area--primary-style" id="order-note"></textarea></div>
                                             <div>
 
-                                                <button className="btn btn--e-transparent-brand-b-2" type="submit">SAVE</button></div>
+                                                <button onClick={() => handlePlaceOrder()} className="btn btn--e-transparent-brand-b-2" type="submit">SAVE</button></div>
                                         </div>
-                                    </form>
-                                </div>
-                                <div className="col-lg-6">
-                                    <h1 className="checkout-f__h1">ORDER SUMMARY</h1>
+                                        {/* </form> */}
+                                    </div>
+                                    <div className="col-lg-6">
+                                        <h1 className="checkout-f__h1">ORDER SUMMARY</h1>
 
-                                    {/*====== Order Summary ======*/}
-                                    <div className="o-summary">
-                                        <div className="o-summary__section u-s-m-b-30">
-                                            <div className="o-summary__item-wrap gl-scroll">
-                                                <div className="o-card">
-                                                    <div className="o-card__flex">
-                                                        <div className="o-card__img-wrap">
+                                        {/*====== Order Summary ======*/}
+                                        <div className="o-summary">
+                                            {/* summary */}
+                                            <div className="o-summary__section u-s-m-b-30">
+                                                <div className="o-summary__item-wrap gl-scroll">
+                                                    <div className="o-card">
+                                                        <div className="o-card__flex">
+                                                            <div className="o-card__img-wrap">
 
-                                                            <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt=""/></div>
-                                                        <div className="o-card__info-wrap">
+                                                                <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt="" /></div>
+                                                            <div className="o-card__info-wrap">
 
-                                                            <span className="o-card__name">
+                                                                <span className="o-card__name">
 
-                                                                <a href="product-detail.html">Yellow Wireless Headphone</a></span>
+                                                                    <a href="product-detail.html">Yellow Wireless Headphone</a></span>
 
-                                                            <span className="o-card__quantity">Quantity x 1</span>
+                                                                <span className="o-card__quantity">Quantity x 1</span>
 
-                                                            <span className="o-card__price">$150.00</span></div>
+                                                                <span className="o-card__price">$150.00</span></div>
+                                                        </div>
+
+                                                        <a className="o-card__del far fa-trash-alt"></a>
                                                     </div>
+                                                    <div className="o-card">
+                                                        <div className="o-card__flex">
+                                                            <div className="o-card__img-wrap">
 
-                                                    <a className="o-card__del far fa-trash-alt"></a>
-                                                </div>
-                                                <div className="o-card">
-                                                    <div className="o-card__flex">
-                                                        <div className="o-card__img-wrap">
+                                                                <img className="u-img-fluid" src="images/product/electronic/product18.jpg" alt="" /></div>
+                                                            <div className="o-card__info-wrap">
 
-                                                            <img className="u-img-fluid" src="images/product/electronic/product18.jpg" alt=""/></div>
-                                                        <div className="o-card__info-wrap">
+                                                                <span className="o-card__name">
 
-                                                            <span className="o-card__name">
+                                                                    <a href="product-detail.html">Nikon DSLR Camera 4k</a></span>
 
-                                                                <a href="product-detail.html">Nikon DSLR Camera 4k</a></span>
+                                                                <span className="o-card__quantity">Quantity x 1</span>
 
-                                                            <span className="o-card__quantity">Quantity x 1</span>
+                                                                <span className="o-card__price">$150.00</span></div>
+                                                        </div>
 
-                                                            <span className="o-card__price">$150.00</span></div>
+                                                        <a className="o-card__del far fa-trash-alt"></a>
                                                     </div>
+                                                    <div className="o-card">
+                                                        <div className="o-card__flex">
+                                                            <div className="o-card__img-wrap">
 
-                                                    <a className="o-card__del far fa-trash-alt"></a>
-                                                </div>
-                                                <div className="o-card">
-                                                    <div className="o-card__flex">
-                                                        <div className="o-card__img-wrap">
+                                                                <img className="u-img-fluid" src="images/product/women/product8.jpg" alt="" /></div>
+                                                            <div className="o-card__info-wrap">
 
-                                                            <img className="u-img-fluid" src="images/product/women/product8.jpg" alt=""/></div>
-                                                        <div className="o-card__info-wrap">
+                                                                <span className="o-card__name">
 
-                                                            <span className="o-card__name">
+                                                                    <a href="product-detail.html">New Dress D Nice Elegant</a></span>
 
-                                                                <a href="product-detail.html">New Dress D Nice Elegant</a></span>
+                                                                <span className="o-card__quantity">Quantity x 1</span>
 
-                                                            <span className="o-card__quantity">Quantity x 1</span>
+                                                                <span className="o-card__price">$150.00</span></div>
+                                                        </div>
 
-                                                            <span className="o-card__price">$150.00</span></div>
+                                                        <a className="o-card__del far fa-trash-alt"></a>
                                                     </div>
+                                                    <div className="o-card">
+                                                        <div className="o-card__flex">
+                                                            <div className="o-card__img-wrap">
 
-                                                    <a className="o-card__del far fa-trash-alt"></a>
-                                                </div>
-                                                <div className="o-card">
-                                                    <div className="o-card__flex">
-                                                        <div className="o-card__img-wrap">
+                                                                <img className="u-img-fluid" src="images/product/men/product8.jpg" alt="" /></div>
+                                                            <div className="o-card__info-wrap">
 
-                                                            <img className="u-img-fluid" src="images/product/men/product8.jpg" alt=""/></div>
-                                                        <div className="o-card__info-wrap">
+                                                                <span className="o-card__name">
 
-                                                            <span className="o-card__name">
+                                                                    <a href="product-detail.html">New Fashion D Nice Elegant</a></span>
 
-                                                                <a href="product-detail.html">New Fashion D Nice Elegant</a></span>
+                                                                <span className="o-card__quantity">Quantity x 1</span>
 
-                                                            <span className="o-card__quantity">Quantity x 1</span>
+                                                                <span className="o-card__price">$150.00</span></div>
+                                                        </div>
 
-                                                            <span className="o-card__price">$150.00</span></div>
+                                                        <a className="o-card__del far fa-trash-alt"></a>
                                                     </div>
-
-                                                    <a className="o-card__del far fa-trash-alt"></a>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="o-summary__section u-s-m-b-30">
-                                            <div className="o-summary__box">
-                                                <h1 className="checkout-f__h1">SHIPPING & BILLING</h1>
-                                                <div className="ship-b">
+                                            <div className="o-summary__section u-s-m-b-30">
+                                                <div className="o-summary__box">
+                                                    <h1 className="checkout-f__h1">SHIPPING & BILLING</h1>
+                                                    <div className="ship-b">
 
-                                                    <span className="ship-b__text">Ship to:</span>
-                                                    <div className="ship-b__box u-s-m-b-10">
-                                                        <p className="ship-b__p">4247 Ashford Drive Virginia VA-20006 USA (+0) 900901904</p>
+                                                        <span className="ship-b__text">Ship to:</span>
+                                                        <div className="ship-b__box u-s-m-b-10">
+                                                            <p className="ship-b__p">4247 Ashford Drive Virginia VA-20006 USA (+0) 900901904</p>
 
-                                                        <a className="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id="#edit-ship-address">Edit</a>
+                                                            <a className="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id="#edit-ship-address">Edit</a>
+                                                        </div>
+                                                        <div className="ship-b__box">
+
+                                                            <span className="ship-b__text">Bill to default billing address</span>
+
+                                                            <a className="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id="#edit-ship-address">Edit</a></div>
                                                     </div>
-                                                    <div className="ship-b__box">
-
-                                                        <span className="ship-b__text">Bill to default billing address</span>
-
-                                                        <a className="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id="#edit-ship-address">Edit</a></div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="o-summary__section u-s-m-b-30">
-                                            <div className="o-summary__box">
-                                                <table className="o-summary__table">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>SHIPPING</td>
-                                                            <td>$4.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>TAX</td>
-                                                            <td>$0.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>SUBTOTAL</td>
-                                                            <td>$379.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>GRAND TOTAL</td>
-                                                            <td>$379.00</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                            <div className="o-summary__section u-s-m-b-30">
+                                                <div className="o-summary__box">
+                                                    <table className="o-summary__table">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>SHIPPING</td>
+                                                                <td>$4.00</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>TAX</td>
+                                                                <td>$0.00</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>SUBTOTAL</td>
+                                                                <td>$379.00</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>GRAND TOTAL</td>
+                                                                <td>$379.00</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="o-summary__section u-s-m-b-30">
-                                            <div className="o-summary__box">
-                                                <h1 className="checkout-f__h1">PAYMENT INFORMATION</h1>
-                                                <form className="checkout-f__payment">
+                                            <div className="o-summary__section u-s-m-b-30">
+                                                <div className="o-summary__box">
+                                                    <h1 className="checkout-f__h1">PAYMENT INFORMATION</h1>
+                                                    {/* <form className="checkout-f__payment"> */}
                                                     <div className="u-s-m-b-10">
 
                                                         {/*====== Radio Box ======*/}
                                                         <div className="radio-box">
 
-                                                            <input type="radio" id="cash-on-delivery" name="payment"/>
+                                                            <input type="radio" id="cash-on-delivery" name="payment" />
                                                             <div className="radio-box__state radio-box__state--primary">
 
                                                                 <label className="radio-box__label" for="cash-on-delivery">Cash on Delivery</label></div>
@@ -418,7 +440,7 @@ const CheckOut = () => {
                                                         {/*====== Radio Box ======*/}
                                                         <div className="radio-box">
 
-                                                            <input type="radio" id="direct-bank-transfer" name="payment"/>
+                                                            <input type="radio" id="direct-bank-transfer" name="payment" />
                                                             <div className="radio-box__state radio-box__state--primary">
 
                                                                 <label className="radio-box__label" for="direct-bank-transfer">Direct Bank Transfer</label></div>
@@ -432,7 +454,7 @@ const CheckOut = () => {
                                                         {/*====== Radio Box ======*/}
                                                         <div className="radio-box">
 
-                                                            <input type="radio" id="pay-with-check" name="payment"/>
+                                                            <input type="radio" id="pay-with-check" name="payment" />
                                                             <div className="radio-box__state radio-box__state--primary">
 
                                                                 <label className="radio-box__label" for="pay-with-check">Pay With Check</label></div>
@@ -446,7 +468,7 @@ const CheckOut = () => {
                                                         {/*====== Radio Box ======*/}
                                                         <div className="radio-box">
 
-                                                            <input type="radio" id="pay-with-card" name="payment"/>
+                                                            <input type="radio" id="pay-with-card" name="payment" />
                                                             <div className="radio-box__state radio-box__state--primary">
 
                                                                 <label className="radio-box__label" for="pay-with-card">Pay With Credit / Debit Card</label></div>
@@ -460,7 +482,7 @@ const CheckOut = () => {
                                                         {/*====== Radio Box ======*/}
                                                         <div className="radio-box">
 
-                                                            <input type="radio" id="pay-pal" name="payment"/>
+                                                            <input type="radio" id="pay-pal" name="payment" />
                                                             <div className="radio-box__state radio-box__state--primary">
 
                                                                 <label className="radio-box__label" for="pay-pal">Pay Pal</label></div>
@@ -474,7 +496,7 @@ const CheckOut = () => {
                                                         {/*====== Check Box ======*/}
                                                         <div className="check-box">
 
-                                                            <input type="checkbox" id="term-and-condition"/>
+                                                            <input type="checkbox" id="term-and-condition" />
                                                             <div className="check-box__state check-box__state--primary">
 
                                                                 <label className="check-box__label" for="term-and-condition">I consent to the</label></div>
@@ -485,24 +507,26 @@ const CheckOut = () => {
                                                     </div>
                                                     <div>
 
-                                                        <button className="btn btn--e-brand-b-2" type="submit">PLACE ORDER</button></div>
-                                                </form>
+                                                        <button className="btn btn--e-brand-b-2" type="submit"
+                                                            onClick={() => handlePlaceOrder()}
+                                                        >PLACE ORDER</button></div>
+                                                    {/* </form> */}
+                                                </div>
                                             </div>
                                         </div>
+                                        {/*====== End - Order Summary ======*/}
                                     </div>
-                                    {/*====== End - Order Summary ======*/}
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {/*====== End - Section Content ======*/}
                 </div>
-                {/*====== End - Section Content ======*/}
+                {/*====== End - Section 3 ======*/}
             </div>
-            {/*====== End - Section 3 ======*/}
+            {/*====== End - App Content ======*/}
         </div>
-        {/*====== End - App Content ======*/}
-    </div>
-  )
+    )
 }
 
 export default CheckOut
