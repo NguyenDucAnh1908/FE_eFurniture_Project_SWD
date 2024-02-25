@@ -5,13 +5,11 @@ const indexProductDetail = () => {
         <>
             {/*====== App Content ======*/}
             <div class="app-content">
-
                 {/*====== Section 1 ======*/}
                 <div class="u-s-p-t-90">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-5">
-
                                 {/*====== Product Breadcrumb ======*/}
                                 <div class="pd-breadcrumb u-s-m-b-30">
                                     <ul class="pd-breadcrumb__list">
