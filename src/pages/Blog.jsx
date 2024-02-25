@@ -411,7 +411,14 @@ const Blog = () => {
 
                                                         <span className="bp__read-more">
 
-                                                            <a href="blog-detail">READ MORE</a></span></div>
+                                                            <Link to={`/blog-detail/${blog.id}`} className="bp__read-more">
+                                                                <a href="blog-detail">READ MORE</a>
+                                                            </Link>
+
+                                                        </span></div>
+
+
+
                                                     <ul className="bp__social-list">
                                                         <li>
 
