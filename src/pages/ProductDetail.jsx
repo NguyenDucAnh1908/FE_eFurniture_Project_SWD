@@ -355,9 +355,8 @@ const ProductDetail = () => {
                                                 <a className="nav-link" data-toggle="tab" href="#pd-tag">TAGS</a></li>
                                             <li className="nav-item">
 
-                                                <a className="nav-link" id="view-review" data-toggle="tab" href="#pd-rev">REVIEWS
-
-                                                    {reviews && (<span></span>)}</a></li>
+                                                <a className="nav-link" id="view-review" data-toggle="tab" href="#pd-rev">REVIEWS ( {totalElements})
+                                                </a></li>
                                         </ul>
                                     </div>
                                     <div className="tab-content">
