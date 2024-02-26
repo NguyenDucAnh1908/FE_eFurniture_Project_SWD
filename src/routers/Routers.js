@@ -44,8 +44,6 @@ function Routers() {
 
         <Route path='/address-book' element={<AddressBook/>}/>
         
-        <Route path='/address-add' element={<AddressAdd/>}/>
-
         <Route path='/my-order' element={<MyOrder/>}/>
 
         <Route path='/track-order' element={<TrackOrder/>}/>
