@@ -13,3 +13,10 @@
 .slick-prev {
     left: 10px; /* Dịch chuyển nút điều hướng sang trái */
 }
+
+.selectedButton {
+    /* Thêm màu background và màu chữ mong muốn cho nút khi được chọn */
+    background-color: rgb(197, 130, 59);
+    color: rgb(241, 245, 245);
+}
+

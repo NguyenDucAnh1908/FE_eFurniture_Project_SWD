@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
-import { useCart } from 'react-use-cart'
-import { checkOutOrder } from '../services/CartApi/CartApi'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
+import { useCart } from 'react-use-cart';
+import { checkOutOrder } from '../services/CartApi/CartApi';
+import { FetchAllAddress, fetchAllAddress } from '../services/AddressApi/AddressApi';
+import './ProductDetailImage.css'
 import FormCheckOut from '../components/FormCheckOut/FormCheckOut'
 import OrderSummary from '../components/FormCheckOut/OrderSummary'
 
@@ -15,12 +18,24 @@ const CheckOut = () => {
     const [status, setStatus] = useState(null);
     const [shipping_date, setShippingDate] = useState('');
     const [shipping_method, setShippingMethod] = useState('');
-    const [tracking_number, setTrackingNumber] = useState('');
-    const [shipping_address, setShippingAddress] = useState(null);
+    const [province, setProvince] = useState('');
+    const [district, setDistrict] = useState('');
+    const [ward, setWard] = useState('');
     const [payment_method, setPaymentMethod] = useState('');
     const [coupon_id, setCouponId] = useState(null);
     const [total_amount, setTotalAmount] = useState(null);
     const [cart_items, setCartItems] = useState([]);
+
+    const [provinceData, setProvinceData] = useState([]);
+    const [districtData, setDistrictData] = useState([]);
+    const [selectedProvince, setSelectedProvince] = useState('');
+    const [selectedDistrict, setSelectedDistrict] = useState('');
+    const [wardData, setWardData] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const [listAdress, setListAdress] = useState([]);
+    const [selectedAddress, setSelectedAddress] = useState(null);
+
     const {
         isEmpty,
         totalUniqueItems,
@@ -32,14 +47,14 @@ const CheckOut = () => {
         emptyCart,
     } = useCart();
 
-        // console.log("Check place order: ", "userId: ", user_id,);
-        // items.forEach((item, index) => {
-        //     console.log("Check place order: ", "userId: ", user_id,);
-        //     const { quantity, id } = item;
-        //     console.log(`Item ${index + 1}:`);
-        //     console.log(" - ID:", id);
-        //     console.log(" - Quantity:", quantity);
-        // });
+    // console.log("Check place order: ", "userId: ", user_id,);
+    // items.forEach((item, index) => {
+    //     console.log("Check place order: ", "userId: ", user_id,);
+    //     const { quantity, id } = item;
+    //     console.log(`Item ${index + 1}:`);
+    //     console.log(" - ID:", id);
+    //     console.log(" - Quantity:", quantity);
+    // });
     const handlePlaceOrder = async () => {
         const cart_items = items.map(item => ({
             product_id: item.id,
@@ -52,11 +67,12 @@ const CheckOut = () => {
             email,
             fullName,
             discounts,
-            notes, status,
+            notes, 1,
             shipping_date,
             shipping_method,
-            tracking_number,
-            shipping_address,
+            province,
+            district,
+            ward,
             payment_method,
             coupon_id,
             total_amount,
@@ -85,6 +101,30 @@ const CheckOut = () => {
         //     console.log("A user is created error!!");
         // }
     };
+
+
+    const handleSave = () => {
+        console.log("Check save provinces: ", "province: ", province, "District: ", district, "Ward: ", ward)
+    };
+
+    useEffect(() => {
+        // Gọi hàm fetchData để lấy dữ liệu từ API
+        getAddressUser();
+    }, []);
+
+    const getAddressUser = async () => {
+        let res = await fetchAllAddress();
+        setListAdress(res.address)
+        console.log("Check address: ", res.address)
+    };
+
+    const handleUseAddress = (addressItem) => {
+        setProvince(addressItem.province);
+        setDistrict(addressItem.district);
+        setWard(addressItem.ward);
+        setSelectedAddress(addressItem);
+    };
+
     return (
         <div>
             {/*====== App Content ======*/}
@@ -114,89 +154,7 @@ const CheckOut = () => {
                 {/*====== End - Section 1 ======*/}
 
 
-                {/*====== Section 2 ======*/}
-                <div className="u-s-p-b-60">
 
-                    {/*====== Section Content ======*/}
-                    <div className="section__content">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <div id="checkout-msg-group">
-                                        <div className="msg u-s-m-b-30">
-
-                                            <span className="msg__text">Returning customer?
-
-                                                <a className="gl-link" href="#return-customer" data-toggle="collapse">Click here to login</a></span>
-                                            <div className="collapse" id="return-customer" data-parent="#checkout-msg-group">
-                                                <div className="l-f u-s-m-b-16">
-
-                                                    <span className="gl-text u-s-m-b-16">If you have an account with us, please log in.</span>
-                                                    <form className="l-f__form">
-                                                        <div className="gl-inline">
-                                                            <div className="u-s-m-b-15">
-
-                                                                <label className="gl-label" for="login-email">E-MAIL *</label>
-
-                                                                <input className="input-text input-text--primary-style" type="text" id="login-email" placeholder="Enter E-mail" /></div>
-                                                            <div className="u-s-m-b-15">
-
-                                                                <label className="gl-label" for="login-password">PASSWORD *</label>
-
-                                                                <input className="input-text input-text--primary-style" type="text" id="login-password" placeholder="Enter Password" /></div>
-                                                        </div>
-                                                        <div className="gl-inline">
-                                                            <div className="u-s-m-b-15">
-
-                                                                <button className="btn btn--e-transparent-brand-b-2" type="submit">LOGIN</button></div>
-                                                            <div className="u-s-m-b-15">
-
-                                                                <a className="gl-link" href="lost-password.html">Lost Your Password?</a></div>
-                                                        </div>
-                                                        {/*====== Check Box ======*/}
-                                                        <div className="check-box">
-                                                            <input type="checkbox" id="remember-me" />
-                                                            <div className="check-box__state check-box__state--primary">
-                                                                <label className="check-box__label" for="remember-me">Remember Me</label>
-                                                            </div>
-                                                        </div>
-                                                        {/*====== End - Check Box ======*/}
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="msg">
-
-                                            <span className="msg__text">Have a coupon?
-
-                                                <a className="gl-link" href="#have-coupon" data-toggle="collapse">Click Here to enter your code</a></span>
-                                            <div className="collapse" id="have-coupon" data-parent="#checkout-msg-group">
-                                                <div className="c-f u-s-m-b-16">
-
-                                                    <span className="gl-text u-s-m-b-16">Enter your coupon code if you have one.</span>
-                                                    <form className="c-f__form">
-                                                        <div className="u-s-m-b-16">
-                                                            <div className="u-s-m-b-15">
-
-                                                                <label for="coupon"></label>
-
-                                                                <input className="input-text input-text--primary-style" type="text" id="coupon" placeholder="Coupon Code" /></div>
-                                                            <div className="u-s-m-b-15">
-
-                                                                <button className="btn btn--e-transparent-brand-b-2" type="submit">APPLY</button></div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {/*====== End - Section Content ======*/}
-                </div>
-                {/*====== End - Section 2 ======*/}
 
 
                 {/*====== Section 3 ======*/}
@@ -237,9 +195,12 @@ const CheckOut = () => {
                                                     /></div>
                                                 <div className="u-s-m-b-15">
 
-                                                    <label className="gl-label" for="billing-lname">LAST NAME *</label>
+                                                    <label className="gl-label" for="billing-lname">FULL NAME *</label>
 
-                                                    <input className="input-text input-text--primary-style" type="text" id="billing-lname" data-bill="" /></div>
+                                                    <input className="input-text input-text--primary-style" type="text" id="billing-lname" data-bill=""
+                                                        value={fullName}
+                                                        onChange={(event) => setFullName(event.target.value)}
+                                                    /></div>
                                             </div>
                                             {/*====== End - First Name, Last Name ======*/}
 
@@ -273,7 +234,7 @@ const CheckOut = () => {
                                                     onChange={(event) => setPhoneNumber(event.target.value)}
                                                 /></div>
                                             {/*====== End - PHONE ======*/}
-                                            <div className="u-s-m-b-15">
+                                            {/* <div className="u-s-m-b-15">
 
                                                 <label className="gl-label" for="billing-email">E-fullName *</label>
 
@@ -371,13 +332,128 @@ const CheckOut = () => {
                                                     value={total_amount}
                                                     onChange={(event) => setTotalAmount(event.target.value)}
                                                 />
+                                            </div> */}
+
+                                            <label className="gl-label" for="billing-country">STATE/PROVINCE *</label>
+                                            <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
+                                                value={province}
+                                                onChange={(event) => setProvince(event.target.value)}
+                                                readOnly
+                                            />
+                                            {/* <select className="select-box select-box--primary-style" id="shipping-state" onChange={handleProvinceChange} value={selectedAddress ? selectedAddress.province : ""}>
+                                                <option value="">Choose State/Province</option>
+                                                {provinceData.map(province => (
+                                                    <option key={province.ProvinceID} value={province.ProvinceName}>{province.ProvinceName}</option>
+                                                ))}
+                                                {selectedAddress && (
+                                                    <option value={selectedAddress.province}>{selectedAddress.province}</option>
+                                                )}
+                                            </select> */}
+                                            {/*====== End - Street Address ======*/}
+
+
+                                            {/*====== Country ======*/}
+                                            <div className="u-s-m-b-15">
+
+                                                {/*====== Select Box ======*/}
+
+                                                <label className="gl-label" for="billing-country">DISTRICT *</label>
+                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
+                                                    value={district}
+                                                    onChange={(event) => setDistrict(event.target.value)}
+                                                    readOnly
+                                                />
+                                                {/* <select className="select-box select-box--primary-style" id="shipping-district" onChange={handleDistrictChange} value={district.DistrictID}>
+                                                    <option value="">Choose District</option>
+                                                    {districtData.map(district => (
+                                                        <option key={district.DistrictID} value={district.DistrictID}>{district.DistrictName}</option>
+                                                    ))}
+                                                </select> */}
+                                                {/*====== End - Select Box ======*/}
                                             </div>
+                                            {/*====== End - Country ======*/}
+
+
+                                            {/*====== Town / City ======*/}
+                                            <label className="gl-label" for="billing-country">WARD *</label>
+                                            <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
+                                                value={ward}
+                                                onChange={(event) => setWard(event.target.value)}
+                                                readOnly
+                                            />
+                                            {/* <select className="select-box select-box--primary-style" id="shipping-ward" onChange={handleWardChange} value={ward}>
+                                                <option value="">Choose Ward</option>
+                                                {wardData.map(ward => (
+                                                    <option key={ward.WardCode} value={ward.WardName}>{ward.WardName}</option>
+                                                ))}
+                                            </select> */}
+                                            {/*====== End - Town / City ======*/}
+
+
+                                            {/*====== STATE/PROVINCE ======*/}
+                                            <div className="u-s-m-b-15">
+
+                                                {/*====== Select Box ======*/}
+                                                {/* 
+                                                <label className="gl-label" for="billing-state">STATE/PROVINCE *</label><select className="select-box select-box--primary-style" id="billing-state" data-bill="">
+                                                    <option selected value="">Choose State/Province</option>
+                                                    <option value="al">Alabama</option>
+                                                    <option value="al">Alaska</option>
+                                                    <option value="ny">New York</option>
+                                                </select> */}
+                                                {/*====== End - Select Box ======*/}
+                                            </div>
+                                            {/*====== End - STATE/PROVINCE ======*/}
+
+
+                                            {/*====== ZIP/POSTAL ======*/}
+                                            <label className="gl-label" for="billing-country">Shiping method *</label><select className="select-box select-box--primary-style" id="billing-country" data-bill="">
+                                                <option selected value="">Choose Country</option>
+                                                <option value="uae">United Arab Emirate (UAE)</option>
+                                            </select>
+
+                                            <div className="u-s-m-b-15">
+
+                                                <label className="gl-label" for="billing-email">E-shipping_date *</label>
+
+                                                <input className="input-text input-text--primary-style" type="date" id="billing-email" data-bill=""
+                                                    value={email}
+                                                    onChange={(event) => setEmail(event.target.value)}
+                                                /></div>
+                                            {/*====== End - ZIP/POSTAL ======*/}
+                                            <div className="u-s-m-b-10">
+
+                                                {/*====== Check Box ======*/}
+                                                <div className="check-box">
+
+                                                    <input type="checkbox" id="make-default-address" data-bill="" />
+                                                    <div className="check-box__state check-box__state--primary">
+
+                                                        <label className="check-box__label" for="make-default-address">Make default shipping and billing address</label></div>
+                                                </div>
+                                                {/*====== End - Check Box ======*/}
+                                            </div>
+                                            <div className="u-s-m-b-10">
+
+                                                <a className="gl-link" href="#create-account" data-toggle="collapse">Want to create a new account?</a></div>
+                                            <div className="collapse u-s-m-b-15" id="create-account">
+
+                                                <span className="gl-text u-s-m-b-15">Create an account by entering the information below. If you are a returning customer please login at the top of the page.</span>
+                                                <div>
+
+                                                    <label className="gl-label" for="reg-password">Account Password *</label>
+
+                                                    <input className="input-text input-text--primary-style" type="text" data-bill id="reg-password" /></div>
+                                            </div>
+                                            <div className="u-s-m-b-10">
+
+                                                <label className="gl-label" for="order-note">ORDER NOTE</label><textarea className="text-area text-area--primary-style" id="order-note"></textarea></div>
 
 
                                             {/* HEREFORMDONHA */}
                                             <div>
 
-                                                <button onClick={() => handlePlaceOrder()} className="btn btn--e-transparent-brand-b-2" type="submit">SAVE</button></div>
+                                                <button onClick={() => handleSave()} className="btn btn--e-transparent-brand-b-2" type="submit">SAVE</button></div>
                                         </div>
                                         {/* </form> */}
                                     </div>
@@ -413,20 +489,32 @@ const CheckOut = () => {
                                             <div className="o-summary__section u-s-m-b-30">
                                                 <div className="o-summary__box">
                                                     <h1 className="checkout-f__h1">SHIPPING & BILLING</h1>
+
                                                     <div className="ship-b">
 
                                                         <span className="ship-b__text">Ship to:</span>
-                                                        <div className="ship-b__box u-s-m-b-10">
-                                                            <p className="ship-b__p">4247 Ashford Drive Virginia VA-20006 USA (+0) 900901904</p>
+                                                        {listAdress && listAdress.length > 0 && listAdress.map((addressItem, index) => (
+                                                            <div key={index} className="ship-b__box u-s-m-b-10">
+                                                                <p className="ship-b__p">{addressItem.ward}, {addressItem.district}, {addressItem.province}, VNA(+84) {addressItem.phoneNumber}</p>
+                                                                <button
+                                                                    className={`ship-b__edit btn--e-transparent-platinum-b-2 ${selectedAddress === addressItem ? 'selectedButton' : ''}`}
+                                                                    data-modal="modal"
+                                                                    data-modal-id="#edit-ship-address"
+                                                                    onClick={() => handleUseAddress(addressItem)}
+                                                                >
+                                                                    {selectedAddress === addressItem ? "Used" : "Use"}
+                                                                </button>
+                                                            </div>
+                                                        ))}
 
-                                                            <a className="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id="#edit-ship-address">Edit</a>
-                                                        </div>
                                                         <div className="ship-b__box">
 
                                                             <span className="ship-b__text">Bill to default billing address</span>
 
-                                                            <a className="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id="#edit-ship-address">Edit</a></div>
+                                                            {/* <a className="ship-b__edit btn--e-transparent-platinum-b-2" data-modal="modal" data-modal-id="#edit-ship-address">Edit</a> */}
+                                                        </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                             <div className="o-summary__section u-s-m-b-30">
@@ -447,11 +535,32 @@ const CheckOut = () => {
                                                             </tr>
                                                             <tr>
                                                                 <td>GRAND TOTAL</td>
-                                                                <td>$379.00</td>
+                                                                <td>${cartTotal}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                            </div>
+
+
+                                            <div className="c-f u-s-m-b-16">
+
+                                                <span className="gl-text u-s-m-b-16">Enter your coupon code if you have one.</span>
+                                                <form className="c-f__form">
+                                                    <div className="u-s-m-b-16">
+                                                        <div className="u-s-m-b-15">
+
+                                                            <label for="coupon"></label>
+
+                                                            <select className="select-box select-box--primary-style" id="billing-country" data-bill="">
+                                                                <option selected value="">Choose Country</option>
+                                                                <option value="uae">United Arab Emirate (UAE)</option>
+                                                            </select></div>
+                                                        <div className="u-s-m-b-15">
+
+                                                            <button className="btn btn--e-transparent-brand-b-2" type="submit">APPLY</button></div>
+                                                    </div>
+                                                </form>
                                             </div>
                                             <div className="o-summary__section u-s-m-b-30">
                                                 <div className="o-summary__box">
