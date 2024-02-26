@@ -6,7 +6,6 @@ import ProductDetail from '../pages/ProductDetail'
 import Cart from '../pages/Cart'
 import CheckOut from '../pages/CheckOut'
 import Blog from '../pages/Blog'
-import Test from '../pages/test'
 import BlogDetail from '../pages/BlogDetail'
 import MyProfile from '../pages/Account/MyProfile'
 import AddressBook from '../pages/Account/AddressBook'  
@@ -15,6 +14,11 @@ import MyOrder from '../pages/Account/MyOrder'
 import Cancellation from '../pages/Account/Cancellation'
 import PaymentOption from '../pages/Account/PaymentOption' 
 import Wishlist from '../pages/Account/Wishlist'
+import AddressBookEdit from '../pages/Account/AddressBookEdit'
+
+
+import Test from '../pages/test'
+import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
 
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
@@ -40,7 +44,7 @@ function Routers() {
         <Route path='/my-profile' element={<MyProfile/>}/>
 
         <Route path='/address-book' element={<AddressBook/>}/>
-
+        
         <Route path='/my-order' element={<MyOrder/>}/>
 
         <Route path='/track-order' element={<TrackOrder/>}/>
@@ -51,7 +55,12 @@ function Routers() {
 
         <Route path='/wish-list' element={<Wishlist/>}/>
 
+        <Route path='/edit-address' element={<AddressBookEdit/>}/>
+
         <Route path='/test' element={<Test/>}/>
+
+        <Route exact path='/product-detail-test' element={<IndexProductDetail/>}/>
+
       </Routes>
     </BrowserRouter>
   )

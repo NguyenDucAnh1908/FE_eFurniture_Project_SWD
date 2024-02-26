@@ -379,7 +379,7 @@ function Home() {
 
                                                                     <Link to={`/product-detail/${productItem.id}`}>{productItem.name}</Link></span>
 
-                                                                <span className="product-r__price">{productItem.price_sale}</span></div>
+                                                                <span className="product-r__price">{productItem.price}</span></div>
 
                                                             <span className="product-r__description">{productItem.description}</span>
                                                         </div>
@@ -473,9 +473,9 @@ function Home() {
                                                                         {/* <span className="product-bs__review">(23)</span> */}
                                                                     </div>
 
-                                                                    <span className="product-bs__price">${product.price_sale}
+                                                                    <span className="product-bs__price">${product.price}
 
-                                                                        <span className="product-bs__discount">${product.price}</span></span>
+                                                                        <span className="product-bs__discount">${product.price_sale}</span></span>
                                                                 </div>
                                                             </div>
                                                         </div>
