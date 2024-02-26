@@ -16,6 +16,7 @@ import PaymentOption from '../pages/Account/PaymentOption'
 import Wishlist from '../pages/Account/Wishlist'
 import AddressBookEdit from '../pages/Account/AddressBookEdit'
 
+
 import Test from '../pages/test'
 import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
 
@@ -42,6 +43,8 @@ function Routers() {
         <Route path='/my-profile' element={<MyProfile/>}/>
 
         <Route path='/address-book' element={<AddressBook/>}/>
+        
+        <Route path='/address-add' element={<AddressAdd/>}/>
 
         <Route path='/my-order' element={<MyOrder/>}/>
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PaymentOption = () => {
+const AddressAdd = () => {
   return (
     <div>
             {/*====== App Content ======*/}
@@ -20,7 +20,7 @@ const PaymentOption = () => {
                                         <a href="/">Home</a></li>
                                     <li className="is-marked">
 
-                                        <a href="/payment-option">My Account</a></li>
+                                        <a href="/address-add">My Account</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -54,7 +54,7 @@ const PaymentOption = () => {
                                                     <a href="/my-profile">My Profile</a></li>
                                                 <li>
 
-                                                    <a href="/address-book">Address Book</a></li>
+                                                    <a className="dash-active" href="/address-book">Address Book</a></li>
                                                 <li>
 
                                                     <a href="/track-order">Track Order</a></li>
@@ -63,7 +63,7 @@ const PaymentOption = () => {
                                                     <a href="/my-order">My Orders</a></li>
                                                 <li>
 
-                                                    <a className="dash-active" href="/payment-option">My Payment Options</a></li>
+                                                    <a href="/payment-option">My Payment Options</a></li>
                                                 <li>
 
                                                     <a href="/cancellation">My Returns & Cancellations</a></li>
@@ -108,9 +108,75 @@ const PaymentOption = () => {
                                 <div className="col-lg-9 col-md-12">
                                     <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
                                         <div className="dash__pad-2">
-                                            <h1 className="dash__h1 u-s-m-b-14">My Payment Options</h1>
+                                            <h1 className="dash__h1 u-s-m-b-14">Add new Address</h1>
 
-                                            <span className="dash__text">No payment options</span>
+                                            <span className="dash__text u-s-m-b-30">We need an address where we could deliver products.</span>
+                                            <form className="dash-address-manipulation">
+                                                <div className="gl-inline">
+                                                    <div className="u-s-m-b-30">
+
+                                                        <label className="gl-label" for="address-fname">FIRST NAME *</label>
+
+                                                        <input className="input-text input-text--primary-style" type="text" id="address-fname" placeholder="First Name"/></div>
+                                                    <div className="u-s-m-b-30">
+
+                                                        <label className="gl-label" for="address-lname">LAST NAME *</label>
+
+                                                        <input className="input-text input-text--primary-style" type="text" id="address-lname" placeholder="Last Name"/></div>
+                                                </div>
+                                                <div className="gl-inline">
+                                                    <div className="u-s-m-b-30">
+
+                                                        <label className="gl-label" for="address-phone">PHONE *</label>
+
+                                                        <input className="input-text input-text--primary-style" type="text" id="address-phone"/></div>
+                                                    <div className="u-s-m-b-30">
+
+                                                        <label className="gl-label" for="address-street">STREET ADDRESS *</label>
+
+                                                        <input className="input-text input-text--primary-style" type="text" id="address-street" placeholder="House Name and Street"/></div>
+                                                </div>
+                                                <div className="gl-inline">
+                                                    <div className="u-s-m-b-30">
+
+                                                        {/*====== Select Box ======*/}
+
+                                                        <label className="gl-label" for="address-country">COUNTRY *</label><select className="select-box select-box--primary-style" id="address-country">
+                                                            <option selected value="">Choose Country</option>
+                                                            <option value="uae">United Arab Emirate (UAE)</option>
+                                                            <option value="uk">United Kingdom (UK)</option>
+                                                            <option value="us">United States (US)</option>
+                                                        </select>
+                                                        {/*====== End - Select Box ======*/}
+                                                    </div>
+                                                    <div className="u-s-m-b-30">
+
+                                                        {/*====== Select Box ======*/}
+
+                                                        <label className="gl-label" for="address-state">STATE/PROVINCE *</label><select className="select-box select-box--primary-style" id="address-state">
+                                                            <option selected value="">Choose State/Province</option>
+                                                            <option value="al">Alabama</option>
+                                                            <option value="al">Alaska</option>
+                                                            <option value="ny">New York</option>
+                                                        </select>
+                                                        {/*====== End - Select Box ======*/}
+                                                    </div>
+                                                </div>
+                                                <div className="gl-inline">
+                                                    <div className="u-s-m-b-30">
+
+                                                        <label className="gl-label" for="address-city">TOWN/CITY *</label>
+
+                                                        <input className="input-text input-text--primary-style" type="text" id="address-city"/></div>
+                                                    <div className="u-s-m-b-30">
+
+                                                        <label className="gl-label" for="address-street">ZIP/POSTAL CODE *</label>
+
+                                                        <input className="input-text input-text--primary-style" type="text" id="address-postal" placeholder="Zip/Postal Code"/></div>
+                                                </div>
+
+                                                <button className="btn btn--e-brand-b-2" type="submit">SAVE</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -127,4 +193,4 @@ const PaymentOption = () => {
   )
 }
 
-export default PaymentOption
+export default AddressAdd
