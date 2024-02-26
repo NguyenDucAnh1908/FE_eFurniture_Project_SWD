@@ -6,6 +6,7 @@ import { fetchallBrand } from '../services/BrandApi/BrandApi';
 import { fetchallCategory } from '../services/CategoryApi/CategoryApi';
 import { fetchallTagProduct } from '../services/TagProductApi/TagProductApi';
 import { useCart } from 'react-use-cart';
+import { Link } from 'react-router-dom';
 import { wait } from '@testing-library/user-event/dist/utils';
 import Pagination from '../components/Pagination/Pagination';
 
@@ -20,7 +21,9 @@ function Shop() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalProducts, setTotalProducts] = useState(0); // Khởi tạo totalProducts với giá trị ban đầu là 0
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
 
   useEffect(() => {
     getCategory();
@@ -111,25 +114,21 @@ function Shop() {
     }
   };
 
+  // const handleSubmitPriceFilter = (event) => {
+  //   event.preventDefault(); // Ngăn chặn sự kiện mặc định của form
+  //   const minPrice = document.getElementById('price-min').value;
+  //   const maxPrice = document.getElementById('price-max').value;
+  //   fetchProducts(1, minPrice, maxPrice);
+  // };
   const handleSubmitPriceFilter = (event) => {
     event.preventDefault(); // Ngăn chặn sự kiện mặc định của form
-    const minPrice = document.getElementById('price-min').value;
-    const maxPrice = document.getElementById('price-max').value;
-    fetchProducts(1, minPrice, maxPrice);
+    const minPriceInput = document.getElementById('price-min').value; // Lấy giá trị của ô nhập giá tiền tối thiểu
+    const maxPriceInput = document.getElementById('price-max').value; // Lấy giá trị của ô nhập giá tiền tối đa
+    setMinPrice(minPriceInput);
+    setMaxPrice(maxPriceInput);
+    const filter = { minPrice: minPriceInput, maxPrice: maxPriceInput };
+    fetchProducts(1, filter); // Gọi hàm fetchProducts với object filter
   };
-
-  const addToCart = (product) => {
-    // Lấy danh sách sản phẩm đã lưu trong session, nếu không có thì khởi tạo một mảng rỗng
-    let cartItems = JSON.parse(sessionStorage.getItem('cart')) || [];
-    // Thêm sản phẩm mới vào danh sách
-    cartItems.push(product);
-    // Lưu danh sách sản phẩm vào session
-    sessionStorage.setItem('cart', JSON.stringify(cartItems));
-    // Thông báo cho người dùng biết sản phẩm đã được thêm vào giỏ hàng
-    alert('Product added to cart!');
-    console.log("Check ad to cart: ", cartItems)
-  };
- 
 
   return (
     <div>
@@ -519,25 +518,58 @@ function Shop() {
                             <i className="fas fa-trash" onClick={clearSelectedCategory} style={{ marginLeft: '5px' }}></i>
                           </a>
                         )} */}
-                        {selectedCategory.map((category) => (
-                          <a className="gl-tag btn--e-brand-shadow" key={category.id} href="#">
-                            {category.name}
-                            {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
+                        {selectedCategory.length > 0 && (
+                          <a className="gl-tag btn--e-brand-shadow" href="#">
+                            CATEGORY:&nbsp;
+                            {selectedCategory.map((category, index) => (
+                              <span key={category.id}>
+                                {category.name}
+                                {index !== selectedCategory.length - 1 && ', '}
+                              </span>
+                            ))}
                           </a>
-                        ))}
-                        {selectedBrands.map((brand) => (
+                        )}
+                        {selectedBrands.length > 0 && (
+                          <a className="gl-tag btn--e-brand-shadow" href="#">
+                            BRAND:&nbsp;
+                            {selectedBrands.map((brand, index) => (
+                              <span key={brand.id}>
+                                {brand.name}
+                                {index !== selectedBrands.length - 1 && ', '}
+                              </span>
+                            ))}
+                          </a>
+                        )}
+                        {/* {selectedBrands.map((brand) => (
                           <a className="gl-tag btn--e-brand-shadow" key={brand.id} href="#">
                             {brand.name}
-                            {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
+                           
                           </a>
-                        ))}
-
-                        {selectTagProducts.map((tagProduct) => (
+                        ))} */}
+                        {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
+                        {selectTagProducts.length > 0 && (
+                          <a className="gl-tag btn--e-brand-shadow" href="#">
+                            TAGBRAND:&nbsp;
+                            {selectTagProducts.map((tagProduct, index) => (
+                              <span key={tagProduct.id}>
+                                {tagProduct.name}
+                                {index !== selectTagProducts.length - 1 && ', '}
+                              </span>
+                            ))}
+                          </a>
+                        )}
+                        {/* {selectTagProducts.map((tagProduct) => (
                           <a className="gl-tag btn--e-brand-shadow" key={tagProduct.id} href="#">
                             {tagProduct.name}
-                            {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
                           </a>
-                        ))}
+                        ))} */}
+
+                        {minPrice && maxPrice && (
+                          <a className="gl-tag btn--e-brand-shadow" href="#">
+                            PRICE:&nbsp;
+                            {`Price: $${minPrice} - $${maxPrice}`}
+                          </a>
+                        )}
                       </div>
                       {/* <div className="shop-p__meta-text-2">
                         <span>Related Searches: </span>
@@ -582,13 +614,13 @@ function Shop() {
                     <div className="row is-grid-active">
                       {/* Here product */}
                       {products.map((product) => (
-                        <div  className="col-lg-4 col-md-6 col-sm-6">
+                        <div className="col-lg-4 col-md-6 col-sm-6">
                           <div key={product.id} className="product-m">
-                            <div  className="product-m__thumb">
+                            <div className="product-m__thumb">
 
-                              <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
+                              <Link className="aspect aspect--bg-grey aspect--square u-d-block" to={`/product-detail/${product.id}`}>
 
-                                <img className="aspect__img" src={product.thumbnail} alt="" /></a>
+                                <img className="aspect__img" src={product.thumbnail} alt="" /></Link>
                               <div className="product-m__quick-look">
 
                                 <a className="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
@@ -608,9 +640,9 @@ function Shop() {
 
                                 {/* <span className="product-m__review">(23)</span> */}
                               </div>
-                              <div class="product-m__price">${product.price_sale}
+                              <div class="product-m__price">${product.price}
 
-                                <span class="product-m__discount">${product.price}</span>
+                                <span class="product-m__discount">${product.price_sale}</span>
                               </div>
                               <div className="product-m__hover">
                                 <div className="product-m__preview-description">
