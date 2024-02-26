@@ -14,7 +14,8 @@ import MyOrder from '../pages/Account/MyOrder'
 import Cancellation from '../pages/Account/Cancellation'
 import PaymentOption from '../pages/Account/PaymentOption' 
 import Wishlist from '../pages/Account/Wishlist'
-import AddressAdd from '../pages/Account/AddAddress'
+import AddressBookEdit from '../pages/Account/AddressBookEdit'
+
 
 import Test from '../pages/test'
 import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
@@ -54,6 +55,8 @@ function Routers() {
         <Route path='/payment-option' element={<PaymentOption/>}/>
 
         <Route path='/wish-list' element={<Wishlist/>}/>
+
+        <Route path='/edit-address' element={<AddressBookEdit/>}/>
 
         <Route path='/test' element={<Test/>}/>
 
