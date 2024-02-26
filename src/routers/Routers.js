@@ -20,6 +20,7 @@ import AddressBookEdit from '../pages/Account/AddressBookEdit'
 import Test from '../pages/test'
 import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
 
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function Routers() {
@@ -38,7 +39,7 @@ function Routers() {
 
         <Route path='/blog' element={<Blog/>}/>
 
-        <Route path='/blog-detail' element={<BlogDetail/>}/>
+        <Route path='/blog-detail/:id' element={<BlogDetail/>}/>
 
         <Route path='/my-profile' element={<MyProfile/>}/>
 
