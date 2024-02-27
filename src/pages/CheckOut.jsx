@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useCart } from 'react-use-cart';
 import { checkOutOrder } from '../services/CartApi/CartApi';
+import { fetchAllCoupons } from '../services/CartApi/CouponApi';
 import { FetchAllAddress, fetchAllAddress } from '../services/AddressApi/AddressApi';
 import './ProductDetailImage.css'
 import FormCheckOut from '../components/FormCheckOut/FormCheckOut'
@@ -35,6 +36,11 @@ const CheckOut = () => {
 
     const [listAdress, setListAdress] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
+
+    const [listCoupon, setListCoupon] = useState([]);
+    const [couponCode, setCouponCode] = useState('');
+    const [calculatedAmount, setCalculatedAmount] = useState('');
+    const [discountAmount, setDiscountAmount] = useState(0);
 
     const {
         isEmpty,
@@ -104,24 +110,48 @@ const CheckOut = () => {
 
 
     const handleSave = () => {
-        console.log("Check save provinces: ", "province: ", province, "District: ", district, "Ward: ", ward)
+        console.log("Check save provinces: ", "Shipping Date: ", province)
     };
 
     useEffect(() => {
         // Gọi hàm fetchData để lấy dữ liệu từ API
         getAddressUser();
+        getListCoupon();
     }, []);
 
     const getAddressUser = async () => {
         let res = await fetchAllAddress();
         setListAdress(res.address)
-        console.log("Check address: ", res.address)
+        //console.log("Check address: ", res.address)
+    };
+
+    const getListCoupon = async () => {
+        let res = await fetchAllCoupons();
+        setListCoupon(res)
+        console.log("Check coupon: ", res)
+    };
+    const handleCalculateTotal = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/v1/coupons/calculate?couponCode=${couponCode}&totalAmount=${cartTotal}`);
+            const { result } = response.data;
+            setCalculatedAmount(result);
+            const discount = cartTotal - result;
+            setDiscountAmount(discount);
+        } catch (error) {
+            console.error('Error calculating total:', error);
+        }
+    };
+    const handleCouponChange = (event) => {
+        setCouponCode(event.target.value);
     };
 
     const handleUseAddress = (addressItem) => {
-        setProvince(addressItem.province);
-        setDistrict(addressItem.district);
-        setWard(addressItem.ward);
+        setProvince(addressItem.provinceName);
+        setDistrict(addressItem.districtName);
+        setWard(addressItem.wardName);
+        setPhoneNumber(addressItem.phoneNumber);
+        setAddress(addressItem.streetAddress);
+        setFullName(addressItem.user.fullName);
         setSelectedAddress(addressItem);
     };
 
@@ -407,9 +437,13 @@ const CheckOut = () => {
 
 
                                             {/*====== ZIP/POSTAL ======*/}
-                                            <label className="gl-label" for="billing-country">Shiping method *</label><select className="select-box select-box--primary-style" id="billing-country" data-bill="">
+                                            <label className="gl-label" for="billing-country">Shiping method *</label>
+                                            <select className="select-box select-box--primary-style" id="billing-country"
+                                                data-bill="" value={shipping_method}
+                                                onChange={(e) => setShippingMethod(e.target.value)}
+                                            >
                                                 <option selected value="">Choose Country</option>
-                                                <option value="uae">United Arab Emirate (UAE)</option>
+                                                <option value="United Arab Emirate (UAE)">United Arab Emirate (UAE)</option>
                                             </select>
 
                                             <div className="u-s-m-b-15">
@@ -417,26 +451,26 @@ const CheckOut = () => {
                                                 <label className="gl-label" for="billing-email">E-shipping_date *</label>
 
                                                 <input className="input-text input-text--primary-style" type="date" id="billing-email" data-bill=""
-                                                    value={email}
-                                                    onChange={(event) => setEmail(event.target.value)}
+                                                    value={shipping_date}
+                                                    onChange={(event) => setShippingDate(event.target.value)}
                                                 /></div>
                                             {/*====== End - ZIP/POSTAL ======*/}
-                                            <div className="u-s-m-b-10">
+                                            {/* <div className="u-s-m-b-10"> */}
 
                                                 {/*====== Check Box ======*/}
-                                                <div className="check-box">
+                                                {/* <div className="check-box">
 
                                                     <input type="checkbox" id="make-default-address" data-bill="" />
                                                     <div className="check-box__state check-box__state--primary">
 
                                                         <label className="check-box__label" for="make-default-address">Make default shipping and billing address</label></div>
-                                                </div>
+                                                </div> */}
                                                 {/*====== End - Check Box ======*/}
-                                            </div>
-                                            <div className="u-s-m-b-10">
+                                            {/* </div> */}
+                                            {/* <div className="u-s-m-b-10">
 
-                                                <a className="gl-link" href="#create-account" data-toggle="collapse">Want to create a new account?</a></div>
-                                            <div className="collapse u-s-m-b-15" id="create-account">
+                                                <a className="gl-link" href="#create-account" data-toggle="collapse">Want to create a new account?</a></div> */}
+                                            {/* <div className="collapse u-s-m-b-15" id="create-account">
 
                                                 <span className="gl-text u-s-m-b-15">Create an account by entering the information below. If you are a returning customer please login at the top of the page.</span>
                                                 <div>
@@ -444,10 +478,16 @@ const CheckOut = () => {
                                                     <label className="gl-label" for="reg-password">Account Password *</label>
 
                                                     <input className="input-text input-text--primary-style" type="text" data-bill id="reg-password" /></div>
-                                            </div>
+                                            </div> */}
                                             <div className="u-s-m-b-10">
 
-                                                <label className="gl-label" for="order-note">ORDER NOTE</label><textarea className="text-area text-area--primary-style" id="order-note"></textarea></div>
+                                                <label className="gl-label" for="order-note">ORDER NOTE</label>
+                                                <textarea className="text-area text-area--primary-style" id="order-note"
+                                                    value={notes}
+                                                    onChange={(event) => setNotes(event.target.value)}
+                                                >
+                                                </textarea>
+                                            </div>
 
 
                                             {/* HEREFORMDONHA */}
@@ -495,7 +535,7 @@ const CheckOut = () => {
                                                         <span className="ship-b__text">Ship to:</span>
                                                         {listAdress && listAdress.length > 0 && listAdress.map((addressItem, index) => (
                                                             <div key={index} className="ship-b__box u-s-m-b-10">
-                                                                <p className="ship-b__p">{addressItem.ward}, {addressItem.district}, {addressItem.province}, VNA(+84) {addressItem.phoneNumber}</p>
+                                                                <p className="ship-b__p">{addressItem.wardName}, {addressItem.districtName}, {addressItem.provinceName}, VNA(+84) {addressItem.phoneNumber}</p>
                                                                 <button
                                                                     className={`ship-b__edit btn--e-transparent-platinum-b-2 ${selectedAddress === addressItem ? 'selectedButton' : ''}`}
                                                                     data-modal="modal"
@@ -526,16 +566,16 @@ const CheckOut = () => {
                                                                 <td>$4.00</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>TAX</td>
-                                                                <td>$0.00</td>
+                                                                <td>Discount</td>
+                                                                <td>${discountAmount.toFixed(2)}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>SUBTOTAL</td>
-                                                                <td>$379.00</td>
+                                                                <td>${cartTotal}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>GRAND TOTAL</td>
-                                                                <td>${cartTotal}</td>
+                                                                <td>${calculatedAmount}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -546,21 +586,29 @@ const CheckOut = () => {
                                             <div className="c-f u-s-m-b-16">
 
                                                 <span className="gl-text u-s-m-b-16">Enter your coupon code if you have one.</span>
-                                                <form className="c-f__form">
-                                                    <div className="u-s-m-b-16">
-                                                        <div className="u-s-m-b-15">
+                                                {/* <form className="c-f__form"> */}
+                                                <div className="u-s-m-b-16">
+                                                    <div className="u-s-m-b-15">
 
-                                                            <label for="coupon"></label>
-
-                                                            <select className="select-box select-box--primary-style" id="billing-country" data-bill="">
-                                                                <option selected value="">Choose Country</option>
-                                                                <option value="uae">United Arab Emirate (UAE)</option>
-                                                            </select></div>
-                                                        <div className="u-s-m-b-15">
-
-                                                            <button className="btn btn--e-transparent-brand-b-2" type="submit">APPLY</button></div>
+                                                        <label for="coupon"></label>
+                                                        <select className="select-box select-box--primary-style" id="billing-country" data-bill=""
+                                                            onChange={handleCouponChange}
+                                                        >
+                                                            <option selected value="">Choose Country</option>
+                                                            {listCoupon.map(couponItem => (
+                                                                <option key={couponItem.id} value={couponItem.code}>
+                                                                    {couponItem.code} ({couponItem.couponCondition.map(condition => (
+                                                                        `${condition.operator} ${condition.value}`
+                                                                    )).join(', ')})
+                                                                </option>
+                                                            ))}
+                                                        </select>
                                                     </div>
-                                                </form>
+                                                    <div className="u-s-m-b-15">
+
+                                                        <button className="btn btn--e-transparent-brand-b-2" type="submit" onClick={handleCalculateTotal}>APPLY</button></div>
+                                                </div>
+                                                {/* </form> */}
                                             </div>
                                             <div className="o-summary__section u-s-m-b-30">
                                                 <div className="o-summary__box">
