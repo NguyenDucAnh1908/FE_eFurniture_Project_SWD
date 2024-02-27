@@ -6,7 +6,7 @@ const AddressBook = () => {
 
     useEffect(() => {
 
-        axios.get('http://localhost:8080/api/address/get_all_address_by_id/1')
+        axios.get('http://localhost:8080/api/v1/address/get_all_address_by_id/1')
             .then(response => {
                 setAddresses(response.data.address);
             })
@@ -161,7 +161,7 @@ const AddressBook = () => {
                                                                 <td>{address.phoneNumber}</td>
                                                                 <td>
                                                                     <div className="gl-text">Default Shipping Address</div>
-                                                                    <div className="gl-text">Default Billing Address </div>
+                                                                    <div className="gl-text">Default Billing Address</div>
                                                                 </td>
                                                             </tr>
                                                         ))}

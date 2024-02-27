@@ -13,7 +13,7 @@ const Blog = () => {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/blogs/get_all_blogs?page=${currentPage}`);
+                const response = await axios.get(`http://localhost:8080/api/v1/blogs/get_all_blogs?page=${currentPage}`);
                 setBlogs(response.data.blogs);
                 setLoading(false);
             } catch (error) {

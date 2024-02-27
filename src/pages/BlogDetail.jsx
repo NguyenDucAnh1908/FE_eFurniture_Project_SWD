@@ -13,7 +13,7 @@ const BlogDetail = () => {
     useEffect(() => {
         const fetchBlog = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/blogs/get-blog-detail/${id}`);
+                const response = await axios.get(`http://localhost:8080/api/v1/blogs/get-blog-detail/${id}`);
                 setBlog(response.data);
                 setLoading(false);
             } catch (error) {
@@ -29,8 +29,8 @@ const BlogDetail = () => {
         const fetchTagsAndCategories = async () => {
             if (blog) {
                 try {
-                    const tagResponses = await Promise.all(blog.tagsBlog.map(tag => axios.get(`http://localhost:8080/api/tags-blog/${tag.id}`)));
-                    const categoryResponses = await Promise.all(blog.categories.map(category => axios.get(`http://localhost:8080/api/categories-blog/${category.id}`)));
+                    const tagResponses = await Promise.all(blog.tagsBlog.map(tag => axios.get(`http://localhost:8080/api/v1/tags-blog/${tag.id}`)));
+                    const categoryResponses = await Promise.all(blog.categories.map(category => axios.get(`http://localhost:8080/api/v1/categories-blog/${category.id}`)));
 
                     const fetchedTags = tagResponses.map(response => response.data);
                     const fetchedCategories = categoryResponses.map(response => response.data);
