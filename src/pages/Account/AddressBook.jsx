@@ -6,7 +6,6 @@ const AddressBook = () => {
 
     useEffect(() => {
 
-
         axios.get('http://localhost:8080/api/address/get_all_address_by_id/1')
             .then(response => {
                 setAddresses(response.data.address);
@@ -15,8 +14,6 @@ const AddressBook = () => {
                 console.error('Error fetching addresses:', error);
             });
     }, []);
-
-
 
     return (
         <div>
@@ -140,7 +137,7 @@ const AddressBook = () => {
                                         </div>
                                         <div className="dash__box dash__box--shadow dash__box--bg-white dash__box--radius u-s-m-b-30">
                                             <div className="dash__table-2-wrap gl-scroll">
-                                                <table className="dash__table-2">
+                                            <table className="dash__table-2">
                                                     <thead>
                                                         <tr>
                                                             <th>Action</th>
@@ -159,7 +156,7 @@ const AddressBook = () => {
                                                                     <a className="address-book-edit btn--e-transparent-platinum-b-2" href={`/address-edit/${address.id}`}>Edit</a>
                                                                 </td>
                                                                 <td>{`${address.firstName} ${address.lastName}`}</td>
-                                                                <td>{`${address.streetAddress}, ${address.ward}, ${address.district}, ${address.province}`}</td>
+                                                                <td>{`${address.streetAddress}, ${address.wardName}, ${address.districtName}, ${address.provinceName}`}</td>
                                                                 
                                                                 <td>{address.phoneNumber}</td>
                                                                 <td>
@@ -171,11 +168,12 @@ const AddressBook = () => {
                                                     </tbody>
 
                                                 </table>
+
                                             </div>
                                         </div>
                                         <div>
 
-                                            <a className="dash__custom-link btn--e-brand-b-2" href="/address-add"><i className="fas fa-plus u-s-m-r-8"></i>
+                                            <a className="dash__custom-link btn--e-brand-b-2" href="/edit-address"><i className="fas fa-plus u-s-m-r-8"></i>
 
                                                 <span>Add New Address</span></a></div>
                                     </div>
