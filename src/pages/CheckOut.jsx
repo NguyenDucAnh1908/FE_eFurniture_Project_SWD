@@ -39,7 +39,7 @@ const CheckOut = () => {
 
     const [listCoupon, setListCoupon] = useState([]);
     const [couponCode, setCouponCode] = useState('');
-    const [calculatedAmount, setCalculatedAmount] = useState('');
+    const [calculatedAmount, setCalculatedAmount] = useState(null);
     const [discountAmount, setDiscountAmount] = useState(0);
 
     const {
@@ -109,15 +109,18 @@ const CheckOut = () => {
     };
 
 
-    const handleSave = () => {
-        console.log("Check save provinces: ", "Shipping Date: ", province)
-    };
+
 
     useEffect(() => {
         // Gọi hàm fetchData để lấy dữ liệu từ API
         getAddressUser();
         getListCoupon();
     }, []);
+
+    useEffect(() => {
+        setTotalAmount(calculatedAmount);
+        setDiscounts(discountAmount.toFixed(2));
+    }, [calculatedAmount, discountAmount]);
 
     const getAddressUser = async () => {
         let res = await fetchAllAddress();
@@ -142,7 +145,14 @@ const CheckOut = () => {
         }
     };
     const handleCouponChange = (event) => {
-        setCouponCode(event.target.value);
+        const selectedCouponCode = event.target.value;
+        const selectedCoupon = listCoupon.find(coupon => coupon.code === selectedCouponCode);
+
+        // Nếu tìm thấy mã giảm giá, cập nhật state của cả code và id
+        if (selectedCoupon) {
+            setCouponCode(selectedCoupon.code);
+            setCouponId(selectedCoupon.id);
+        }
     };
 
     const handleUseAddress = (addressItem) => {
@@ -153,6 +163,14 @@ const CheckOut = () => {
         setAddress(addressItem.streetAddress);
         setFullName(addressItem.user.fullName);
         setSelectedAddress(addressItem);
+    };
+
+    const handlePaymentMethodChange = (event) => {
+        setPaymentMethod(event.target.value);
+    };
+
+    const handleSave = () => {
+        console.log("Check save provinces: ", "Total amound: ", total_amount, "Discount: ", discounts)
     };
 
     return (
@@ -457,15 +475,15 @@ const CheckOut = () => {
                                             {/*====== End - ZIP/POSTAL ======*/}
                                             {/* <div className="u-s-m-b-10"> */}
 
-                                                {/*====== Check Box ======*/}
-                                                {/* <div className="check-box">
+                                            {/*====== Check Box ======*/}
+                                            {/* <div className="check-box">
 
                                                     <input type="checkbox" id="make-default-address" data-bill="" />
                                                     <div className="check-box__state check-box__state--primary">
 
                                                         <label className="check-box__label" for="make-default-address">Make default shipping and billing address</label></div>
                                                 </div> */}
-                                                {/*====== End - Check Box ======*/}
+                                            {/*====== End - Check Box ======*/}
                                             {/* </div> */}
                                             {/* <div className="u-s-m-b-10">
 
@@ -618,86 +636,22 @@ const CheckOut = () => {
 
                                                         {/*====== Radio Box ======*/}
                                                         <div className="radio-box">
-
-                                                            <input type="radio" id="cash-on-delivery" name="payment" />
+                                                            <input
+                                                                type="radio"
+                                                                id="cash-on-delivery"
+                                                                name="payment"
+                                                                value="Cash on Delivery" // Thêm value vào radio button
+                                                                onChange={handlePaymentMethodChange} // Bắt sự kiện onChange
+                                                            />
                                                             <div className="radio-box__state radio-box__state--primary">
-
-                                                                <label className="radio-box__label" for="cash-on-delivery">Cash on Delivery</label></div>
+                                                                <label className="radio-box__label" htmlFor="cash-on-delivery">Cash on Delivery</label>
+                                                            </div>
                                                         </div>
                                                         {/*====== End - Radio Box ======*/}
 
                                                         <span className="gl-text u-s-m-t-6">Pay Upon Cash on delivery. (This service is only available for some countries)</span>
                                                     </div>
-                                                    <div className="u-s-m-b-10">
 
-                                                        {/*====== Radio Box ======*/}
-                                                        <div className="radio-box">
-
-                                                            <input type="radio" id="direct-bank-transfer" name="payment" />
-                                                            <div className="radio-box__state radio-box__state--primary">
-
-                                                                <label className="radio-box__label" for="direct-bank-transfer">Direct Bank Transfer</label></div>
-                                                        </div>
-                                                        {/*====== End - Radio Box ======*/}
-
-                                                        <span className="gl-text u-s-m-t-6">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.</span>
-                                                    </div>
-                                                    <div className="u-s-m-b-10">
-
-                                                        {/*====== Radio Box ======*/}
-                                                        <div className="radio-box">
-
-                                                            <input type="radio" id="pay-with-check" name="payment" />
-                                                            <div className="radio-box__state radio-box__state--primary">
-
-                                                                <label className="radio-box__label" for="pay-with-check">Pay With Check</label></div>
-                                                        </div>
-                                                        {/*====== End - Radio Box ======*/}
-
-                                                        <span className="gl-text u-s-m-t-6">Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</span>
-                                                    </div>
-                                                    <div className="u-s-m-b-10">
-
-                                                        {/*====== Radio Box ======*/}
-                                                        <div className="radio-box">
-
-                                                            <input type="radio" id="pay-with-card" name="payment" />
-                                                            <div className="radio-box__state radio-box__state--primary">
-
-                                                                <label className="radio-box__label" for="pay-with-card">Pay With Credit / Debit Card</label></div>
-                                                        </div>
-                                                        {/*====== End - Radio Box ======*/}
-
-                                                        <span className="gl-text u-s-m-t-6">International Credit Cards must be eligible for use within the United States.</span>
-                                                    </div>
-                                                    <div className="u-s-m-b-10">
-
-                                                        {/*====== Radio Box ======*/}
-                                                        <div className="radio-box">
-
-                                                            <input type="radio" id="pay-pal" name="payment" />
-                                                            <div className="radio-box__state radio-box__state--primary">
-
-                                                                <label className="radio-box__label" for="pay-pal">Pay Pal</label></div>
-                                                        </div>
-                                                        {/*====== End - Radio Box ======*/}
-
-                                                        <span className="gl-text u-s-m-t-6">When you click "Place Order" below we'll take you to Paypal's site to set up your billing information.</span>
-                                                    </div>
-                                                    <div className="u-s-m-b-15">
-
-                                                        {/*====== Check Box ======*/}
-                                                        <div className="check-box">
-
-                                                            <input type="checkbox" id="term-and-condition" />
-                                                            <div className="check-box__state check-box__state--primary">
-
-                                                                <label className="check-box__label" for="term-and-condition">I consent to the</label></div>
-                                                        </div>
-                                                        {/*====== End - Check Box ======*/}
-
-                                                        <a className="gl-link">Terms of Service.</a>
-                                                    </div>
                                                     <div>
 
                                                         <button className="btn btn--e-brand-b-2" type="submit"
