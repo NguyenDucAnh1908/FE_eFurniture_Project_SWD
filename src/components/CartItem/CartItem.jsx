@@ -2,7 +2,7 @@ import React from 'react'
 
 const CartItem = (props) => {
     const { items, updateItemQuantity, removeItem } = props;
-    console.log("Check items: ", items);
+    //console.log("Check items: ", items);
     return (
         <>
             {items.map((item, index) => (
