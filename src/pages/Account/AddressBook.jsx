@@ -161,7 +161,7 @@ const AddressBook = () => {
                                                                 <td>{address.phoneNumber}</td>
                                                                 <td>
                                                                     <div className="gl-text">Default Shipping Address</div>
-                                                                    <div className="gl-text">Default Billing Address</div>
+                                                                    <div className="gl-text">Default Billing Address </div>
                                                                 </td>
                                                             </tr>
                                                         ))}
