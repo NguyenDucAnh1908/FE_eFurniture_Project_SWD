@@ -15,6 +15,7 @@ import Cancellation from '../pages/Account/Cancellation'
 import PaymentOption from '../pages/Account/PaymentOption' 
 import Wishlist from '../pages/Account/Wishlist'
 import AddressBookEdit from '../pages/Account/AddressBookEdit'
+import CheckOutSuccess from '../components/CheckOutSuccess/CheckOutSuccess'
 
 
 import Test from '../pages/test'
@@ -36,6 +37,8 @@ function Routers() {
         <Route path='/cart' element={<Cart/>}/>
 
         <Route path='/check-out' element={<CheckOut/>}/>
+
+        <Route path='/check-out/thank-you' element={<CheckOutSuccess/>}/>
 
         <Route path='/blog' element={<Blog/>}/>
 

@@ -53,66 +53,27 @@ const CheckOut = () => {
         emptyCart,
     } = useCart();
 
-    // console.log("Check place order: ", "userId: ", user_id,);
-    // items.forEach((item, index) => {
-    //     console.log("Check place order: ", "userId: ", user_id,);
-    //     const { quantity, id } = item;
-    //     console.log(`Item ${index + 1}:`);
-    //     console.log(" - ID:", id);
-    //     console.log(" - Quantity:", quantity);
-    // });
     const handlePlaceOrder = async () => {
         const cart_items = items.map(item => ({
             product_id: item.id,
             quantity: item.quantity
         }));
         let res = await checkOutOrder(
-            user_id,
-            address,
-            phone_number,
-            email,
-            fullName,
-            discounts,
-            notes, 1,
-            shipping_date,
-            shipping_method,
-            province,
-            district,
-            ward,
-            payment_method,
-            coupon_id,
-            total_amount,
-            cart_items
+            user_id, address, phone_number, email, fullName, discounts, notes, 1, shipping_date, shipping_method, province,
+            district, ward, payment_method, coupon_id, total_amount, cart_items
         );
         console.log("Check Check out order: ", res);
-        // if (res && res.id) {
-        //     setUserId('');
-        //     setPhoneNumber('');
-        //     setEmail('');
-        //     setAddress('')
-        //     setFullName('');
-        //     setDiscounts('');
-        //     setNotes('');
-        //     setStatus('');
-        //     setShippingDate('');
-        //     setShippingMethod('');
-        //     setTrackingNumber('');
-        //     setShippingAddress('');
-        //     setPaymentMethod('');
-        //     setCouponId('');
-        //     setTotalAmount('');
-        //     setCartItems([]);
-        //     console.log("A User is created success!!")
-        // } else {
-        //     console.log("A user is created error!!");
-        // }
+        if (res && res.id) {
+            setUserId(''); setPhoneNumber(''); setEmail(''); setAddress(''); setFullName(''); setDiscounts(''); setNotes(''); setStatus('');
+            setShippingDate(''); setShippingMethod(''); setProvince(''); setDistrict(''); setWard(''); setPaymentMethod(''); setCouponId('');
+            setTotalAmount(''); emptyCart();
+            console.log("A User is created success!!");
+        } else {
+            console.log("A user is created error!!");
+        }
     };
 
-
-
-
     useEffect(() => {
-        // Gọi hàm fetchData để lấy dữ liệu từ API
         getAddressUser();
         getListCoupon();
     }, []);
@@ -148,7 +109,6 @@ const CheckOut = () => {
         const selectedCouponCode = event.target.value;
         const selectedCoupon = listCoupon.find(coupon => coupon.code === selectedCouponCode);
 
-        // Nếu tìm thấy mã giảm giá, cập nhật state của cả code và id
         if (selectedCoupon) {
             setCouponCode(selectedCoupon.code);
             setCouponId(selectedCoupon.id);
@@ -282,106 +242,6 @@ const CheckOut = () => {
                                                     onChange={(event) => setPhoneNumber(event.target.value)}
                                                 /></div>
                                             {/*====== End - PHONE ======*/}
-                                            {/* <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-fullName *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={fullName}
-                                                    onChange={(event) => setFullName(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-discounts *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={discounts}
-                                                    onChange={(event) => setDiscounts(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-setNotes *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={notes}
-                                                    onChange={(event) => setNotes(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-setStatus *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={status}
-                                                    onChange={(event) => setStatus(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-shipping_date *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={shipping_date}
-                                                    onChange={(event) => setShippingDate(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-setShippingMethod *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={shipping_method}
-                                                    onChange={(event) => setShippingMethod(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-tracking_number *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={tracking_number}
-                                                    onChange={(event) => setTrackingNumber(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-shipping_address *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={shipping_address}
-                                                    onChange={(event) => setShippingAddress(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-payment_method *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={payment_method}
-                                                    onChange={(event) => setPaymentMethod(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-setCouponId *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={coupon_id}
-                                                    onChange={(event) => setCouponId(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-total_amount *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={total_amount}
-                                                    onChange={(event) => setTotalAmount(event.target.value)}
-                                                />
-                                            </div> */}
-
                                             <label className="gl-label" for="billing-country">STATE/PROVINCE *</label>
                                             <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
                                                 value={province}
