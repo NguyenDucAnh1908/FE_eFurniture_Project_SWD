@@ -16,6 +16,7 @@ import PaymentOption from '../pages/Account/PaymentOption'
 import Wishlist from '../pages/Account/Wishlist'
 import AddressBookEdit from '../pages/Account/AddressBookEdit'
 import CheckOutSuccess from '../components/CheckOutSuccess/CheckOutSuccess'
+import Login from '../pages/Account/Login'
 
 
 import Test from '../pages/test'
@@ -31,6 +32,8 @@ function Routers() {
         <Route path='/shop' element={<Shop/>}/>
 
         <Route path='/' element={<Home/>}/>
+
+        <Route path='/Login' element={<Login/>}/>
 
         <Route path='/product-detail/:id' element={<ProductDetail/>}/>
 
