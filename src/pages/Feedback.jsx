@@ -20,11 +20,18 @@ function Feedback({ productId, onFeedbackData }) {
         setReviewText(event.target.value);
     };
 
-    const handlePageChange = (newPage) => {
-        if (newPage >= 0 && newPage < totalPages) {
-            setCurrentPage(newPage);
+    const handlePageChange = async (newPage) => {
+        if (newPage >= 0 && newPage < totalPages && newPage !== currentPage) {
+            try {
+                // Update the current page state
+                setCurrentPage(newPage);
+            } catch (error) {
+                console.error('Error fetching feedback:', error);
+                setLoading(false);
+            }
         }
     };
+
 
     const fetchProductDetail = async () => {
         try {
@@ -35,14 +42,13 @@ function Feedback({ productId, onFeedbackData }) {
         }
     };
 
-    const fetchFeedbackData = async () => {
+    const fetchFeedbackData = async (page) => {
         try {
-            const response1 = await axios.get(`http://localhost:8080/api/v1/feedbacks/product/${productId}`);
-            const response2 = await axios.get(`http://localhost:8080/api/v1/feedbacks/average-rating/${productId}?size=10&page=${currentPage}`);
+            const response1 = await axios.get(`http://localhost:8080/api/v1/feedbacks/product/${productId}?size=10&page=${page}`);
+            const response2 = await axios.get(`http://localhost:8080/api/v1/feedbacks/average-rating/${productId}?size=10&page=${page}`);
 
             setReviews(response1.data.content);
             setAverageRating(response2.data);
-            setCurrentPage(response1.data.number);
             setTotalPages(response1.data.totalPages);
             setTotalElements(response1.data.totalElements);
             setLoading(false);
@@ -50,6 +56,9 @@ function Feedback({ productId, onFeedbackData }) {
             if (onFeedbackData && typeof onFeedbackData === 'function') {
                 onFeedbackData({ totalElements, averageRating });
             }
+
+            console.log("Check feedback1: ", response1.data);
+            console.log("Check feedback2: ", response2.data);
         } catch (error) {
             console.error('Error fetching feedback:', error);
             setLoading(false);
@@ -61,8 +70,20 @@ function Feedback({ productId, onFeedbackData }) {
     }, [productId]);
 
     useEffect(() => {
-        fetchFeedbackData();
+        fetchFeedbackData(currentPage);
     }, [productId, currentPage, onFeedbackData]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await fetchFeedbackData(currentPage);
+        };
+
+        fetchData();
+
+        return () => {
+            // Cleanup function
+        };
+    }, [currentPage]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -170,15 +191,18 @@ function Feedback({ productId, onFeedbackData }) {
                                     ))}
 
                                     {totalPages > 1 && (
-                                        <div className="pagination">
-                                            <button type="button" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
-                                                Previous
-                                            </button>
-
-                                            <span>{`Page ${currentPage + 1} of ${totalPages}`}</span>
-                                            <button type="button" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
-                                                Next
-                                            </button>
+                                        <div className="u-s-p-y-60">
+                                            <ul className="shop-p__pagination">
+                                                <li>
+                                                    <a  className="fas fa-angle-left" type="button" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+                                                    </a>
+                                                </li>
+                                                <span>{`Page ${currentPage + 1} of ${totalPages}`}</span>
+                                                <li>
+                                                    <a  className="fas fa-angle-right" type="button" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     )}
                                 </>
