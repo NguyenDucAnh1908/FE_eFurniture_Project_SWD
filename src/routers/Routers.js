@@ -8,17 +8,17 @@ import CheckOut from '../pages/CheckOut'
 import Blog from '../pages/Blog'
 import BlogDetail from '../pages/BlogDetail'
 import MyProfile from '../pages/Account/MyProfile'
-import AddressBook from '../pages/Account/AddressBook'  
+import AddressBook from '../pages/Account/AddressBook'
 import TrackOrder from '../pages/Account/TrackOrder'
 import MyOrder from '../pages/Account/MyOrder'
 import Cancellation from '../pages/Account/Cancellation'
-import PaymentOption from '../pages/Account/PaymentOption' 
+import PaymentOption from '../pages/Account/PaymentOption'
 import Wishlist from '../pages/Account/Wishlist'
 import AddressBookEdit from '../pages/Account/AddressBookEdit'
 import CheckOutSuccess from '../components/CheckOutSuccess/CheckOutSuccess'
 import Login from '../pages/Account/Login'
-
-
+import NotFound from '../pages/NotFound'
+import PrivateRounter from './PrivateRount/PrivateRounter'
 import Test from '../pages/test'
 import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
 
@@ -26,49 +26,66 @@ import IndexProductDetail from '../components/ViewProductDetail/IndexProductDeta
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function Routers() {
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/shop' element={<Shop/>}/>
+    <>
+      {/* <BrowserRouter> */}
+        <Routes>
+          <Route path='/shop' element={<Shop />} />
 
-        <Route path='/' element={<Home/>}/>
+          <Route path='/' element={<Home />} />
 
-        <Route path='/Login' element={<Login/>}/>
+          <Route path='/login' element={<Login />} />
 
-        <Route path='/product-detail/:id' element={<ProductDetail/>}/>
+          <Route path='/product-detail/:id' element={<ProductDetail />} />
 
-        <Route path='/cart' element={<Cart/>}/>
+          <Route path='/cart' element={<Cart />} />
 
-        <Route path='/check-out' element={<CheckOut/>}/>
+          {/* <Route path='/check-out' element={<CheckOut/>}/> */}
 
-        <Route path='/check-out/thank-you' element={<CheckOutSuccess/>}/>
+          <Route path='/check-out/thank-you' element={<CheckOutSuccess />} />
 
-        <Route path='/blog' element={<Blog/>}/>
+          <Route path='/blog' element={<Blog />} />
 
-        <Route path='/blog-detail/:id' element={<BlogDetail/>}/>
+          <Route path='/blog-detail/:id' element={<BlogDetail />} />
 
-        <Route path='/my-profile' element={<MyProfile/>}/>
+          <Route path='/my-profile' element={<MyProfile />} />
 
-        <Route path='/address-book' element={<AddressBook/>}/>
-        
-        <Route path='/my-order' element={<MyOrder/>}/>
+          <Route path='/address-book' element={<AddressBook />} />
 
-        <Route path='/track-order' element={<TrackOrder/>}/>
+          <Route path='/my-order' element={<MyOrder />} />
 
-        <Route path='/cancellation' element={<Cancellation/>}/>
+          <Route path='/track-order' element={<TrackOrder />} />
 
-        <Route path='/payment-option' element={<PaymentOption/>}/>
+          <Route path='/cancellation' element={<Cancellation />} />
 
-        <Route path='/wish-list' element={<Wishlist/>}/>
+          <Route path='/payment-option' element={<PaymentOption />} />
 
-        <Route path='/edit-address' element={<AddressBookEdit/>}/>
+          <Route path='/wish-list' element={<Wishlist />} />
 
-        <Route path='/test' element={<Test/>}/>
+          <Route path='/edit-address' element={<AddressBookEdit />} />
 
-        <Route exact path='/product-detail-test' element={<IndexProductDetail/>}/>
+          <Route path='*' element={<NotFound />} />
 
-      </Routes>
-    </BrowserRouter>
+          {/* {user && user.isLoading ?
+          
+        } */}
+          <Route
+            path="/check-out" element={
+              <PrivateRounter >
+                <CheckOut />
+              </PrivateRounter>
+              
+            }
+          />
+
+          <Route path='/test' element={<Test />} />
+
+          <Route exact path='/product-detail-test' element={<IndexProductDetail />} />
+
+        </Routes>
+      {/* </BrowserRouter> */}
+    </>
   )
 }
 

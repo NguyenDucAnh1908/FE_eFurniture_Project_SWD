@@ -1,9 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { toast } from 'react-toastify'
 import { loginUser } from '../../services/UserApi/UserApi'
 import { useNavigate } from 'react-router-dom'
+import { event } from 'jquery'
+import { UserContext } from '../../context/UserContext'
 
 const Login = (props) => {
+
+    const { login } = useContext(UserContext);
 
     const navigate = useNavigate()
 
@@ -14,6 +18,8 @@ const Login = (props) => {
         isValidValuePassword: true,
     }
     const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
+
 
     const handleRegister = async () => {
         navigate("/register");
@@ -30,11 +36,23 @@ const Login = (props) => {
             toast.warning("Please enter your password");
         }
         let response = await loginUser(valueLogin, valuePassword);
-        console.log(response);
-        if (response.staus === "Success") {
+        console.log("Check login",response);
+        if (response && response.staus === "Success") {
+            let user = response.user;
+            let tokenJwt = response.token;
+            let data = {
+                isAuthenticated: true,
+                token: response.token,
+                refesh_token: response.refesh_token,
+                account: { user }
+            }
+            sessionStorage.setItem("account", JSON.stringify(data));
+            localStorage.setItem("jwt", tokenJwt);
+            login(data);
             navigate("/");
-            toast.success("Login Success");
-        } if (response) {
+            // window.location.reload();
+            // toast.success("Login Success");
+        } else{
             toast.error("An error occurred during login")
         }
     }
@@ -46,6 +64,21 @@ const Login = (props) => {
     const handleLoginPasswordChange = (event) => {
         setValuePassword(event.target.value);
     }
+
+    const handlepressEnter = (event) => {
+        if (event.charCode === 13 && event.code == "Enter") {
+            handleLogin();
+        };
+    };
+
+    useEffect(() => {
+        let session = sessionStorage.getItem('account');
+        if (session) {
+            navigate("/")
+            // window.location.reload();
+        }
+    }, []);
+    
     return (
         <>
             {/*====== App Content ======*/}
@@ -110,56 +143,57 @@ const Login = (props) => {
 
                                             <span class="gl-text u-s-m-b-30">If you have an account with us, please log in.</span>
                                             {/* <form class="l-f-o__form" > */}
-                                                <div class="gl-s-api">
-                                                    <div class="u-s-m-b-15">
+                                            <div class="gl-s-api">
+                                                <div class="u-s-m-b-15">
 
-                                                        <button class="gl-s-api__btn gl-s-api__btn--fb" type="button"><i class="fab fa-facebook-f"></i>
+                                                    <button class="gl-s-api__btn gl-s-api__btn--fb" type="button"><i class="fab fa-facebook-f"></i>
 
-                                                            <span>Signin with Facebook</span></button></div>
-                                                    <div class="u-s-m-b-15">
+                                                        <span>Signin with Facebook</span></button></div>
+                                                <div class="u-s-m-b-15">
 
-                                                        <button class="gl-s-api__btn gl-s-api__btn--gplus" type="button"><i class="fab fa-google"></i>
+                                                    <button class="gl-s-api__btn gl-s-api__btn--gplus" type="button"><i class="fab fa-google"></i>
 
-                                                            <span>Signin with Google</span></button></div>
-                                                </div>
+                                                        <span>Signin with Google</span></button></div>
+                                            </div>
+                                            <div class="u-s-m-b-30">
+
+                                                <label class="gl-label" for="login-email">E-MAIL *</label>
+
+                                                <input class="input-text input-text--primary-style" type="text" id="login-email"
+                                                    placeholder="Enter E-mail"
+                                                    value={valueLogin}
+                                                    onChange={handleLoginEmailChange}
+                                                /></div>
+                                            <div class="u-s-m-b-30">
+
+                                                <label class="gl-label" for="login-password">PASSWORD *</label>
+
+                                                <input class="input-text input-text--primary-style" type="text" id="login-password"
+                                                    placeholder="Enter Password"
+                                                    value={valuePassword}
+                                                    onChange={handleLoginPasswordChange}
+                                                    // onKeyPress={(event) => handlepressEnter(event)}
+                                                /></div>
+                                            <div class="gl-inline">
                                                 <div class="u-s-m-b-30">
 
-                                                    <label class="gl-label" for="login-email">E-MAIL *</label>
-
-                                                    <input class="input-text input-text--primary-style" type="text" id="login-email"
-                                                        placeholder="Enter E-mail"
-                                                        value={valueLogin}
-                                                        onChange={handleLoginEmailChange}
-                                                    /></div>
+                                                    <button class="btn btn--e-transparent-brand-b-2" type="submit" onClick={() => handleLogin()}>LOGIN</button></div>
                                                 <div class="u-s-m-b-30">
 
-                                                    <label class="gl-label" for="login-password">PASSWORD *</label>
+                                                    <a class="gl-link" href="lost-password.html">Lost Your Password?</a></div>
+                                            </div>
+                                            <div class="u-s-m-b-30">
 
-                                                    <input class="input-text input-text--primary-style" type="text" id="login-password"
-                                                        placeholder="Enter Password"
-                                                        value={valuePassword}
-                                                        onChange={handleLoginPasswordChange}
-                                                    /></div>
-                                                <div class="gl-inline">
-                                                    <div class="u-s-m-b-30">
+                                                {/*====== Check Box ======*/}
+                                                <div class="check-box">
 
-                                                        <button class="btn btn--e-transparent-brand-b-2" type="submit" onClick={() => handleLogin()}>LOGIN</button></div>
-                                                    <div class="u-s-m-b-30">
+                                                    <input type="checkbox" id="remember-me" />
+                                                    <div class="check-box__state check-box__state--primary">
 
-                                                        <a class="gl-link" href="lost-password.html">Lost Your Password?</a></div>
+                                                        <label class="check-box__label" for="remember-me">Remember Me</label></div>
                                                 </div>
-                                                <div class="u-s-m-b-30">
-
-                                                    {/*====== Check Box ======*/}
-                                                    <div class="check-box">
-
-                                                        <input type="checkbox" id="remember-me" />
-                                                        <div class="check-box__state check-box__state--primary">
-
-                                                            <label class="check-box__label" for="remember-me">Remember Me</label></div>
-                                                    </div>
-                                                    {/*====== End - Check Box ======*/}
-                                                </div>
+                                                {/*====== End - Check Box ======*/}
+                                            </div>
                                             {/* </form> */}
                                         </div>
                                     </div>
