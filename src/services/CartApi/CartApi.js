@@ -40,7 +40,7 @@ const checkOutOrder = (
         cart_items
     }, {
         headers: {
-            Authorization: `Bearer ${token}` // Thêm tiêu đề Authorization vào yêu cầu
+            Authorization: `Bearer ${token}`
         }
     });
 };

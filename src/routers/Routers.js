@@ -17,6 +17,7 @@ import Wishlist from '../pages/Account/Wishlist'
 import AddressBookEdit from '../pages/Account/AddressBookEdit'
 import CheckOutSuccess from '../components/CheckOutSuccess/CheckOutSuccess'
 import Login from '../pages/Account/Login'
+import Register from '../pages/Account/Register'
 import NotFound from '../pages/NotFound'
 import PrivateRounter from './PrivateRount/PrivateRounter'
 import Test from '../pages/test'
@@ -36,6 +37,8 @@ function Routers() {
           <Route path='/' element={<Home />} />
 
           <Route path='/login' element={<Login />} />
+
+          <Route path='/register' element={<Register />} />
 
           <Route path='/product-detail/:id' element={<ProductDetail />} />
 
