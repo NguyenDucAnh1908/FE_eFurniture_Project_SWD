@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import TextEditor from '../components/Editor/TextEditor';
 
 function Feedback({ productId, onFeedbackData }) {
     const [reviews, setReviews] = useState([]);
@@ -16,9 +17,10 @@ function Feedback({ productId, onFeedbackData }) {
         setRating(value);
     };
 
-    const handleReviewTextChange = (event) => {
-        setReviewText(event.target.value);
-    };
+    const handleReviewTextChange = (newData) => {
+        setReviewText(newData);
+      };
+      
 
     const handlePageChange = async (newPage) => {
         if (newPage >= 0 && newPage < totalPages && newPage !== currentPage) {
@@ -185,8 +187,8 @@ function Feedback({ productId, onFeedbackData }) {
                                                     <span>({review.rating})</span>
                                                 </div>
                                             </div>
-                                            <p className="review-o__text">{parseHtml(review.comment)}</p>
-                                            {/* <p className="review-o__text" dangerouslySetInnerHTML={{ __html: review.comment }}></p> */}
+                                            {/* <p className="review-o__text">{parseHtml(review.comment)}</p> */}
+                                            <p className="review-o__text" dangerouslySetInnerHTML={{ __html: review.comment }}></p>
                                         </div>
                                     ))}
 
@@ -194,12 +196,12 @@ function Feedback({ productId, onFeedbackData }) {
                                         <div className="u-s-p-y-60">
                                             <ul className="shop-p__pagination">
                                                 <li>
-                                                    <a  className="fas fa-angle-left" type="button" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+                                                    <a className="fas fa-angle-left" type="button" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
                                                     </a>
                                                 </li>
                                                 <span>{`Page ${currentPage + 1} of ${totalPages}`}</span>
                                                 <li>
-                                                    <a  className="fas fa-angle-right" type="button" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+                                                    <a className="fas fa-angle-right" type="button" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -255,12 +257,8 @@ function Feedback({ productId, onFeedbackData }) {
                                             <label className="gl-label" htmlFor="reviewer-text">
                                                 YOUR REVIEW *
                                             </label>
-                                            <textarea
-                                                className="text-area text-area--primary-style"
-                                                id="reviewer-text"
-                                                value={reviewText}
-                                                onChange={handleReviewTextChange}
-                                            />
+
+                                            <TextEditor data={reviewText} onChange={handleReviewTextChange} />
                                         </div>
                                     </div>
                                 </div>
