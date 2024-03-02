@@ -19,8 +19,9 @@ function Feedback({ productId, onFeedbackData }) {
 
     const handleReviewTextChange = (newData) => {
         setReviewText(newData);
-      };
-      
+        setReviewText('');
+    };
+
 
     const handlePageChange = async (newPage) => {
         if (newPage >= 0 && newPage < totalPages && newPage !== currentPage) {
@@ -34,15 +35,17 @@ function Feedback({ productId, onFeedbackData }) {
         }
     };
 
-
-    const fetchProductDetail = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/v1/products/${productId}`);
-            setProductDetail(response.data);
-        } catch (error) {
-            console.error('Error fetching product detail:', error);
-        }
-    };
+    useEffect(() => {
+        const fetchProductDetail = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/v1/products/${productId}`);
+                setProductDetail(response.data);
+            } catch (error) {
+                console.error('Error fetching product detail:', error);
+            }
+        };
+        fetchProductDetail();
+    }, [productId]);
 
     const fetchFeedbackData = async (page) => {
         try {
@@ -54,11 +57,6 @@ function Feedback({ productId, onFeedbackData }) {
             setTotalPages(response1.data.totalPages);
             setTotalElements(response1.data.totalElements);
             setLoading(false);
-
-            if (onFeedbackData && typeof onFeedbackData === 'function') {
-                onFeedbackData({ totalElements, averageRating });
-            }
-
             console.log("Check feedback1: ", response1.data);
             console.log("Check feedback2: ", response2.data);
         } catch (error) {
@@ -66,25 +64,9 @@ function Feedback({ productId, onFeedbackData }) {
             setLoading(false);
         }
     };
-
     useEffect(() => {
-        fetchProductDetail();
-    }, [productId]);
 
-    useEffect(() => {
         fetchFeedbackData(currentPage);
-    }, [productId, currentPage, onFeedbackData]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            await fetchFeedbackData(currentPage);
-        };
-
-        fetchData();
-
-        return () => {
-            // Cleanup function
-        };
     }, [currentPage]);
 
     const handleSubmit = async (event) => {
@@ -130,10 +112,6 @@ function Feedback({ productId, onFeedbackData }) {
         return stars;
     };
 
-    const parseHtml = (htmlString) => {
-        const doc = new DOMParser().parseFromString(htmlString, 'text/html');
-        return doc.body.textContent || '';
-    };
 
     return (
         <div>
@@ -179,7 +157,7 @@ function Feedback({ productId, onFeedbackData }) {
                                         <div key={index} className="review-o u-s-m-b-15">
                                             <div className="review-o__info u-s-m-b-8">
                                                 <span className="review-o__name">{review.userFullName}</span>
-                                                <span className="review-o__date">{review.createdAt}</span>
+                                                <span className="review-o__date">{review.created_at}</span>
                                             </div>
                                             <div key={index} className="review-o__item">
                                                 <div className="review-o__rating gl-rating-style u-s-m-b-8">
@@ -187,11 +165,11 @@ function Feedback({ productId, onFeedbackData }) {
                                                     <span>({review.rating})</span>
                                                 </div>
                                             </div>
-                                            {/* <p className="review-o__text">{parseHtml(review.comment)}</p> */}
                                             <p className="review-o__text" dangerouslySetInnerHTML={{ __html: review.comment }}></p>
                                         </div>
-                                    ))}
 
+
+                                    ))}
                                     {totalPages > 1 && (
                                         <div className="u-s-p-y-60">
                                             <ul className="shop-p__pagination">
