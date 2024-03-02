@@ -7,7 +7,7 @@ const UserProvider = ({ children }) => {
   // User is the name of the "data" that gets stored in context
   const [user, setUser] = useState(() => {
     // Nếu có dữ liệu user trong localStorage thì lấy nó, ngược lại trả về user mặc định
-    const storedUser = sessionStorage.getItem('account');
+    const storedUser = localStorage.getItem('account');
     return storedUser ? JSON.parse(storedUser) : {
       isAuthenticated: false,
       token: '',
@@ -19,7 +19,7 @@ const UserProvider = ({ children }) => {
   // Login updates the user data with a name parameter
   const login = (userData) => {
     setUser(userData);
-    sessionStorage.setItem('account', JSON.stringify(userData));
+    localStorage.setItem('account', JSON.stringify(userData));
   };
 
   // Logout updates the user data to default
@@ -30,7 +30,8 @@ const UserProvider = ({ children }) => {
       refresh_token: '',
       account: {}
     });
-    sessionStorage.removeItem('user');
+    localStorage.removeItem('account');
+    localStorage.removeItem('jwt');
   };
 
   return (

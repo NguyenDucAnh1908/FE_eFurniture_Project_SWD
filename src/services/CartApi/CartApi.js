@@ -1,4 +1,5 @@
-import axios from '../customize-axios'
+// import axios from '../customize-axios'
+import axios from 'axios';
 
 const checkOutOrder = (
     user_id,
@@ -18,7 +19,8 @@ const checkOutOrder = (
     total_amount,
     cart_items
 ) => {
-    return axios.post("/orders", {
+    const token = localStorage.getItem("jwt");
+    return axios.post("http://localhost:8080/api/v1/orders", {
         user_id,
         address,
         phone_number,
@@ -36,6 +38,10 @@ const checkOutOrder = (
         coupon_id,
         total_amount,
         cart_items
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}` // Thêm tiêu đề Authorization vào yêu cầu
+        }
     });
 };
 

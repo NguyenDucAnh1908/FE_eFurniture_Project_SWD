@@ -72,16 +72,24 @@ function Home() {
         if (categoryId) {
             url += `?category_id=${categoryId}`;
         }
-
+    
         try {
-            const response = await axios.get(url);
+            const token = localStorage.getItem('jwt'); // Thay đổi thành mã bearer token thực của bạn
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+    
+            const response = await axios.get(url, config);
             if (response && response.data) {
                 setProducts(response.data);
             }
         } catch (error) {
             console.error("Lỗi khi lấy danh sách sản phẩm:", error);
         }
-    }
+    };
+    
 
     const handleCategoryClick = (categoryId) => {
         setSelectedCategory(categoryId);

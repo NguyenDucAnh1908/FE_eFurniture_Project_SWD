@@ -46,7 +46,7 @@ const Login = (props) => {
                 refesh_token: response.refesh_token,
                 account: { user }
             }
-            sessionStorage.setItem("account", JSON.stringify(data));
+            localStorage.setItem("account", JSON.stringify(data));
             localStorage.setItem("jwt", tokenJwt);
             login(data);
             navigate("/");
