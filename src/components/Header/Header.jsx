@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useCart } from 'react-use-cart';
 import CartMini from '../CartMini/CartMini';
 import { Route } from 'react-router-dom';
 import Shop from '../../pages/Shop';
+import _ from 'lodash';
+// import { UserContext } from '../../context/UserContext'
+import Account from '../AccountComponent/Account';
 
 function Header() {
+    const [account, setAccount] = useState({});
+    // const { user } = useContext(UserContext);
     const {
         isEmpty,
         totalUniqueItems,
@@ -15,6 +20,14 @@ function Header() {
         removeItem,
         emptyCart,
     } = useCart();
+    
+    // useEffect(() => {
+    //     let session = sessionStorage.getItem('account');
+    //     if (session) {
+    //         setAccount(JSON.parse(session));
+    //     }
+    // }, [])
+
     return (
         <div>
             {/*====== Main Header ======*/}
@@ -63,30 +76,8 @@ function Header() {
                                             <a><i className="far fa-user-circle"></i></a>
 
                                             {/*====== Dropdown ======*/}
+                                            <Account />
 
-                                            <span className="js-menu-toggle"></span>
-                                            <ul style={{ width: "120px" }}>
-                                                <li>
-
-                                                    <a href="#dashboard.html"><i className="fas fa-user-circle u-s-m-r-6"></i>
-
-                                                        <span>Account</span></a></li>
-                                                <li>
-
-                                                    <a href="#signup.html"><i className="fas fa-user-plus u-s-m-r-6"></i>
-
-                                                        <span>Signup</span></a></li>
-                                                <li>
-
-                                                    <a href="#signin.html"><i className="fas fa-lock u-s-m-r-6"></i>
-
-                                                        <span>Signin</span></a></li>
-                                                <li>
-
-                                                    <a href="#signup.html"><i className="fas fa-lock-open u-s-m-r-6"></i>
-
-                                                        <span>Signout</span></a></li>
-                                            </ul>
                                             {/*====== End - Dropdown ======*/}
                                         </li>
                                         <li className="has-dropdown" data-tooltip="tooltip" data-placement="left" title="Settings">

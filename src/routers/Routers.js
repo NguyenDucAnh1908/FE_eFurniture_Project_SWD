@@ -8,16 +8,17 @@ import CheckOut from '../pages/CheckOut'
 import Blog from '../pages/Blog'
 import BlogDetail from '../pages/BlogDetail'
 import MyProfile from '../pages/Account/MyProfile'
-import AddressBook from '../pages/Account/AddressBook'  
+import AddressBook from '../pages/Account/AddressBook'
 import TrackOrder from '../pages/Account/TrackOrder'
 import MyOrder from '../pages/Account/MyOrder'
 import Cancellation from '../pages/Account/Cancellation'
-import PaymentOption from '../pages/Account/PaymentOption' 
+import PaymentOption from '../pages/Account/PaymentOption'
 import Wishlist from '../pages/Account/Wishlist'
 import AddressBookEdit from '../pages/Account/AddressBookEdit'
 import CheckOutSuccess from '../components/CheckOutSuccess/CheckOutSuccess'
-
-
+import Login from '../pages/Account/Login'
+import NotFound from '../pages/NotFound'
+import PrivateRounter from './PrivateRount/PrivateRounter'
 import Test from '../pages/test'
 import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
 
@@ -25,47 +26,66 @@ import IndexProductDetail from '../components/ViewProductDetail/IndexProductDeta
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function Routers() {
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/shop' element={<Shop/>}/>
+    <>
+      {/* <BrowserRouter> */}
+        <Routes>
+          <Route path='/shop' element={<Shop />} />
 
-        <Route path='/' element={<Home/>}/>
+          <Route path='/' element={<Home />} />
 
-        <Route path='/product-detail/:id' element={<ProductDetail/>}/>
+          <Route path='/login' element={<Login />} />
 
-        <Route path='/cart' element={<Cart/>}/>
+          <Route path='/product-detail/:id' element={<ProductDetail />} />
 
-        <Route path='/check-out' element={<CheckOut/>}/>
+          <Route path='/cart' element={<Cart />} />
 
-        <Route path='/check-out/thank-you' element={<CheckOutSuccess/>}/>
+          {/* <Route path='/check-out' element={<CheckOut/>}/> */}
 
-        <Route path='/blog' element={<Blog/>}/>
+          <Route path='/check-out/thank-you' element={<CheckOutSuccess />} />
 
-        <Route path='/blog-detail/:id' element={<BlogDetail/>}/>
+          <Route path='/blog' element={<Blog />} />
 
-        <Route path='/my-profile' element={<MyProfile/>}/>
+          <Route path='/blog-detail/:id' element={<BlogDetail />} />
 
-        <Route path='/address-book' element={<AddressBook/>}/>
-        
-        <Route path='/my-order' element={<MyOrder/>}/>
+          <Route path='/my-profile' element={<MyProfile />} />
 
-        <Route path='/track-order' element={<TrackOrder/>}/>
+          <Route path='/address-book' element={<AddressBook />} />
 
-        <Route path='/cancellation' element={<Cancellation/>}/>
+          <Route path='/my-order' element={<MyOrder />} />
 
-        <Route path='/payment-option' element={<PaymentOption/>}/>
+          <Route path='/track-order' element={<TrackOrder />} />
 
-        <Route path='/wish-list' element={<Wishlist/>}/>
+          <Route path='/cancellation' element={<Cancellation />} />
 
-        <Route path='/edit-address' element={<AddressBookEdit/>}/>
+          <Route path='/payment-option' element={<PaymentOption />} />
 
-        <Route path='/test' element={<Test/>}/>
+          <Route path='/wish-list' element={<Wishlist />} />
 
-        <Route exact path='/product-detail-test' element={<IndexProductDetail/>}/>
+          <Route path='/edit-address' element={<AddressBookEdit />} />
 
-      </Routes>
-    </BrowserRouter>
+          <Route path='*' element={<NotFound />} />
+
+          {/* {user && user.isLoading ?
+          
+        } */}
+          <Route
+            path="/check-out" element={
+              <PrivateRounter >
+                <CheckOut />
+              </PrivateRounter>
+              
+            }
+          />
+
+          <Route path='/test' element={<Test />} />
+
+          <Route exact path='/product-detail-test' element={<IndexProductDetail />} />
+
+        </Routes>
+      {/* </BrowserRouter> */}
+    </>
   )
 }
 
