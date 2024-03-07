@@ -13,7 +13,7 @@ const Blog = () => {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/blogs/get_all_blogs?page=${currentPage}`);
+                const response = await axios.get(`http://localhost:8080/api/v1/blogs/get_all_blogs?page=${currentPage}`);
                 setBlogs(response.data.blogs);
                 setLoading(false);
             } catch (error) {
@@ -29,7 +29,7 @@ const Blog = () => {
     const fetchTag = async (tagId) => {
         try {
             // Thực hiện cuộc gọi API để lấy thông tin về tag dựa trên id
-            const response = await axios.get(`http://localhost:8080/api/tags-blog/${tagId}`);
+            const response = await axios.get(`http://localhost:8080/api/v1/tags-blog/${tagId}`);
             // Lưu thông tin của tag vào state
             setTags(prevState => ({
                 ...prevState,
@@ -55,7 +55,7 @@ const Blog = () => {
 
     const fetchTag2 = async (categoryId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/categories-blog/${categoryId}`);
+            const response = await axios.get(`http://localhost:8080/api/v1/categories-blog/${categoryId}`);
             setCategories(prevState => ({
                 ...prevState,
                 [categoryId]: response.data // Lưu thông tin tag với key là id của tag
