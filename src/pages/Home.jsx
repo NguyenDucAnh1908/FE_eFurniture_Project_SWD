@@ -74,7 +74,7 @@ function Home() {
         }
     
         try {
-            const token = localStorage.getItem('jwt'); // Thay đổi thành mã bearer token thực của bạn
+            const token = localStorage.getItem('jwt');
             const config = {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -82,6 +82,7 @@ function Home() {
             };
     
             const response = await axios.get(url, config);
+            console.log("Check response get all products", response.data);
             if (response && response.data) {
                 setProducts(response.data);
             }
