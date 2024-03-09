@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useCart } from 'react-use-cart';
 import { checkOutOrder } from '../services/CartApi/CartApi';
+import { fetchAllCoupons } from '../services/CartApi/CouponApi';
 import { FetchAllAddress, fetchAllAddress } from '../services/AddressApi/AddressApi';
 import './ProductDetailImage.css'
 import FormCheckOut from '../components/FormCheckOut/FormCheckOut'
@@ -15,7 +16,8 @@ const CheckOut = () => {
     const [fullName, setFullName] = useState('');
     const [discounts, setDiscounts] = useState('');
     const [notes, setNotes] = useState('');
-    const [status, setStatus] = useState(null);
+    const [orderStatus, setOrderStatus] = useState(null);
+    const [paymentStatus, setPaymentStatus] = useState(null);
     const [shipping_date, setShippingDate] = useState('');
     const [shipping_method, setShippingMethod] = useState('');
     const [province, setProvince] = useState('');
@@ -36,6 +38,11 @@ const CheckOut = () => {
     const [listAdress, setListAdress] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
 
+    const [listCoupon, setListCoupon] = useState([]);
+    const [couponCode, setCouponCode] = useState('');
+    const [calculatedAmount, setCalculatedAmount] = useState(null);
+    const [discountAmount, setDiscountAmount] = useState(0);
+
     const {
         isEmpty,
         totalUniqueItems,
@@ -47,82 +54,84 @@ const CheckOut = () => {
         emptyCart,
     } = useCart();
 
-    // console.log("Check place order: ", "userId: ", user_id,);
-    // items.forEach((item, index) => {
-    //     console.log("Check place order: ", "userId: ", user_id,);
-    //     const { quantity, id } = item;
-    //     console.log(`Item ${index + 1}:`);
-    //     console.log(" - ID:", id);
-    //     console.log(" - Quantity:", quantity);
-    // });
     const handlePlaceOrder = async () => {
         const cart_items = items.map(item => ({
             product_id: item.id,
             quantity: item.quantity
         }));
         let res = await checkOutOrder(
-            user_id,
-            address,
-            phone_number,
-            email,
-            fullName,
-            discounts,
-            notes, 1,
-            shipping_date,
-            shipping_method,
-            province,
-            district,
-            ward,
-            payment_method,
-            coupon_id,
-            total_amount,
-            cart_items
+            user_id, address, phone_number, email, fullName, discounts, notes, 1, 1,shipping_date, shipping_method, province,
+            district, ward, payment_method, coupon_id, total_amount, cart_items
         );
         console.log("Check Check out order: ", res);
-        // if (res && res.id) {
-        //     setUserId('');
-        //     setPhoneNumber('');
-        //     setEmail('');
-        //     setAddress('')
-        //     setFullName('');
-        //     setDiscounts('');
-        //     setNotes('');
-        //     setStatus('');
-        //     setShippingDate('');
-        //     setShippingMethod('');
-        //     setTrackingNumber('');
-        //     setShippingAddress('');
-        //     setPaymentMethod('');
-        //     setCouponId('');
-        //     setTotalAmount('');
-        //     setCartItems([]);
-        //     console.log("A User is created success!!")
-        // } else {
-        //     console.log("A user is created error!!");
-        // }
-    };
-
-
-    const handleSave = () => {
-        console.log("Check save provinces: ", "province: ", province, "District: ", district, "Ward: ", ward)
+        if (res && res.id) {
+            setUserId(''); setPhoneNumber(''); setEmail(''); setAddress(''); setFullName(''); setDiscounts(''); setNotes(''); setOrderStatus(''); setPaymentStatus('');
+            setShippingDate(''); setShippingMethod(''); setProvince(''); setDistrict(''); setWard(''); setPaymentMethod(''); setCouponId('');
+            setTotalAmount(''); emptyCart();
+            console.log("A User is created success!!");
+        } else {
+            console.log("A user is created error!!");
+        }
     };
 
     useEffect(() => {
-        // Gọi hàm fetchData để lấy dữ liệu từ API
         getAddressUser();
+        getListCoupon();
     }, []);
+
+    useEffect(() => {
+        setTotalAmount(calculatedAmount);
+        setDiscounts(discountAmount.toFixed(2));
+    }, [calculatedAmount, discountAmount]);
 
     const getAddressUser = async () => {
         let res = await fetchAllAddress();
         setListAdress(res.address)
-        console.log("Check address: ", res.address)
+        //console.log("Check address: ", res.address)
+    };
+
+    const getListCoupon = async () => {
+        let res = await fetchAllCoupons();
+        setListCoupon(res)
+        console.log("Check coupon: ", res)
+    };
+    const handleCalculateTotal = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/v1/coupons/calculate?couponCode=${couponCode}&totalAmount=${cartTotal}`);
+            const { result } = response.data;
+            setCalculatedAmount(result);
+            const discount = cartTotal - result;
+            setDiscountAmount(discount);
+        } catch (error) {
+            console.error('Error calculating total:', error);
+        }
+    };
+    const handleCouponChange = (event) => {
+        const selectedCouponCode = event.target.value;
+        const selectedCoupon = listCoupon.find(coupon => coupon.code === selectedCouponCode);
+
+        if (selectedCoupon) {
+            setCouponCode(selectedCoupon.code);
+            setCouponId(selectedCoupon.id);
+        }
     };
 
     const handleUseAddress = (addressItem) => {
-        setProvince(addressItem.province);
-        setDistrict(addressItem.district);
-        setWard(addressItem.ward);
+        setProvince(addressItem.provinceName);
+        setDistrict(addressItem.districtName);
+        setWard(addressItem.wardName);
+        setPhoneNumber(addressItem.phoneNumber);
+        setAddress(addressItem.streetAddress);
+        setFullName(addressItem.user.fullName);
         setSelectedAddress(addressItem);
+    };
+
+    const handlePaymentMethodChange = (event) => {
+        setPaymentMethod(event.target.value);
+    };
+
+    const handleSave = () => {
+        console.log("Check save provinces: ", "Total amound: ", total_amount, "Discount: ", discounts)
     };
 
     return (
@@ -234,106 +243,6 @@ const CheckOut = () => {
                                                     onChange={(event) => setPhoneNumber(event.target.value)}
                                                 /></div>
                                             {/*====== End - PHONE ======*/}
-                                            {/* <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-fullName *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={fullName}
-                                                    onChange={(event) => setFullName(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-discounts *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={discounts}
-                                                    onChange={(event) => setDiscounts(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-setNotes *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={notes}
-                                                    onChange={(event) => setNotes(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-setStatus *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={status}
-                                                    onChange={(event) => setStatus(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-shipping_date *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={shipping_date}
-                                                    onChange={(event) => setShippingDate(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-setShippingMethod *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={shipping_method}
-                                                    onChange={(event) => setShippingMethod(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-tracking_number *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={tracking_number}
-                                                    onChange={(event) => setTrackingNumber(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-shipping_address *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={shipping_address}
-                                                    onChange={(event) => setShippingAddress(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-payment_method *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={payment_method}
-                                                    onChange={(event) => setPaymentMethod(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-setCouponId *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={coupon_id}
-                                                    onChange={(event) => setCouponId(event.target.value)}
-                                                />
-                                            </div>
-                                            <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-total_amount *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
-                                                    value={total_amount}
-                                                    onChange={(event) => setTotalAmount(event.target.value)}
-                                                />
-                                            </div> */}
-
                                             <label className="gl-label" for="billing-country">STATE/PROVINCE *</label>
                                             <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
                                                 value={province}
@@ -407,9 +316,13 @@ const CheckOut = () => {
 
 
                                             {/*====== ZIP/POSTAL ======*/}
-                                            <label className="gl-label" for="billing-country">Shiping method *</label><select className="select-box select-box--primary-style" id="billing-country" data-bill="">
+                                            <label className="gl-label" for="billing-country">Shiping method *</label>
+                                            <select className="select-box select-box--primary-style" id="billing-country"
+                                                data-bill="" value={shipping_method}
+                                                onChange={(e) => setShippingMethod(e.target.value)}
+                                            >
                                                 <option selected value="">Choose Country</option>
-                                                <option value="uae">United Arab Emirate (UAE)</option>
+                                                <option value="United Arab Emirate (UAE)">United Arab Emirate (UAE)</option>
                                             </select>
 
                                             <div className="u-s-m-b-15">
@@ -417,26 +330,26 @@ const CheckOut = () => {
                                                 <label className="gl-label" for="billing-email">E-shipping_date *</label>
 
                                                 <input className="input-text input-text--primary-style" type="date" id="billing-email" data-bill=""
-                                                    value={email}
-                                                    onChange={(event) => setEmail(event.target.value)}
+                                                    value={shipping_date}
+                                                    onChange={(event) => setShippingDate(event.target.value)}
                                                 /></div>
                                             {/*====== End - ZIP/POSTAL ======*/}
-                                            <div className="u-s-m-b-10">
+                                            {/* <div className="u-s-m-b-10"> */}
 
-                                                {/*====== Check Box ======*/}
-                                                <div className="check-box">
+                                            {/*====== Check Box ======*/}
+                                            {/* <div className="check-box">
 
                                                     <input type="checkbox" id="make-default-address" data-bill="" />
                                                     <div className="check-box__state check-box__state--primary">
 
                                                         <label className="check-box__label" for="make-default-address">Make default shipping and billing address</label></div>
-                                                </div>
-                                                {/*====== End - Check Box ======*/}
-                                            </div>
-                                            <div className="u-s-m-b-10">
+                                                </div> */}
+                                            {/*====== End - Check Box ======*/}
+                                            {/* </div> */}
+                                            {/* <div className="u-s-m-b-10">
 
-                                                <a className="gl-link" href="#create-account" data-toggle="collapse">Want to create a new account?</a></div>
-                                            <div className="collapse u-s-m-b-15" id="create-account">
+                                                <a className="gl-link" href="#create-account" data-toggle="collapse">Want to create a new account?</a></div> */}
+                                            {/* <div className="collapse u-s-m-b-15" id="create-account">
 
                                                 <span className="gl-text u-s-m-b-15">Create an account by entering the information below. If you are a returning customer please login at the top of the page.</span>
                                                 <div>
@@ -444,10 +357,16 @@ const CheckOut = () => {
                                                     <label className="gl-label" for="reg-password">Account Password *</label>
 
                                                     <input className="input-text input-text--primary-style" type="text" data-bill id="reg-password" /></div>
-                                            </div>
+                                            </div> */}
                                             <div className="u-s-m-b-10">
 
-                                                <label className="gl-label" for="order-note">ORDER NOTE</label><textarea className="text-area text-area--primary-style" id="order-note"></textarea></div>
+                                                <label className="gl-label" for="order-note">ORDER NOTE</label>
+                                                <textarea className="text-area text-area--primary-style" id="order-note"
+                                                    value={notes}
+                                                    onChange={(event) => setNotes(event.target.value)}
+                                                >
+                                                </textarea>
+                                            </div>
 
 
                                             {/* HEREFORMDONHA */}
@@ -495,7 +414,7 @@ const CheckOut = () => {
                                                         <span className="ship-b__text">Ship to:</span>
                                                         {listAdress && listAdress.length > 0 && listAdress.map((addressItem, index) => (
                                                             <div key={index} className="ship-b__box u-s-m-b-10">
-                                                                <p className="ship-b__p">{addressItem.ward}, {addressItem.district}, {addressItem.province}, VNA(+84) {addressItem.phoneNumber}</p>
+                                                                <p className="ship-b__p">{addressItem.wardName}, {addressItem.districtName}, {addressItem.provinceName}, VNA(+84) {addressItem.phoneNumber}</p>
                                                                 <button
                                                                     className={`ship-b__edit btn--e-transparent-platinum-b-2 ${selectedAddress === addressItem ? 'selectedButton' : ''}`}
                                                                     data-modal="modal"
@@ -526,16 +445,16 @@ const CheckOut = () => {
                                                                 <td>$4.00</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>TAX</td>
-                                                                <td>$0.00</td>
+                                                                <td>Discount</td>
+                                                                <td>${discountAmount.toFixed(2)}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>SUBTOTAL</td>
-                                                                <td>$379.00</td>
+                                                                <td>${cartTotal}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>GRAND TOTAL</td>
-                                                                <td>${cartTotal}</td>
+                                                                <td>${calculatedAmount}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -546,21 +465,29 @@ const CheckOut = () => {
                                             <div className="c-f u-s-m-b-16">
 
                                                 <span className="gl-text u-s-m-b-16">Enter your coupon code if you have one.</span>
-                                                <form className="c-f__form">
-                                                    <div className="u-s-m-b-16">
-                                                        <div className="u-s-m-b-15">
+                                                {/* <form className="c-f__form"> */}
+                                                <div className="u-s-m-b-16">
+                                                    <div className="u-s-m-b-15">
 
-                                                            <label for="coupon"></label>
-
-                                                            <select className="select-box select-box--primary-style" id="billing-country" data-bill="">
-                                                                <option selected value="">Choose Country</option>
-                                                                <option value="uae">United Arab Emirate (UAE)</option>
-                                                            </select></div>
-                                                        <div className="u-s-m-b-15">
-
-                                                            <button className="btn btn--e-transparent-brand-b-2" type="submit">APPLY</button></div>
+                                                        <label for="coupon"></label>
+                                                        <select className="select-box select-box--primary-style" id="billing-country" data-bill=""
+                                                            onChange={handleCouponChange}
+                                                        >
+                                                            <option selected value="">Choose Country</option>
+                                                            {listCoupon.map(couponItem => (
+                                                                <option key={couponItem.id} value={couponItem.code}>
+                                                                    {couponItem.code} ({couponItem.couponCondition.map(condition => (
+                                                                        `${condition.operator} ${condition.value}`
+                                                                    )).join(', ')})
+                                                                </option>
+                                                            ))}
+                                                        </select>
                                                     </div>
-                                                </form>
+                                                    <div className="u-s-m-b-15">
+
+                                                        <button className="btn btn--e-transparent-brand-b-2" type="submit" onClick={handleCalculateTotal}>APPLY</button></div>
+                                                </div>
+                                                {/* </form> */}
                                             </div>
                                             <div className="o-summary__section u-s-m-b-30">
                                                 <div className="o-summary__box">
@@ -570,86 +497,22 @@ const CheckOut = () => {
 
                                                         {/*====== Radio Box ======*/}
                                                         <div className="radio-box">
-
-                                                            <input type="radio" id="cash-on-delivery" name="payment" />
+                                                            <input
+                                                                type="radio"
+                                                                id="cash-on-delivery"
+                                                                name="payment"
+                                                                value="Cash on Delivery" // Thêm value vào radio button
+                                                                onChange={handlePaymentMethodChange} // Bắt sự kiện onChange
+                                                            />
                                                             <div className="radio-box__state radio-box__state--primary">
-
-                                                                <label className="radio-box__label" for="cash-on-delivery">Cash on Delivery</label></div>
+                                                                <label className="radio-box__label" htmlFor="cash-on-delivery">Cash on Delivery</label>
+                                                            </div>
                                                         </div>
                                                         {/*====== End - Radio Box ======*/}
 
                                                         <span className="gl-text u-s-m-t-6">Pay Upon Cash on delivery. (This service is only available for some countries)</span>
                                                     </div>
-                                                    <div className="u-s-m-b-10">
 
-                                                        {/*====== Radio Box ======*/}
-                                                        <div className="radio-box">
-
-                                                            <input type="radio" id="direct-bank-transfer" name="payment" />
-                                                            <div className="radio-box__state radio-box__state--primary">
-
-                                                                <label className="radio-box__label" for="direct-bank-transfer">Direct Bank Transfer</label></div>
-                                                        </div>
-                                                        {/*====== End - Radio Box ======*/}
-
-                                                        <span className="gl-text u-s-m-t-6">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.</span>
-                                                    </div>
-                                                    <div className="u-s-m-b-10">
-
-                                                        {/*====== Radio Box ======*/}
-                                                        <div className="radio-box">
-
-                                                            <input type="radio" id="pay-with-check" name="payment" />
-                                                            <div className="radio-box__state radio-box__state--primary">
-
-                                                                <label className="radio-box__label" for="pay-with-check">Pay With Check</label></div>
-                                                        </div>
-                                                        {/*====== End - Radio Box ======*/}
-
-                                                        <span className="gl-text u-s-m-t-6">Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</span>
-                                                    </div>
-                                                    <div className="u-s-m-b-10">
-
-                                                        {/*====== Radio Box ======*/}
-                                                        <div className="radio-box">
-
-                                                            <input type="radio" id="pay-with-card" name="payment" />
-                                                            <div className="radio-box__state radio-box__state--primary">
-
-                                                                <label className="radio-box__label" for="pay-with-card">Pay With Credit / Debit Card</label></div>
-                                                        </div>
-                                                        {/*====== End - Radio Box ======*/}
-
-                                                        <span className="gl-text u-s-m-t-6">International Credit Cards must be eligible for use within the United States.</span>
-                                                    </div>
-                                                    <div className="u-s-m-b-10">
-
-                                                        {/*====== Radio Box ======*/}
-                                                        <div className="radio-box">
-
-                                                            <input type="radio" id="pay-pal" name="payment" />
-                                                            <div className="radio-box__state radio-box__state--primary">
-
-                                                                <label className="radio-box__label" for="pay-pal">Pay Pal</label></div>
-                                                        </div>
-                                                        {/*====== End - Radio Box ======*/}
-
-                                                        <span className="gl-text u-s-m-t-6">When you click "Place Order" below we'll take you to Paypal's site to set up your billing information.</span>
-                                                    </div>
-                                                    <div className="u-s-m-b-15">
-
-                                                        {/*====== Check Box ======*/}
-                                                        <div className="check-box">
-
-                                                            <input type="checkbox" id="term-and-condition" />
-                                                            <div className="check-box__state check-box__state--primary">
-
-                                                                <label className="check-box__label" for="term-and-condition">I consent to the</label></div>
-                                                        </div>
-                                                        {/*====== End - Check Box ======*/}
-
-                                                        <a className="gl-link">Terms of Service.</a>
-                                                    </div>
                                                     <div>
 
                                                         <button className="btn btn--e-brand-b-2" type="submit"

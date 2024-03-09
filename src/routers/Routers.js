@@ -8,15 +8,18 @@ import CheckOut from '../pages/CheckOut'
 import Blog from '../pages/Blog'
 import BlogDetail from '../pages/BlogDetail'
 import MyProfile from '../pages/Account/MyProfile'
-import AddressBook from '../pages/Account/AddressBook'  
+import AddressBook from '../pages/Account/AddressBook'
 import TrackOrder from '../pages/Account/TrackOrder'
 import MyOrder from '../pages/Account/MyOrder'
 import Cancellation from '../pages/Account/Cancellation'
-import PaymentOption from '../pages/Account/PaymentOption' 
+import PaymentOption from '../pages/Account/PaymentOption'
 import Wishlist from '../pages/Account/Wishlist'
 import AddressBookEdit from '../pages/Account/AddressBookEdit'
-
-
+import CheckOutSuccess from '../components/CheckOutSuccess/CheckOutSuccess'
+import Login from '../pages/Account/Login'
+import Register from '../pages/Account/Register'
+import NotFound from '../pages/NotFound'
+import PrivateRounter from './PrivateRount/PrivateRounter'
 import Test from '../pages/test'
 import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
 import Design from '../pages/Design'
@@ -27,6 +30,7 @@ import DesignDetail from '../pages/DesignDetail'
 import { Routes, Route } from 'react-router-dom'
 
 function Routers() {
+
   return (
     <>
       {/* <BrowserRouter> */}
