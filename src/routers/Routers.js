@@ -19,50 +19,79 @@ import AddressBookEdit from '../pages/Account/AddressBookEdit'
 
 import Test from '../pages/test'
 import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
+import Design from '../pages/Design'
+import DesignDetail from '../pages/DesignDetail'
 
 
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+
+import { Routes, Route } from 'react-router-dom'
 
 function Routers() {
   return (
-    <BrowserRouter>
+    <>
+      {/* <BrowserRouter> */}
       <Routes>
-        <Route path='/shop' element={<Shop/>}/>
+        <Route path='/shop' element={<Shop />} />
 
-        <Route path='/' element={<Home/>}/>
+        <Route path='/' element={<Home />} />
 
-        <Route path='/product-detail/:id' element={<ProductDetail/>}/>
+        <Route path='/login' element={<Login />} />
 
-        <Route path='/cart' element={<Cart/>}/>
+        <Route path='/register' element={<Register />} />
 
-        <Route path='/check-out' element={<CheckOut/>}/>
+        <Route path='/product-detail/:id' element={<ProductDetail />} />
 
-        <Route path='/blog' element={<Blog/>}/>
+        <Route path='/cart' element={<Cart />} />
 
-        <Route path='/blog-detail/:id' element={<BlogDetail/>}/>
+        {/* <Route path='/check-out' element={<CheckOut/>}/> */}
 
-        <Route path='/my-profile' element={<MyProfile/>}/>
+        <Route path='/check-out/thank-you' element={<CheckOutSuccess />} />
 
-        <Route path='/address-book' element={<AddressBook/>}/>
-        
-        <Route path='/my-order' element={<MyOrder/>}/>
+        <Route path='/blog' element={<Blog />} />
 
-        <Route path='/track-order' element={<TrackOrder/>}/>
+        <Route path='/design' element={<Design />} />
 
-        <Route path='/cancellation' element={<Cancellation/>}/>
+        <Route path='/design-detail/:id' element={<DesignDetail />} />
 
-        <Route path='/payment-option' element={<PaymentOption/>}/>
+        <Route path='/blog-detail/:id' element={<BlogDetail />} />
 
-        <Route path='/wish-list' element={<Wishlist/>}/>
+        <Route path='/my-profile' element={<MyProfile />} />
 
-        <Route path='/edit-address' element={<AddressBookEdit/>}/>
+        <Route path='/address-book' element={<AddressBook />} />
 
-        <Route path='/test' element={<Test/>}/>
+        <Route path='/my-order' element={<MyOrder />} />
 
-        <Route exact path='/product-detail-test' element={<IndexProductDetail/>}/>
+        <Route path='/track-order' element={<TrackOrder />} />
+
+        <Route path='/cancellation' element={<Cancellation />} />
+
+        <Route path='/payment-option' element={<PaymentOption />} />
+
+        <Route path='/wish-list' element={<Wishlist />} />
+
+        <Route path='/edit-address' element={<AddressBookEdit />} />
+
+        <Route path='*' element={<NotFound />} />
+
+        {/* {user && user.isLoading ?
+          
+        } */}
+        <Route
+          path="/check-out" element={
+            <PrivateRounter >
+              <CheckOut />
+            </PrivateRounter>
+
+          }
+        />
+
+        <Route path='/test' element={<Test />} />
+
+        <Route exact path='/product-detail-test' element={<IndexProductDetail />} />
 
       </Routes>
-    </BrowserRouter>
+      {/* </BrowserRouter> */}
+    </>
   )
 }
 

@@ -1,9 +1,22 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const MyProfile = () => {
+const Design = () => {
+    const [designs, setDesigns] = useState([]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/v1/designs/get-designs-by-project/1')
+            .then(response => {
+                setDesigns(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching designs:', error);
+            });
+    }, []);
+
+
     return (
         <div>
-            {/*====== App Content ======*/}
             <div className="app-content">
 
                 {/*====== Section 1 ======*/}
@@ -17,10 +30,10 @@ const MyProfile = () => {
                                     <ul className="breadcrumb__list">
                                         <li className="has-separator">
 
-                                            <a href="/">Home</a></li>
+                                            <a href="index">Home</a></li>
                                         <li className="is-marked">
 
-                                            <a href="/my-profile">My Account</a></li>
+                                            <a href="address-book">My Account</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -51,7 +64,7 @@ const MyProfile = () => {
                                                         <a href="/dashboard">Manage My Account</a></li>
                                                     <li>
 
-                                                        <a className="dash-active" href="/my-profile">My Profile</a></li>
+                                                        <a href="/my-profile">My Profile</a></li>
                                                     <li>
 
                                                         <a href="/address-book">Address Book</a></li>
@@ -69,7 +82,7 @@ const MyProfile = () => {
                                                         <a href="/cancellation">My Returns & Cancellations</a></li>
                                                     <li>
 
-                                                        <a href="/design">Design</a></li>
+                                                        <a className="dash-active" href="/design">Design</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -111,57 +124,59 @@ const MyProfile = () => {
                                     <div className="col-lg-9 col-md-12">
                                         <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                             <div className="dash__pad-2">
-                                                <h1 className="dash__h1 u-s-m-b-14">My Profile</h1>
+                                                <div className="dash__address-header">
+                                                    <h1 className="dash__h1">Design</h1>
+                                                    <div>
 
-                                                <span className="dash__text u-s-m-b-30">Look all your info, you could customize your profile.</span>
-                                                <div className="row">
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Full Name</h2>
+                                                        {/* <span className="dash__link dash__link--black u-s-m-r-8">
 
-                                                        <span className="dash__text">John Doe</span>
-                                                    </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">E-mail</h2>
+                                                            <a href="/address-make-default">Make default shipping address</a></span>
 
-                                                        <span className="dash__text">johndoe@domain.com</span>
-                                                        <div className="dash__link dash__link--secondary">
+                                                        <span className="dash__link dash__link--black">
 
-                                                            <a href="#">Change</a></div>
-                                                    </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Phone</h2>
-
-                                                        <span className="dash__text">Please enter your mobile</span>
-                                                        <div className="dash__link dash__link--secondary">
-
-                                                            <a href="#">Add</a></div>
-                                                    </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Birthday</h2>
-
-                                                        <span className="dash__text">1991-02-02</span>
-                                                    </div>
-                                                    <div className="col-lg-4 u-s-m-b-30">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Gender</h2>
-
-                                                        <span className="dash__text">Male</span>
-                                                    </div>
-                                                </div>
-                                                <div className="row">
-                                                    <div className="col-lg-12">
-                                                        <div className="dash__link dash__link--secondary u-s-m-b-30">
-
-                                                            <a data-modal="modal" data-modal-id="#/newsletter">Subscribe Newsletter</a></div>
-                                                        <div className="u-s-m-b-16">
-
-                                                            <a className="dash__custom-link btn--e-transparent-brand-b-2" href="/edit-profile">Edit Profile</a></div>
-                                                        <div>
-
-                                                            <a className="dash__custom-link btn--e-brand-b-2" href="#">Change Password</a></div>
+                                                            <a href="/address-make-default">Make default shipping address</a></span> */}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className="dash__box dash__box--shadow dash__box--bg-white dash__box--radius u-s-m-b-30">
+                                            <div className="dash__table-2-wrap gl-scroll">
+                                                <table className="dash__table-2">
+                                                    <thead>
+                                                        <tr>
+
+                                                            <th>Code</th>
+                                                            <th>Status</th>
+                                                        
+                                                            <th>Created</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {designs.map(design => (
+                                                            <tr key={design.id}>
+
+                                                                <td>{design.codeDesign}</td>
+                                                                <td>{design.status}</td>
+                                                               
+
+                                                                <td>{design.createdAt}</td>
+                                                                <td>
+                                                                    <a href={`/design-detail/${design.id}`} style={{ color: 'blue' }}>Read more</a>
+                                                                </td>
+
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                        <div>
+
+                                            <a className="dash__custom-link btn--e-brand-b-2" href="/edit-address"><i className="fas fa-plus u-s-m-r-8"></i>
+
+                                                <span>Add New Address</span></a></div>
                                     </div>
                                 </div>
                             </div>
@@ -171,9 +186,8 @@ const MyProfile = () => {
                 </div>
                 {/*====== End - Section 2 ======*/}
             </div>
-            {/*====== End - App Content ======*/}
         </div>
     )
 }
 
-export default MyProfile
+export default Design
