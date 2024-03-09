@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import CartItem from '../components/CartItem/CartItem'
 import { useCart } from 'react-use-cart'
 import axios from 'axios';
+import EmptyCart from '../components/PageEmpty/EmptyCart';
 const Cart = () => {
     const [provinceData, setProvinceData] = useState([]);
     const [districtData, setDistrictData] = useState([]);
@@ -88,9 +89,10 @@ const Cart = () => {
         }
     };
 
-    if (isEmpty) return
-    <h1>Chua mua hang kia DMM</h1>
-    
+    if (isEmpty) {
+        return <EmptyCart />;
+    }
+
     return (
         <div>
             {/*====== App Content ======*/}

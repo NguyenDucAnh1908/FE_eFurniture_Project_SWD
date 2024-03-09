@@ -16,7 +16,8 @@ const CheckOut = () => {
     const [fullName, setFullName] = useState('');
     const [discounts, setDiscounts] = useState('');
     const [notes, setNotes] = useState('');
-    const [status, setStatus] = useState(null);
+    const [orderStatus, setOrderStatus] = useState(null);
+    const [paymentStatus, setPaymentStatus] = useState(null);
     const [shipping_date, setShippingDate] = useState('');
     const [shipping_method, setShippingMethod] = useState('');
     const [province, setProvince] = useState('');
@@ -59,12 +60,12 @@ const CheckOut = () => {
             quantity: item.quantity
         }));
         let res = await checkOutOrder(
-            user_id, address, phone_number, email, fullName, discounts, notes, 1, shipping_date, shipping_method, province,
+            user_id, address, phone_number, email, fullName, discounts, notes, 1, 1,shipping_date, shipping_method, province,
             district, ward, payment_method, coupon_id, total_amount, cart_items
         );
         console.log("Check Check out order: ", res);
         if (res && res.id) {
-            setUserId(''); setPhoneNumber(''); setEmail(''); setAddress(''); setFullName(''); setDiscounts(''); setNotes(''); setStatus('');
+            setUserId(''); setPhoneNumber(''); setEmail(''); setAddress(''); setFullName(''); setDiscounts(''); setNotes(''); setOrderStatus(''); setPaymentStatus('');
             setShippingDate(''); setShippingMethod(''); setProvince(''); setDistrict(''); setWard(''); setPaymentMethod(''); setCouponId('');
             setTotalAmount(''); emptyCart();
             console.log("A User is created success!!");
