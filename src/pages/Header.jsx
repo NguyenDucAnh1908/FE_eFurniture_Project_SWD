@@ -24,7 +24,7 @@ function Header() {
             {/*====== Search Form ======*/}
             <form className="main-form">
 
-                <label for="main-search"></label>
+                <label htmlFor="main-search"></label>
 
                 <input className="input-text input-text--border-radius input-text--style-1" type="text" id="main-search" placeholder="Search"/>
 

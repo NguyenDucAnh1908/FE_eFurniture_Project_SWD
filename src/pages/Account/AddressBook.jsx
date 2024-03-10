@@ -80,6 +80,9 @@ const AddressBook = () => {
                                                     <li>
 
                                                         <a href="/cancellation">My Returns & Cancellations</a></li>
+                                                    <li>
+
+                                                        <a href="/booking">My Booking Design</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -137,13 +140,13 @@ const AddressBook = () => {
                                         </div>
                                         <div className="dash__box dash__box--shadow dash__box--bg-white dash__box--radius u-s-m-b-30">
                                             <div className="dash__table-2-wrap gl-scroll">
-                                            <table className="dash__table-2">
+                                                <table className="dash__table-2">
                                                     <thead>
                                                         <tr>
                                                             <th>Action</th>
                                                             <th>Full Name</th>
                                                             <th>Address</th>
-                                                          
+
                                                             <th>Phone Number</th>
                                                             <th>Status</th>
                                                         </tr>
@@ -157,7 +160,7 @@ const AddressBook = () => {
                                                                 </td>
                                                                 <td>{`${address.firstName} ${address.lastName}`}</td>
                                                                 <td>{`${address.streetAddress}, ${address.wardName}, ${address.districtName}, ${address.provinceName}`}</td>
-                                                                
+
                                                                 <td>{address.phoneNumber}</td>
                                                                 <td>
                                                                     <div className="gl-text">Default Shipping Address</div>

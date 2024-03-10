@@ -68,6 +68,9 @@ const MyOrder = () => {
                                                     <li>
 
                                                         <a href="/cancellation">My Returns & Cancellations</a></li>
+                                                    <li>
+
+                                                        <a href="/booking">My Booking Design</a></li>
                                                 </ul>
                                             </div>
                                         </div>

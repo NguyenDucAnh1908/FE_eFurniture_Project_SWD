@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import RecommendedProductsSlider from '../components/RecommendedProductsSlider/RecommendedProductsSlider';
 import Feedback from './Feedback';
+import { FeedbackProvider } from '../Feedback/FeedbackContext';
+
 
 const ProductDetail = () => {
     const [images, setImages] = useState([]);
@@ -46,6 +48,10 @@ const ProductDetail = () => {
             console.error('Error fetching feedback:', error);
             setLoading(false); // Set loading to false in case of an error
         }
+    };
+
+    const handleReviewSubmission = () => {
+        fetchFeedbackData();
     };
 
     const fetchProductImages = async () => {
@@ -265,7 +271,8 @@ const ProductDetail = () => {
                                                     </div>
                                                     <div className="u-s-m-b-15">
 
-                                                        <button className="btn btn--e-brand-b-2" type="submit">Add to Cart</button></div>
+                                                        <button className="btn btn--e-brand-b-2" type="submit">Add to Cart</button>
+                                                        </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -406,7 +413,9 @@ const ProductDetail = () => {
 
                                         {/*--====== Tab 3 ======*/}
                                         <div className="tab-pane" id="pd-rev">
-                                            <Feedback productId={id}/>
+                                            <FeedbackProvider>
+                                                <Feedback productId={id} onReviewSubmission={handleReviewSubmission} />
+                                            </FeedbackProvider>
                                         </div>
 
                                         {/*--====== End - Tab 3 ======*/}

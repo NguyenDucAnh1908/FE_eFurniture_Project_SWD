@@ -21,8 +21,9 @@ import NotFound from '../pages/NotFound'
 import PrivateRounter from './PrivateRount/PrivateRounter'
 import Test from '../pages/test'
 import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
-
-
+import BookingForm from '../pages/BookingForm'
+import Dashboard from '../pages/Account/Dashboard'
+import Booking from '../pages/Account/Booking'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function Routers() {
@@ -30,60 +31,66 @@ function Routers() {
   return (
     <>
       {/* <BrowserRouter> */}
-        <Routes>
-          <Route path='/shop' element={<Shop />} />
+      <Routes>
+        <Route path='/shop' element={<Shop />} />
 
-          <Route path='/' element={<Home />} />
+        <Route path='/' element={<Home />} />
 
-          <Route path='/login' element={<Login />} />
+        <Route path='/login' element={<Login />} />
 
-          <Route path='/product-detail/:id' element={<ProductDetail />} />
+        <Route path='/product-detail/:id' element={<ProductDetail />} />
 
-          <Route path='/cart' element={<Cart />} />
+        <Route path='/cart' element={<Cart />} />
 
-          {/* <Route path='/check-out' element={<CheckOut/>}/> */}
+        {/* <Route path='/check-out' element={<CheckOut/>}/> */}
 
-          <Route path='/check-out/thank-you' element={<CheckOutSuccess />} />
+        <Route path='/check-out/thank-you' element={<CheckOutSuccess />} />
 
-          <Route path='/blog' element={<Blog />} />
+        <Route path='/blog' element={<Blog />} />
 
-          <Route path='/blog-detail/:id' element={<BlogDetail />} />
+        <Route path='/blog-detail/:id' element={<BlogDetail />} />
 
-          <Route path='/my-profile' element={<MyProfile />} />
+        <Route path='/my-profile' element={<MyProfile />} />
 
-          <Route path='/address-book' element={<AddressBook />} />
+        <Route path='/address-book' element={<AddressBook />} />
 
-          <Route path='/my-order' element={<MyOrder />} />
+        <Route path='/my-order' element={<MyOrder />} />
 
-          <Route path='/track-order' element={<TrackOrder />} />
+        <Route path='/track-order' element={<TrackOrder />} />
 
-          <Route path='/cancellation' element={<Cancellation />} />
+        <Route path='/cancellation' element={<Cancellation />} />
 
-          <Route path='/payment-option' element={<PaymentOption />} />
+        <Route path='/payment-option' element={<PaymentOption />} />
 
-          <Route path='/wish-list' element={<Wishlist />} />
+        <Route path='/wish-list' element={<Wishlist />} />
 
-          <Route path='/edit-address' element={<AddressBookEdit />} />
+        <Route path='/edit-address' element={<AddressBookEdit />} />
 
-          <Route path='*' element={<NotFound />} />
+        <Route path='/booking-form' element={<BookingForm />} />
 
-          {/* {user && user.isLoading ?
+        <Route path='/booking' element={<Booking />} />
+
+        <Route path='/dashboard' element={<Dashboard />} />
+
+        <Route path='*' element={<NotFound />} />
+
+        {/* {user && user.isLoading ?
           
         } */}
-          <Route
-            path="/check-out" element={
-              <PrivateRounter >
-                <CheckOut />
-              </PrivateRounter>
-              
-            }
-          />
+        <Route
+          path="/check-out" element={
+            <PrivateRounter >
+              <CheckOut />
+            </PrivateRounter>
 
-          <Route path='/test' element={<Test />} />
+          }
+        />
 
-          <Route exact path='/product-detail-test' element={<IndexProductDetail />} />
+        <Route path='/test' element={<Test />} />
 
-        </Routes>
+        <Route exact path='/product-detail-test' element={<IndexProductDetail />} />
+
+      </Routes>
       {/* </BrowserRouter> */}
     </>
   )

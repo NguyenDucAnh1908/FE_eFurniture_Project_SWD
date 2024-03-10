@@ -1,6 +1,23 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const TrackOrder = () => {
+const Booking = () => {
+    const [bookings, setBookings] = useState([]);
+
+    useEffect(() => {
+        fetchAllBooking();
+    }, []);
+
+    const fetchAllBooking = async () => {
+        axios.get('http://localhost:8080/api/v1/booking/all')
+            .then(response => {
+                setBookings(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching bookings:', error);
+            });
+    }
+
     return (
         <div>
 
@@ -21,7 +38,7 @@ const TrackOrder = () => {
                                             <a href="/">Home</a></li>
                                         <li className="is-marked">
 
-                                            <a href="/track-order">My Account</a></li>
+                                            <a href="/booking">Booking</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -49,7 +66,7 @@ const TrackOrder = () => {
                                                 <ul className="dash__f-list">
                                                     <li>
 
-                                                        <a href="/dashboard">Manage My Account</a></li>
+                                                        <a href="dashboard">Manage My Account</a></li>
                                                     <li>
 
                                                         <a href="/my-profile">My Profile</a></li>
@@ -58,10 +75,10 @@ const TrackOrder = () => {
                                                         <a href="/address-book">Address Book</a></li>
                                                     <li>
 
-                                                        <a className="dash-active" href="/track-order">Track Order</a></li>
+                                                        <a href="/track-order">Track Order</a></li>
                                                     <li>
 
-                                                        <a href="/my-order">My Orders</a></li>
+                                                        <a  href="/my-order">My Orders</a></li>
                                                     <li>
 
                                                         <a href="/payment-option">My Payment Options</a></li>
@@ -70,7 +87,7 @@ const TrackOrder = () => {
                                                         <a href="/cancellation">My Returns & Cancellations</a></li>
                                                     <li>
 
-                                                        <a href="/booking">My Booking Design</a></li>
+                                                        <a className="dash-active" href="/booking">My Booking Design</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -110,27 +127,43 @@ const TrackOrder = () => {
                                         {/*====== End - Dashboard Features ======*/}
                                     </div>
                                     <div className="col-lg-9 col-md-12">
-                                        <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
+                                        <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                             <div className="dash__pad-2">
-                                                <h1 className="dash__h1 u-s-m-b-14">Track your Order</h1>
+                                                <h1 className="dash__h1 u-s-m-b-14">My Booking</h1>
 
-                                                <span className="dash__text u-s-m-b-30">To track your order please enter your Order ID in the box below and press the "Track" button. This was given to you on your receipt and in the confirmation email you should have received.</span>
-                                                <form className="/track-order">
-                                                    <div className="gl-inline">
-                                                        <div className="u-s-m-b-30">
+                                                <span className="dash__text u-s-m-b-30">Here you can see all design you have booking.</span>
+                                                <form className="m-booking u-s-m-b-30">
+                                                    <div className="m-booking__select-wrapper">
 
-                                                            <label className="gl-label" for="order-id">Order ID *</label>
-
-                                                            <input className="input-text input-text--primary-style" type="text" id="order-id" placeholder="Found in your confirmation email" /></div>
-                                                        <div className="u-s-m-b-30">
-
-                                                            <label className="gl-label" for="track-email">Email *</label>
-
-                                                            <input className="input-text input-text--primary-style" type="text" id="track-email" placeholder="Email you used during checkout" /></div>
-                                                    </div>
-
-                                                    <button className="btn btn--e-brand-b-2" type="submit">TRACK</button>
+                                                        <label className="u-s-m-r-8" for="my-booking-sort">Show:</label><select className="select-box select-box--primary-style" id="my-booking-sort">
+                                                            <option selected>Last 5 bookings</option>
+                                                            <option>Last 15 days</option>
+                                                            <option>Last 30 days</option>
+                                                            <option>Last 6 months</option>
+                                                            <option>Bookings placed in 2018</option>
+                                                            <option>All Bookings</option>
+                                                        </select></div>
                                                 </form>
+                                                <div className="m-booking__list">
+                                                    {bookings.map(booking => (
+                                                        <div key={booking.id} className="m-booking__get">
+                                                            <div className="manage-o__header u-s-m-b-30">
+                                                            <div className="description-title">Booking at:{booking.created_at}</div>                                                            </div>
+                                                            <div className="manage-o__description">
+                                                                <div className="description__container">
+                                                                    <div className="description-title">{booking.id}</div>
+                                                                </div>
+                                                                <div className="description__info-wrap">
+                                                                    <div>
+                                                                        <span className={`manage-o__badge badge--${booking.status.toLowerCase()}`}>
+                                                                            {booking.status}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -143,8 +176,9 @@ const TrackOrder = () => {
                 {/*====== End - Section 2 ======*/}
             </div>
             {/*====== End - App Content ======*/}
+
         </div>
     )
 }
 
-export default TrackOrder
+export default Booking

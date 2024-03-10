@@ -1,36 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import TextEditor from '../components/Editor/TextEditor';
+import { useFeedback } from '../Feedback/FeedbackContext';
 
-function Feedback({ productId, onFeedbackData }) {
+
+function Feedback({ productId, onReviewSubmission }) {
     const [reviews, setReviews] = useState([]);
     const [productDetail, setProductDetail] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [loadingReviews, setLoadingReviews] = useState(true);
     const [averageRating, setAverageRating] = useState(null);
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState('');
+    const [replyingReviewId, setReplyingReviewId] = useState(null);
+    const [replyText, setReplyText] = useState('');
+    const { state, dispatch } = useFeedback();
 
     const handleRatingChange = (value) => {
         setRating(value);
     };
 
-    const handleReviewTextChange = (newData) => {
-        setReviewText(newData);
-        setReviewText('');
+    const handleReplyClick = (reviewId) => {
+        setReplyingReviewId(reviewId);
     };
 
+    const handleReviewTextChange = (newData) => {
+        setReviewText(newData);
+    };
 
     const handlePageChange = async (newPage) => {
         if (newPage >= 0 && newPage < totalPages && newPage !== currentPage) {
             try {
-                // Update the current page state
                 setCurrentPage(newPage);
             } catch (error) {
                 console.error('Error fetching feedback:', error);
-                setLoading(false);
+                setLoadingReviews(false);
             }
         }
     };
@@ -56,16 +62,16 @@ function Feedback({ productId, onFeedbackData }) {
             setAverageRating(response2.data);
             setTotalPages(response1.data.totalPages);
             setTotalElements(response1.data.totalElements);
-            setLoading(false);
+            setLoadingReviews(false);
             console.log("Check feedback1: ", response1.data);
             console.log("Check feedback2: ", response2.data);
         } catch (error) {
             console.error('Error fetching feedback:', error);
-            setLoading(false);
+            setLoadingReviews(false);
         }
     };
-    useEffect(() => {
 
+    useEffect(() => {
         fetchFeedbackData(currentPage);
     }, [currentPage]);
 
@@ -81,14 +87,48 @@ function Feedback({ productId, onFeedbackData }) {
                 userId: 1,
             });
 
-            // Update the reviews state immediately with the new review
-            setReviews((prevReviews) => [response.data, ...prevReviews]);
+            dispatch({ type: 'ADD_FEEDBACKS', payload: response.data.content });
 
+            setReviews((prevReviews) => [response.data, ...prevReviews]);
+            setTotalElements((prevCount) => prevCount + 1);
+            const newAverageRating = ((averageRating || 0) * totalElements + response.data.rating) / (totalElements + 1);
+            setAverageRating(newAverageRating);
+            setRating(0);
+            setReviewText('');
+            const ratingRadios = document.getElementsByName('rating');
+            ratingRadios.forEach((radio) => (radio.checked = false));
+
+            fetchFeedbackData(currentPage);
+            onReviewSubmission();
             console.log('Review submitted successfully:', response.data);
         } catch (error) {
-            console.error('Error submitting review:', error);
+            if (error.response && error.response.status === 400) {
+                console.log('Validation errors:', error.response.data);
+            } else {
+                console.error('Error submitting review:', error);
+            }
+        }
+    };  
+
+    const handleSubmitReply = async (event, feedbackId, replyText) => {
+        event.preventDefault();
+        try {
+            if (feedbackId) {
+                const response = await axios.post(`http://localhost:8080/api/v1/feedbacks/reply/${feedbackId}?replierId=2&reply=${replyText}`);
+                dispatch({ type: 'ADD_REPLY', payload: { id: feedbackId, reply: response.data } });
+                fetchFeedbackData(currentPage);
+                onReviewSubmission();
+                console.log('Reply submitted successfully:', response.data);
+            } else {
+                console.error('Invalid feedbackId:', feedbackId);
+                console.error('error:',);
+            }
+        } catch (error) {
+            console.error('Error submitting reply:', error);
         }
     };
+
+
 
     const generateStarRating = (rating) => {
         const fullStars = Math.floor(rating);
@@ -112,29 +152,32 @@ function Feedback({ productId, onFeedbackData }) {
         return stars;
     };
 
-
     return (
         <div>
             <div className="tab-pane" id="pd-rev">
                 <div className="pd-tab__rev">
                     <div className="u-s-m-b-30">
-                        {reviews.length > 0 && averageRating !== null && !isNaN(averageRating) && (
-                            <div className="pd-tab__rev-score">
-                                <div className="u-s-m-b-8">
-                                    <h2>
-                                        {totalElements} Reviews - {averageRating.toFixed(1)} (Overall)
-                                    </h2>
+                        {loadingReviews ? (
+                            <p>Loading reviews...</p>
+                        ) : (
+                            reviews.length > 0 && averageRating !== null && !isNaN(averageRating) && (
+                                <div className="pd-tab__rev-score">
+                                    <div className="u-s-m-b-8">
+                                        <h2>
+                                            {totalElements} Reviews - {averageRating.toFixed(1)} (Overall)
+                                        </h2>
+                                    </div>
+                                    <div className="gl-rating-style-2 u-s-m-b-8">{generateStarRating(averageRating)}</div>
+                                    <div className="u-s-m-b-8">
+                                        <h4>We want to hear from you!</h4>
+                                    </div>
+                                    <span className="gl-text">Tell us what you think about this item</span>
                                 </div>
-                                <div className="gl-rating-style-2 u-s-m-b-8">{generateStarRating(averageRating)}</div>
-                                <div className="u-s-m-b-8">
-                                    <h4>We want to hear from you!</h4>
-                                </div>
-                                <span className="gl-text">Tell us what you think about this item</span>
-                            </div>
+                            )
                         )}
                     </div>
                     <div className="u-s-m-b-30">
-                        <form className="pd-tab__rev-f1">
+                        <div className="pd-tab__rev-f1">
                             <div className="rev-f1__group">
                                 <div className="u-s-m-b-15">
                                     <div>
@@ -149,7 +192,7 @@ function Feedback({ productId, onFeedbackData }) {
                                     </select>
                                 </div>
                             </div>
-                            {loading ? (
+                            {loadingReviews ? (
                                 <p>Loading reviews...</p>
                             ) : (
                                 <>
@@ -159,13 +202,40 @@ function Feedback({ productId, onFeedbackData }) {
                                                 <span className="review-o__name">{review.userFullName}</span>
                                                 <span className="review-o__date">{review.created_at}</span>
                                             </div>
-                                            <div key={index} className="review-o__item">
+
+                                            <div className="review-o__item">
                                                 <div className="review-o__rating gl-rating-style u-s-m-b-8">
                                                     {generateStarRating(review.rating)}
                                                     <span>({review.rating})</span>
                                                 </div>
                                             </div>
+
                                             <p className="review-o__text" dangerouslySetInnerHTML={{ __html: review.comment }}></p>
+
+                                            {review.reply && (
+                                                <div className="review-o u-s-m-b-15">
+                                                    <div className="review-o__info u-s-m-b-8">
+                                                        <span className="review-o__name">Replier: {review.replierName}</span>
+                                                        <span className="review-o__date">{review.updated_at}</span>
+                                                    </div>
+                                                    <p className="reply-o__text">{review.reply}</p>
+                                                </div>
+                                            )}
+
+                                            {!replyingReviewId && (
+                                                <a onClick={() => handleReplyClick(review.id)}>Reply</a>
+                                            )}
+                                            {replyingReviewId === review.id && (
+                                                <form onSubmit={(event) => handleSubmitReply(event, review.id, replyText)}>
+                                                    <label htmlFor="replyText">Your Reply:</label>
+                                                    <textarea
+                                                        id="replyText"
+                                                        value={replyText}
+                                                        onChange={(e) => setReplyText(e.target.value)}
+                                                    ></textarea>
+                                                    <button type="submit">Submit Reply</button>
+                                                </form>
+                                            )}
                                         </div>
 
 
@@ -187,12 +257,11 @@ function Feedback({ productId, onFeedbackData }) {
                                     )}
                                 </>
                             )}
-                        </form>
+                        </div>
                     </div>
                     <div className="u-s-m-b-30">
                         <form className="pd-tab__rev-f2" onSubmit={handleSubmit}>
                             <h2 className="u-s-m-b-15">Add a Review</h2>
-                            <span className="gl-text u-s-m-b-15">Your email address will not be published. Required fields are marked *</span>
                             <div className="u-s-m-b-30">
                                 <div className="rev-f2__table-wrap gl-scroll">
                                     <table className="rev-f2__table">
@@ -235,7 +304,6 @@ function Feedback({ productId, onFeedbackData }) {
                                             <label className="gl-label" htmlFor="reviewer-text">
                                                 YOUR REVIEW *
                                             </label>
-
                                             <TextEditor data={reviewText} onChange={handleReviewTextChange} />
                                         </div>
                                     </div>
