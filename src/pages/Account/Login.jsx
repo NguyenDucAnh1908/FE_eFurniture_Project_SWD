@@ -46,7 +46,7 @@ const Login = (props) => {
                 refesh_token: response.refesh_token,
                 account: { user }
             }
-            sessionStorage.setItem("account", JSON.stringify(data));
+            localStorage.setItem("account", JSON.stringify(data));
             localStorage.setItem("jwt", tokenJwt);
             login(data);
             navigate("/");
@@ -72,8 +72,8 @@ const Login = (props) => {
     };
 
     useEffect(() => {
-        let session = sessionStorage.getItem('account');
-        if (session) {
+        let local = localStorage.getItem('account');
+        if (local) {
             navigate("/")
             // window.location.reload();
         }
@@ -168,7 +168,7 @@ const Login = (props) => {
 
                                                 <label class="gl-label" for="login-password">PASSWORD *</label>
 
-                                                <input class="input-text input-text--primary-style" type="text" id="login-password"
+                                                <input class="input-text input-text--primary-style" type="password" id="login-password"
                                                     placeholder="Enter Password"
                                                     value={valuePassword}
                                                     onChange={handleLoginPasswordChange}

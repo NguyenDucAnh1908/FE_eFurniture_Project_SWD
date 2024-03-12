@@ -9,11 +9,17 @@ const Blog = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [tags, setTags] = useState({});
     const [categories, setCategories] = useState({});
+    const [allCategories, setAllCategories] = useState([]);
+    const [allTags, setAllTags] = useState([]);
+
+
+
+
 
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/blogs/get_all_blogs?page=${currentPage}`);
+                const response = await axios.get(`http://localhost:8080/api/v1/blogs/get_all_blogs?page=${currentPage}`);
                 setBlogs(response.data.blogs);
                 setLoading(false);
             } catch (error) {
@@ -25,15 +31,32 @@ const Blog = () => {
         fetchBlogs();
     }, [currentPage]);
 
-    // Hàm để gọi API và lấy thông tin về một tag dựa trên id của nó
+
+    const lastThreeBlogs = blogs.slice(-3);
+
+    useEffect(() => {
+        const fetchCategoriesAndTags = async () => {
+            try {
+                const categoriesResponse = await axios.get('http://localhost:8080/api/v1/categories-blog/get-all-categoriesBlog');
+                const tagsResponse = await axios.get('http://localhost:8080/api/v1/tags-blog/get-all');
+
+                setAllCategories(categoriesResponse.data);
+                setAllTags(tagsResponse.data);
+            } catch (error) {
+                console.error('Failed to fetch categories and tags', error);
+            }
+        };
+
+        fetchCategoriesAndTags();
+    }, []);
+
+
     const fetchTag = async (tagId) => {
         try {
-            // Thực hiện cuộc gọi API để lấy thông tin về tag dựa trên id
-            const response = await axios.get(`http://localhost:8080/api/tags-blog/${tagId}`);
-            // Lưu thông tin của tag vào state
+            const response = await axios.get(`http://localhost:8080/api/v1/tags-blog/${tagId}`);
             setTags(prevState => ({
                 ...prevState,
-                [tagId]: response.data // Lưu thông tin tag với key là id của tag
+                [tagId]: response.data
             }));
         } catch (error) {
             console.error(`Failed to fetch tag with id ${tagId}`, error);
@@ -41,10 +64,9 @@ const Blog = () => {
     };
 
     useEffect(() => {
-        // Lấy danh sách các tagIds từ các blogs hiện tại và gọi fetchTag cho mỗi tagId
         blogs.forEach(blog => {
             blog.tagBlogIds.forEach(tagId => {
-                if (!tags[tagId]) { // Kiểm tra xem thông tin tag đã được lấy hay chưa
+                if (!tags[tagId]) {
                     fetchTag(tagId);
                 }
             });
@@ -55,10 +77,10 @@ const Blog = () => {
 
     const fetchTag2 = async (categoryId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/categories-blog/${categoryId}`);
+            const response = await axios.get(`http://localhost:8080/api/v1/categories-blog/${categoryId}`);
             setCategories(prevState => ({
                 ...prevState,
-                [categoryId]: response.data // Lưu thông tin tag với key là id của tag
+                [categoryId]: response.data
             }));
         } catch (error) {
             console.error(`Failed to fetch categoryId with id ${categoryId}`, error);
@@ -127,177 +149,48 @@ const Blog = () => {
 
                                             <span className="blog-w__h">CATEGORIES</span>
                                             <ul className="blog-w__list">
-                                                <li>
-
-                                                    <a href="blog-left-sidebar.html">Corporate</a></li>
-                                                <li>
-
-                                                    <a href="blog-left-sidebar.html">Creative</a></li>
-                                                <li>
-
-                                                    <a href="blog-left-sidebar.html">Design</a></li>
-                                                <li>
-
-                                                    <a href="blog-left-sidebar.html">News</a></li>
-                                                <li>
-
-                                                    <a href="blog-left-sidebar.html">Photography</a></li>
+                                                {allCategories.map(category => (
+                                                    <li key={category.id}>
+                                                        <Link to={`/category/${category.id}`}>{category.name}</Link>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </div>
-                                    <div className="u-s-m-b-60">
-                                        <div className="blog-w">
 
-                                            <span className="blog-w__h">ARCHIVES</span>
-                                            <ul className="blog-w__list">
-                                                <li>
-
-                                                    <a href="blog-left-sidebar.html">March 2017 (1)</a></li>
-                                                <li>
-
-                                                    <a href="blog-left-sidebar.html">December 2017 (3)</a></li>
-                                                <li>
-
-                                                    <a href="blog-left-sidebar.html">November 2017 (4)</a></li>
-                                                <li>
-
-                                                    <a href="blog-left-sidebar.html">September 2017 (1)</a></li>
-                                                <li>
-
-                                                    <a href="blog-left-sidebar.html">August 2014 (1)</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
                                     <div className="u-s-m-b-60">
                                         <div className="blog-w">
 
                                             <span className="blog-w__h">RECENT POSTS</span>
                                             <ul className="blog-w__b-l">
-                                                <li>
-                                                    <div className="b-l__block">
-                                                        <div className="b-l__date">
-
-                                                            <span>25</span>
-
-                                                            <span>July</span>
-
-                                                            <span>2018</span></div>
-
-                                                        <span className="b-l__h">
-
-                                                            <a href="blog-detail">Life is an extraordinary Adventure</a></span>
-
-                                                        <span className="b-l__p">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.</span>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div className="b-l__block">
-                                                        <div className="b-l__date">
-
-                                                            <span>25</span>
-
-                                                            <span>July</span>
-
-                                                            <span>2018</span></div>
-
-                                                        <span className="b-l__h">
-
-                                                            <a href="blog-detail">Everyone can draw but need passion for it</a></span>
-
-                                                        <span className="b-l__p">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.</span>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div className="b-l__block">
-                                                        <div className="b-l__date">
-
-                                                            <span>25</span>
-
-                                                            <span>July</span>
-
-                                                            <span>2018</span></div>
-
-                                                        <span className="b-l__h">
-
-                                                            <a href="blog-detail">Rap is not an art</a></span>
-
-                                                        <span className="b-l__p">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.</span>
-                                                    </div>
-                                                </li>
+                                                {/* Map through the last 3 blogs */}
+                                                {lastThreeBlogs.map(blog => (
+                                                    <li key={blog.id}>
+                                                        <div className="b-l__block">
+                                                            <div className="b-l__date">
+                                                                <span>{blog.createdAt.substring(0, 10)}</span>
+                                                            </div>
+                                                            <span className="b-l__h">
+                                                                {/* Link to the blog's detail page */}
+                                                                <Link to={`/blog-detail/${blog.id}`}>{blog.title}</Link>
+                                                            </span>
+                                                            <span className="b-l__p">{truncateText(blog.content.replace(/<[^>]*>/g, ''), 100)}</span>
+                                                        </div>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </div>
-                                    <div className="u-s-m-b-60">
-                                        <div className="blog-w">
 
-                                            <span className="blog-w__h">RECENT COMMENTS</span>
-                                            <ul className="blog-w__b-l-2">
-                                                <li>
-                                                    <div className="b-l__block">
-
-                                                        <span className="b-l__text">admin</span>
-
-                                                        <span className="b-l__text">on</span>
-
-                                                        <span className="b-l__h-2">
-
-                                                            <a href="blog-detail">Life is all about opportunity</a></span></div>
-                                                </li>
-                                                <li>
-                                                    <div className="b-l__block">
-
-                                                        <span className="b-l__text">admin</span>
-
-                                                        <span className="b-l__text">on</span>
-
-                                                        <span className="b-l__h-2">
-
-                                                            <a href="blog-detail">Be More Confident in 30 Seconds</a></span></div>
-                                                </li>
-                                                <li>
-                                                    <div className="b-l__block">
-
-                                                        <span className="b-l__text">admin</span>
-
-                                                        <span className="b-l__text">on</span>
-
-                                                        <span className="b-l__h-2">
-
-                                                            <a href="blog-detail">Bury A Body With Me</a></span></div>
-                                                </li>
-                                                <li>
-                                                    <div className="b-l__block">
-
-                                                        <span className="b-l__text">admin</span>
-
-                                                        <span className="b-l__text">on</span>
-
-                                                        <span className="b-l__h-2">
-
-                                                            <a href="blog-detail">Everything Must Die</a></span></div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
                                     <div>
                                         <div className="blog-w">
 
                                             <span className="blog-w__h">TAGS</span>
                                             <div className="blog-t-w">
-
-                                                <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">Dresses</a>
-
-                                                <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">Shirts & Tops</a>
-
-                                                <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">Polo Shirts</a>
-
-                                                <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">Sweaters</a>
-
-                                                <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">Blazers</a>
-
-                                                <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">Vests</a>
-
-                                                <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">Jackets</a></div>
+                                                {allTags.map(tag => (
+                                                    <a key={tag.id} className="gl-tag btn--e-transparent-hover-brand-b-2" href={`/tag/${tag.id}`}>{tag.tagName}</a>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -336,14 +229,9 @@ const Blog = () => {
 
                                                         <span className="bp__author">
 
-                                                            <a href="blog-left-sidebar.html">Dayle</a></span></span>
+                                                            <a href="blog-left-sidebar.html">{blog.userFullName}</a></span></span>
 
-                                                    {/* <span className="bp__stat-wrap">
-                                                        <span className="bp__comment">
-                                                            <a href="blog-detail"><i className="far fa-comments u-s-m-r-4"></i>
-                                                                <span></span></a>
-                                                        </span>
-                                                    </span> */}
+
 
                                                     <span className="bp__stat-wrap">
 
@@ -402,8 +290,7 @@ const Blog = () => {
                                                     </div>
 
                                                 </div>
-
-
+                                                
                                                 <p>{truncateText(blog.content.replace(/<[^>]*>/g, ''), 240)}</p>
 
                                                 <div className="gl-l-r">

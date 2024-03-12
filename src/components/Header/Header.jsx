@@ -4,12 +4,14 @@ import CartMini from '../CartMini/CartMini';
 import { Route } from 'react-router-dom';
 import Shop from '../../pages/Shop';
 import _ from 'lodash';
-// import { UserContext } from '../../context/UserContext'
+import { UserContext } from '../../context/UserContext'
 import Account from '../AccountComponent/Account';
+
 
 function Header() {
     const [account, setAccount] = useState({});
-    // const { user } = useContext(UserContext);
+    const { user } = useContext(UserContext);
+    console.log("Check user CT: ", user)
     const {
         isEmpty,
         totalUniqueItems,
@@ -20,7 +22,7 @@ function Header() {
         removeItem,
         emptyCart,
     } = useCart();
-    
+
     // useEffect(() => {
     //     let session = sessionStorage.getItem('account');
     //     if (session) {
@@ -85,43 +87,15 @@ function Header() {
                                             <a><i className="fas fa-user-cog"></i></a>
 
                                             {/*====== Dropdown ======*/}
-
-                                            <span className="js-menu-toggle"></span>
-                                            <ul style={{ width: "120px" }}>
-                                                <li className="has-dropdown has-dropdown--ul-right-100">
-
-                                                    <a>Language<i className="fas fa-angle-down u-s-m-l-6"></i></a>
-
-                                                    {/*====== Dropdown ======*/}
-
-                                                    <span className="js-menu-toggle"></span>
-                                                    <ul style={{ width: "120px" }}>
-                                                        <li>
-
-                                                            <a className="u-c-brand">ENGLISH</a></li>
-                                                        <li>
-
-                                                            <a>ARABIC</a>
-                                                        </li>
-                                                    </ul>
-                                                    {/*====== End - Dropdown ======*/}
+                                        {user && user.isAuthenticated === true &&
+                                        <span className="js-menu-toggle">Welcome, {user.account.user.fullName}</span>
+                                        }
+                                            
+                                            {/* <ul style={{ width: "120px" }}>
+                                                <li>
+                                                    <span>Welcome, </span>
                                                 </li>
-                                                <li className="has-dropdown has-dropdown--ul-right-100">
-
-                                                    <a>Currency<i className="fas fa-angle-down u-s-m-l-6"></i></a>
-
-                                                    {/*====== Dropdown ======*/}
-
-                                                    <span className="js-menu-toggle"></span>
-                                                    <ul style={{ width: "225px" }}>
-                                                        <li>
-
-                                                            <a className="u-c-brand">$ - US DOLLAR</a>
-                                                        </li>
-                                                    </ul>
-                                                    {/*====== End - Dropdown ======*/}
-                                                </li>
-                                            </ul>
+                                            </ul> */}
                                             {/*====== End - Dropdown ======*/}
                                         </li>
                                         <li data-tooltip="tooltip" data-placement="left" title="Contact">
@@ -319,7 +293,7 @@ function Header() {
                                                         <span className="subtotal-value">${cartTotal}</span></div>
                                                     <div className="mini-action">
 
-                                                        <a className="mini-link btn--e-brand-b-2" href="#checkout.html">PROCEED TO CHECKOUT</a>
+                                                        <a className="mini-link btn--e-brand-b-2" href="">PROCEED TO CHECKOUT</a>
 
                                                         <a className="mini-link btn--e-transparent-secondary-b-2" href="/cart">VIEW CART</a></div>
                                                 </div>

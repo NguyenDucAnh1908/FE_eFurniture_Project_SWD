@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const AddressBook = () => {
-    const [addresses, setAddresses] = useState([]);
+const Design = () => {
+    const [designs, setDesigns] = useState([]);
 
     useEffect(() => {
-
-        axios.get('http://localhost:8080/api/v1/address/get_all_address_by_id/1')
+        axios.get('http://localhost:8080/api/v1/designs/get-designs-by-project/1')
             .then(response => {
-                setAddresses(response.data.address);
+                setDesigns(response.data);
             })
             .catch(error => {
-                console.error('Error fetching addresses:', error);
+                console.error('Error fetching designs:', error);
             });
     }, []);
+
 
     return (
         <div>
@@ -67,7 +67,7 @@ const AddressBook = () => {
                                                         <a href="/my-profile">My Profile</a></li>
                                                     <li>
 
-                                                        <a className="dash-active" href="/address-book">Address Book</a></li>
+                                                        <a href="/address-book">Address Book</a></li>
                                                     <li>
 
                                                         <a href="/track-order">Track Order</a></li>
@@ -82,7 +82,7 @@ const AddressBook = () => {
                                                         <a href="/cancellation">My Returns & Cancellations</a></li>
                                                     <li>
 
-                                                        <a href="/booking">My Booking Design</a></li>
+                                                        <a className="dash-active" href="/design">Design</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -125,16 +125,17 @@ const AddressBook = () => {
                                         <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                             <div className="dash__pad-2">
                                                 <div className="dash__address-header">
-                                                    <h1 className="dash__h1">Address Book</h1>
+                                                    <h1 className="dash__h1">Design</h1>
                                                     <div>
 
-                                                        <span className="dash__link dash__link--black u-s-m-r-8">
+                                                        {/* <span className="dash__link dash__link--black u-s-m-r-8">
 
                                                             <a href="/address-make-default">Make default shipping address</a></span>
 
                                                         <span className="dash__link dash__link--black">
 
-                                                            <a href="/address-make-default">Make default shipping address</a></span></div>
+                                                            <a href="/address-make-default">Make default shipping address</a></span> */}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -143,33 +144,30 @@ const AddressBook = () => {
                                                 <table className="dash__table-2">
                                                     <thead>
                                                         <tr>
-                                                            <th>Action</th>
-                                                            <th>Full Name</th>
-                                                            <th>Address</th>
 
-                                                            <th>Phone Number</th>
+                                                            <th>Code</th>
                                                             <th>Status</th>
+                                                        
+                                                            <th>Created</th>
+
                                                         </tr>
                                                     </thead>
-
                                                     <tbody>
-                                                        {addresses.map(address => (
-                                                            <tr key={address.id}>
-                                                                <td>
-                                                                    <a className="address-book-edit btn--e-transparent-platinum-b-2" href={`/address-edit/${address.id}`}>Edit</a>
-                                                                </td>
-                                                                <td>{`${address.firstName} ${address.lastName}`}</td>
-                                                                <td>{`${address.streetAddress}, ${address.wardName}, ${address.districtName}, ${address.provinceName}`}</td>
+                                                        {designs.map(design => (
+                                                            <tr key={design.id}>
 
-                                                                <td>{address.phoneNumber}</td>
+                                                                <td>{design.codeDesign}</td>
+                                                                <td>{design.status}</td>
+                                                               
+
+                                                                <td>{design.createdAt}</td>
                                                                 <td>
-                                                                    <div className="gl-text">Default Shipping Address</div>
-                                                                    <div className="gl-text">Default Billing Address</div>
+                                                                    <a href={`/design-detail/${design.id}`} style={{ color: 'blue' }}>Read more</a>
                                                                 </td>
+
                                                             </tr>
                                                         ))}
                                                     </tbody>
-
                                                 </table>
 
                                             </div>
@@ -192,4 +190,4 @@ const AddressBook = () => {
     )
 }
 
-export default AddressBook
+export default Design

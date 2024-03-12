@@ -114,7 +114,7 @@ const AddressBookEdit = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(`http://localhost:8080/api/address/create_address/1`, formData)
+        axios.post(`http://localhost:8080/api/v1/address/create_address/1`, formData)
             .then(response => {
                 console.log('Address created successfully:', response.data);
             })

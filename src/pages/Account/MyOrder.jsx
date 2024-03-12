@@ -1,6 +1,9 @@
-import React from 'react'
-
+import React, {useEffect, useState} from 'react'
+import axios from 'axios';
 const MyOrder = () => {
+   
+
+     
     return (
         <div>
 
@@ -118,13 +121,13 @@ const MyOrder = () => {
                                                 <form className="m-order u-s-m-b-30">
                                                     <div className="m-order__select-wrapper">
 
-                                                        <label className="u-s-m-r-8" for="my-order-sort">Show:</label><select className="select-box select-box--primary-style" id="my-order-sort">
-                                                            <option selected>Last 5 orders</option>
-                                                            <option>Last 15 days</option>
-                                                            <option>Last 30 days</option>
-                                                            <option>Last 6 months</option>
-                                                            <option>Orders placed in 2018</option>
-                                                            <option>All Orders</option>
+                                                        <label className="u-s-m-r-8" for="my-order-sort">Show Project Booking:</label><select className="select-box select-box--primary-style" id="my-order-sort">
+                                                            <option selected> 5 ProjectBoking</option>
+                                                            <option> 15 ProjectBooking</option>
+                                                            <option> 30 ProjectBooking</option>
+                                                            
+                                                    
+                                                            <option>All ProjectBooking</option>
                                                         </select></div>
                                                 </form>
                                                 <div className="m-order__list">
@@ -258,6 +261,6 @@ const MyOrder = () => {
 
         </div>
     )
-}
+}   
 
 export default MyOrder

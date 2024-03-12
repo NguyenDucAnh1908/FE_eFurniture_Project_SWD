@@ -7,13 +7,11 @@ const BlogDetail = () => {
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [tags, setTags] = useState([]);
-    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         const fetchBlog = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/blogs/get-blog-detail/${id}`);
+                const response = await axios.get(`http://localhost:8080/api/v1/blogs/get-blog-detail/${id}`);
                 setBlog(response.data);
                 setLoading(false);
             } catch (error) {
@@ -24,27 +22,6 @@ const BlogDetail = () => {
 
         fetchBlog();
     }, [id]);
-
-    useEffect(() => {
-        const fetchTagsAndCategories = async () => {
-            if (blog) {
-                try {
-                    const tagResponses = await Promise.all(blog.tagsBlog.map(tag => axios.get(`http://localhost:8080/api/tags-blog/${tag.id}`)));
-                    const categoryResponses = await Promise.all(blog.categories.map(category => axios.get(`http://localhost:8080/api/categories-blog/${category.id}`)));
-
-                    const fetchedTags = tagResponses.map(response => response.data);
-                    const fetchedCategories = categoryResponses.map(response => response.data);
-
-                    setTags(fetchedTags);
-                    setCategories(fetchedCategories);
-                } catch (error) {
-                    console.error('Failed to fetch tags and categories', error);
-                }
-            }
-        };
-
-        fetchTagsAndCategories();
-    }, [blog]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -69,9 +46,11 @@ const BlogDetail = () => {
                             <div className="bp-detail__thumbnail">
 
                                 {/*====== Image Code ======*/}
-                                <div className="aspect aspect--bg-grey aspect--1366-768">
+                                {/* <div className="aspect aspect--bg-grey aspect--1366-768"> */}
 
-                                    <img className="aspect__img" src={blog.thumbnail} alt="" /></div>
+                                {/* <img className="aspect__img" src={blog.thumbnail} alt="" /> */}
+
+                                {/* </div> */}
                                 {/*====== End - Image Code ======*/}
                             </div>
                             <div className="bp-detail__info-wrap">
@@ -91,7 +70,7 @@ const BlogDetail = () => {
 
                                         <span className="bp-detail__author">
 
-                                            <a href="blog-right-sidebar.html">Daylse</a></span></span>
+                                            <a href="blog-right-sidebar.html">{blog.userFullName}</a></span></span>
 
                                     <span className="bp-detail__stat-wrap">
 
@@ -100,14 +79,10 @@ const BlogDetail = () => {
 
                                             {/* Display categories */}
 
-                                            {categories.map((category, index) => (
-                                                <React.Fragment key={category.id}>
-                                                    <span>{category.name}</span>
-                                                    {index < categories.length - 1 && ' '}
-                                                </React.Fragment>
-                                            ))}
 
 
+
+                                            {blog.categoryNames.join(' - ')}
 
                                         </span></span>
                                 </div>
@@ -118,19 +93,16 @@ const BlogDetail = () => {
 
 
                                 <div className="blog-t-w">
-                                    {/* Hiển thị thẻ (tag) của blog */}
-                                    <div>
-
-                                        {tags.map((tag, index) => (
-                                            <React.Fragment key={tag.id}>
-                                                <span className="gl-tag btn--e-transparent-hover-brand-b-2" >{tag.tagName}</span>
-                                                {index < tags.length - 1 && ' '}
-                                            </React.Fragment>
-                                        ))}
-
-                                    </div>
-
+                                    {blog.tagsBlogName.map((tagName, index) => (
+                                        <React.Fragment key={tagName}>
+                                            <a className="gl-tag btn--e-transparent-hover-brand-b-2" href="blog-left-sidebar.html">{tagName}</a>
+                                            {index < blog.tagsBlogName.length - 1 && <span>&nbsp;&nbsp;</span>}
+                                        </React.Fragment>
+                                    ))}
                                 </div>
+
+
+
 
 
 
@@ -168,7 +140,7 @@ const BlogDetail = () => {
                     </div>
                 </div>
                 {/*====== End - Detail Post ======*/}
-             
+
                 {/*====== End - Section 1 ======*/}
             </div>
             {/*====== End - App Content ======*/}
