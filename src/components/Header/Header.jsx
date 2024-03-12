@@ -1,8 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import { useCart } from 'react-use-cart';
+import CartMini from '../CartMini/CartMini';
 import { Route } from 'react-router-dom';
 import Shop from '../../pages/Shop';
+import _ from 'lodash';
+import { UserContext } from '../../context/UserContext'
+import Account from '../AccountComponent/Account';
+
 
 function Header() {
+    const [account, setAccount] = useState({});
+    const { user } = useContext(UserContext);
+    console.log("Check user CT: ", user)
+    const {
+        isEmpty,
+        totalUniqueItems,
+        items,
+        totalItems,
+        cartTotal,
+        updateItemQuantity,
+        removeItem,
+        emptyCart,
+    } = useCart();
+
+    // useEffect(() => {
+    //     let session = sessionStorage.getItem('account');
+    //     if (session) {
+    //         setAccount(JSON.parse(session));
+    //     }
+    // }, [])
+
     return (
         <div>
             {/*====== Main Header ======*/}
@@ -51,30 +78,8 @@ function Header() {
                                             <a><i className="far fa-user-circle"></i></a>
 
                                             {/*====== Dropdown ======*/}
+                                            <Account />
 
-                                            <span className="js-menu-toggle"></span>
-                                            <ul style={{ width: "120px" }}>
-                                                <li>
-
-                                                    <a href="#dashboard.html"><i className="fas fa-user-circle u-s-m-r-6"></i>
-
-                                                        <span>Account</span></a></li>
-                                                <li>
-
-                                                    <a href="#signup.html"><i className="fas fa-user-plus u-s-m-r-6"></i>
-
-                                                        <span>Signup</span></a></li>
-                                                <li>
-
-                                                    <a href="#signin.html"><i className="fas fa-lock u-s-m-r-6"></i>
-
-                                                        <span>Signin</span></a></li>
-                                                <li>
-
-                                                    <a href="#signup.html"><i className="fas fa-lock-open u-s-m-r-6"></i>
-
-                                                        <span>Signout</span></a></li>
-                                            </ul>
                                             {/*====== End - Dropdown ======*/}
                                         </li>
                                         <li className="has-dropdown" data-tooltip="tooltip" data-placement="left" title="Settings">
@@ -82,43 +87,15 @@ function Header() {
                                             <a><i className="fas fa-user-cog"></i></a>
 
                                             {/*====== Dropdown ======*/}
-
-                                            <span className="js-menu-toggle"></span>
-                                            <ul style={{ width: "120px" }}>
-                                                <li className="has-dropdown has-dropdown--ul-right-100">
-
-                                                    <a>Language<i className="fas fa-angle-down u-s-m-l-6"></i></a>
-
-                                                    {/*====== Dropdown ======*/}
-
-                                                    <span className="js-menu-toggle"></span>
-                                                    <ul style={{ width: "120px" }}>
-                                                        <li>
-
-                                                            <a className="u-c-brand">ENGLISH</a></li>
-                                                        <li>
-
-                                                            <a>ARABIC</a>
-                                                        </li>
-                                                    </ul>
-                                                    {/*====== End - Dropdown ======*/}
+                                        {user && user.isAuthenticated === true &&
+                                        <span className="js-menu-toggle">Welcome, {user.account.user.fullName}</span>
+                                        }
+                                            
+                                            {/* <ul style={{ width: "120px" }}>
+                                                <li>
+                                                    <span>Welcome, </span>
                                                 </li>
-                                                <li className="has-dropdown has-dropdown--ul-right-100">
-
-                                                    <a>Currency<i className="fas fa-angle-down u-s-m-l-6"></i></a>
-
-                                                    {/*====== Dropdown ======*/}
-
-                                                    <span className="js-menu-toggle"></span>
-                                                    <ul style={{ width: "225px" }}>
-                                                        <li>
-
-                                                            <a className="u-c-brand">$ - US DOLLAR</a>
-                                                        </li>
-                                                    </ul>
-                                                    {/*====== End - Dropdown ======*/}
-                                                </li>
-                                            </ul>
+                                            </ul> */}
                                             {/*====== End - Dropdown ======*/}
                                         </li>
                                         <li data-tooltip="tooltip" data-placement="left" title="Contact">
@@ -292,7 +269,7 @@ function Header() {
 
                                             <a className="mini-cart-shop-link"><i className="fas fa-shopping-bag"></i>
 
-                                                <span className="total-item-round">2</span></a>
+                                                <span className="total-item-round">{totalUniqueItems}</span></a>
 
                                             {/*====== Dropdown ======*/}
 
@@ -300,119 +277,10 @@ function Header() {
                                             <div className="mini-cart">
 
                                                 {/*====== Mini Product Container ======*/}
-                                                <div className="mini-product-container gl-scroll u-s-m-b-15">
-
-                                                    {/*====== Card for mini cart ======*/}
-                                                    <div className="card-mini-product">
-                                                        <div className="mini-product">
-                                                            <div className="mini-product__image-wrapper">
-
-                                                                <a className="mini-product__link" href="#product-detail.html">
-
-                                                                    <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt="" /></a></div>
-                                                            <div className="mini-product__info-wrapper">
-
-                                                                <span className="mini-product__category">
-
-                                                                    <a href="#shop-side-version-2.html">Electronics</a></span>
-
-                                                                <span className="mini-product__name">
-
-                                                                    <a href="#product-detail.html">Yellow Wireless Headphone</a></span>
-
-                                                                <span className="mini-product__quantity">1 x</span>
-
-                                                                <span className="mini-product__price">$8</span></div>
-                                                        </div>
-
-                                                        <a className="mini-product__delete-link far fa-trash-alt"></a>
-                                                    </div>
-                                                    {/*====== End - Card for mini cart ======*/}
-
-
-                                                    {/*====== Card for mini cart ======*/}
-                                                    <div className="card-mini-product">
-                                                        <div className="mini-product">
-                                                            <div className="mini-product__image-wrapper">
-
-                                                                <a className="mini-product__link" href="#product-detail.html">
-
-                                                                    <img className="u-img-fluid" src="images/product/electronic/product18.jpg" alt="" /></a></div>
-                                                            <div className="mini-product__info-wrapper">
-
-                                                                <span className="mini-product__category">
-
-                                                                    <a href="#shop-side-version-2.html">Electronics</a></span>
-
-                                                                <span className="mini-product__name">
-
-                                                                    <a href="#product-detail.html">Nikon DSLR Camera 4k</a></span>
-
-                                                                <span className="mini-product__quantity">1 x</span>
-
-                                                                <span className="mini-product__price">$8</span></div>
-                                                        </div>
-
-                                                        <a className="mini-product__delete-link far fa-trash-alt"></a>
-                                                    </div>
-                                                    {/*====== End - Card for mini cart ======*/}
-
-
-                                                    {/*====== Card for mini cart ======*/}
-                                                    <div className="card-mini-product">
-                                                        <div className="mini-product">
-                                                            <div className="mini-product__image-wrapper">
-
-                                                                <a className="mini-product__link" href="#product-detail.html">
-
-                                                                    <img className="u-img-fluid" src="images/product/women/product8.jpg" alt="" /></a></div>
-                                                            <div className="mini-product__info-wrapper">
-
-                                                                <span className="mini-product__category">
-
-                                                                    <a href="#shop-side-version-2.html">Women Clothing</a></span>
-
-                                                                <span className="mini-product__name">
-
-                                                                    <a href="#product-detail.html">New Dress D Nice Elegant</a></span>
-
-                                                                <span className="mini-product__quantity">1 x</span>
-
-                                                                <span className="mini-product__price">$8</span></div>
-                                                        </div>
-
-                                                        <a className="mini-product__delete-link far fa-trash-alt"></a>
-                                                    </div>
-                                                    {/*====== End - Card for mini cart ======*/}
-
-
-                                                    {/*====== Card for mini cart ======*/}
-                                                    <div className="card-mini-product">
-                                                        <div className="mini-product">
-                                                            <div className="mini-product__image-wrapper">
-
-                                                                <a className="mini-product__link" href="#product-detail.html">
-
-                                                                    <img className="u-img-fluid" src="images/product/men/product8.jpg" alt="" /></a></div>
-                                                            <div className="mini-product__info-wrapper">
-
-                                                                <span className="mini-product__category">
-
-                                                                    <a href="#shop-side-version-2.html">Men Clothing</a></span>
-
-                                                                <span className="mini-product__name">
-
-                                                                    <a href="#product-detail.html">New Fashion D Nice Elegant</a></span>
-
-                                                                <span className="mini-product__quantity">1 x</span>
-
-                                                                <span className="mini-product__price">$8</span></div>
-                                                        </div>
-
-                                                        <a className="mini-product__delete-link far fa-trash-alt"></a>
-                                                    </div>
-                                                    {/*====== End - Card for mini cart ======*/}
-                                                </div>
+                                                <CartMini
+                                                    items={items}
+                                                    removeItem={removeItem}
+                                                />
                                                 {/*====== End - Mini Product Container ======*/}
 
 
@@ -422,12 +290,12 @@ function Header() {
 
                                                         <span className="subtotal-text">SUBTOTAL</span>
 
-                                                        <span className="subtotal-value">$16</span></div>
+                                                        <span className="subtotal-value">${cartTotal}</span></div>
                                                     <div className="mini-action">
 
                                                         <a className="mini-link btn--e-brand-b-2" href="#checkout.html">PROCEED TO CHECKOUT</a>
 
-                                                        <a className="mini-link btn--e-transparent-secondary-b-2" href="#cart.html">VIEW CART</a></div>
+                                                        <a className="mini-link btn--e-transparent-secondary-b-2" href="/cart">VIEW CART</a></div>
                                                 </div>
                                                 {/*====== End - Mini Product Statistics ======*/}
                                             </div>

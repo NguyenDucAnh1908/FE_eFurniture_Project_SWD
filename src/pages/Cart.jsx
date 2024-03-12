@@ -1,6 +1,98 @@
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import CartItem from '../components/CartItem/CartItem'
+import { useCart } from 'react-use-cart'
+import axios from 'axios';
+import EmptyCart from '../components/PageEmpty/EmptyCart';
 const Cart = () => {
+    const [provinceData, setProvinceData] = useState([]);
+    const [districtData, setDistrictData] = useState([]);
+    const [selectedProvince, setSelectedProvince] = useState('');
+    const [selectedDistrict, setSelectedDistrict] = useState('');
+    const [wardData, setWardData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const {
+        isEmpty,
+        totalUniqueItems,
+        items,
+        totalItems,
+        cartTotal,
+        updateItemQuantity,
+        removeItem,
+        emptyCart,
+    } = useCart();
+
+
+    useEffect(() => {
+        // Hàm gọi API sẽ được gọi khi component được tạo ra
+        const fetchData = async () => {
+            try {
+                // Cấu hình headers chứa token
+                const config = {
+                    headers: {
+                        'token': '05e9c956-d27f-11ee-9414-ce214539f696'
+                    }
+                };
+
+                // Gọi API từ URL đã cung cấp và truyền cấu hình headers
+                const response = await axios.get('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', config);
+
+                // Lấy dữ liệu từ phản hồi API và lưu vào state
+                setProvinceData(response.data.data);
+            } catch (error) {
+                // Xử lý lỗi nếu có
+                console.error('Error fetching data:', error);
+                setLoading(false);
+            }
+        };
+
+        // Gọi hàm fetchData để lấy dữ liệu từ API
+        fetchData();
+    }, []);
+
+    const handleProvinceChange = async (e) => {
+        const selectedProvinceID = e.target.value;
+        setSelectedProvince(selectedProvinceID);
+        try {
+            // Cấu hình headers chứa token
+            const config = {
+                headers: {
+                    'token': '05e9c956-d27f-11ee-9414-ce214539f696'
+                }
+            };
+            setLoading(true);
+            const response = await axios.get(`https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${selectedProvinceID}`, config);
+            setDistrictData(response.data.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching district data:', error);
+            setLoading(false);
+        }
+    };
+
+    const handleDistrictChange = async (e) => {
+        const selectedDistrictID = e.target.value;
+        setSelectedDistrict(selectedDistrictID);
+        try {
+            // Cấu hình headers chứa token
+            const config = {
+                headers: {
+                    'token': '05e9c956-d27f-11ee-9414-ce214539f696'
+                }
+            };
+            setLoading(true);
+            const response = await axios.get(`https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${selectedDistrictID}`, config);
+            setWardData(response.data.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching ward data:', error);
+            setLoading(false);
+        }
+    };
+
+    if (isEmpty) {
+        return <EmptyCart />;
+    }
+
     return (
         <div>
             {/*====== App Content ======*/}
@@ -58,162 +150,13 @@ const Cart = () => {
                                             <tbody>
 
                                                 {/*====== Row ======*/}
-                                                <tr>
-                                                    <td>
-                                                        <div className="table-p__box">
-                                                            <div className="table-p__img-wrap">
-
-                                                                <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt=""/></div>
-                                                            <div className="table-p__info">
-
-                                                                <span className="table-p__name">
-
-                                                                    <a href="product-detail.html">Yellow Wireless Headphone</a></span>
-
-                                                                <span className="table-p__category">
-
-                                                                    <a href="shop-side-version-2.html">Electronics</a></span>
-                                                                <ul className="table-p__variant-list">
-                                                                    <li>
-
-                                                                        <span>Size: 22</span></li>
-                                                                    <li>
-
-                                                                        <span>Color: Red</span></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-
-                                                        <span className="table-p__price">$125.00</span></td>
-                                                    <td>
-                                                        <div className="table-p__input-counter-wrap">
-
-                                                            {/*====== Input Counter ======*/}
-                                                            <div className="input-counter">
-
-                                                                <span className="input-counter__minus fas fa-minus"></span>
-
-                                                                <input className="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000"/>
-
-                                                                    <span className="input-counter__plus fas fa-plus"></span></div>
-                                                            {/*====== End - Input Counter ======*/}
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="table-p__del-wrap">
-
-                                                            <a className="far fa-trash-alt table-p__delete-link" href="#"></a></div>
-                                                    </td>
-                                                </tr>
+                                                <CartItem
+                                                    items={items}
+                                                    updateItemQuantity={updateItemQuantity}
+                                                    removeItem={removeItem}
+                                                />
                                                 {/*====== End - Row ======*/}
 
-
-                                                {/*====== Row ======*/}
-                                                <tr>
-                                                    <td>
-                                                        <div className="table-p__box">
-                                                            <div className="table-p__img-wrap">
-
-                                                                <img className="u-img-fluid" src="images/product/women/product8.jpg" alt=""/></div>
-                                                            <div className="table-p__info">
-
-                                                                <span className="table-p__name">
-
-                                                                    <a href="product-detail.html">New Dress D Nice Elegant</a></span>
-
-                                                                <span className="table-p__category">
-
-                                                                    <a href="shop-side-version-2.html">Women Clothing</a></span>
-                                                                <ul className="table-p__variant-list">
-                                                                    <li>
-
-                                                                        <span>Size: 22</span></li>
-                                                                    <li>
-
-                                                                        <span>Color: Red</span></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-
-                                                        <span className="table-p__price">$125.00</span></td>
-                                                    <td>
-                                                        <div className="table-p__input-counter-wrap">
-
-                                                            {/*====== Input Counter ======*/}
-                                                            <div className="input-counter">
-
-                                                                <span className="input-counter__minus fas fa-minus"></span>
-
-                                                                <input className="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000"/>
-
-                                                                    <span className="input-counter__plus fas fa-plus"></span></div>
-                                                            {/*====== End - Input Counter ======*/}
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="table-p__del-wrap">
-
-                                                            <a className="far fa-trash-alt table-p__delete-link" href="#"></a></div>
-                                                    </td>
-                                                </tr>
-                                                {/*====== End - Row ======*/}
-
-
-                                                {/*====== Row ======*/}
-                                                <tr>
-                                                    <td>
-                                                        <div className="table-p__box">
-                                                            <div className="table-p__img-wrap">
-
-                                                                <img className="u-img-fluid" src="images/product/men/product8.jpg" alt=""/></div>
-                                                            <div className="table-p__info">
-
-                                                                <span className="table-p__name">
-
-                                                                    <a href="product-detail.html">New Fashion D Nice Elegant</a></span>
-
-                                                                <span className="table-p__category">
-
-                                                                    <a href="shop-side-version-2.html">Men Clothing</a></span>
-                                                                <ul className="table-p__variant-list">
-                                                                    <li>
-
-                                                                        <span>Size: 22</span></li>
-                                                                    <li>
-
-                                                                        <span>Color: Red</span></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-
-                                                        <span className="table-p__price">$125.00</span></td>
-                                                    <td>
-                                                        <div className="table-p__input-counter-wrap">
-
-                                                            {/*====== Input Counter ======*/}
-                                                            <div className="input-counter">
-
-                                                                <span className="input-counter__minus fas fa-minus"></span>
-
-                                                                <input className="input-counter__text input-counter--text-primary-style" type="text" value="1" data-min="1" data-max="1000"/>
-
-                                                                    <span className="input-counter__plus fas fa-plus"></span></div>
-                                                            {/*====== End - Input Counter ======*/}
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="table-p__del-wrap">
-
-                                                            <a className="far fa-trash-alt table-p__delete-link" href="#"></a></div>
-                                                    </td>
-                                                </tr>
-                                                {/*====== End - Row ======*/}
                                             </tbody>
                                         </table>
                                     </div>
@@ -227,13 +170,15 @@ const Cart = () => {
                                                 <span>CONTINUE SHOPPING</span></a></div>
                                         <div className="route-box__g2">
 
-                                            <a className="route-box__link" href="cart.html"><i className="fas fa-trash"></i>
+                                            <a className="route-box__link" href="/"><i className="fas fa-trash"></i>
 
-                                                <span>CLEAR CART</span></a>
+                                                <span onClick={() => emptyCart()}>CLEAR CART</span>
+                                            </a>
 
-                                            <a className="route-box__link" href="cart.html"><i className="fas fa-sync"></i>
+                                            {/* <a className="route-box__link" href="cart.html"><i className="fas fa-sync"></i>
 
-                                                <span>UPDATE CART</span></a></div>
+                                                <span>UPDATE CART</span></a> */}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -262,32 +207,39 @@ const Cart = () => {
                                                     <div className="u-s-m-b-30">
 
                                                         {/*====== Select Box ======*/}
-
-                                                        <label className="gl-label" for="shipping-country">COUNTRY *</label><select className="select-box select-box--primary-style" id="shipping-country">
-                                                            <option selected value="">Choose Country</option>
-                                                            <option value="uae">United Arab Emirate (UAE)</option>
-                                                            <option value="uk">United Kingdom (UK)</option>
-                                                            <option value="us">United States (US)</option>
+                                                        <label className="gl-label" htmlFor="shipping-state">STATE/PROVINCE *</label>
+                                                        <select className="select-box select-box--primary-style" id="shipping-state" onChange={handleProvinceChange} value={selectedProvince}>
+                                                            <option value="">Choose State/Province</option>
+                                                            {provinceData.map(province => (
+                                                                <option key={province.ProvinceID} value={province.ProvinceID}>{province.ProvinceName}</option>
+                                                            ))}
                                                         </select>
+
                                                         {/*====== End - Select Box ======*/}
                                                     </div>
                                                     <div className="u-s-m-b-30">
 
                                                         {/*====== Select Box ======*/}
 
-                                                        <label className="gl-label" for="shipping-state">STATE/PROVINCE *</label><select className="select-box select-box--primary-style" id="shipping-state">
-                                                            <option selected value="">Choose State/Province</option>
-                                                            <option value="al">Alabama</option>
-                                                            <option value="al">Alaska</option>
-                                                            <option value="ny">New York</option>
+                                                        <label className="gl-label" htmlFor="shipping-district">DISTRICT *</label>
+                                                        <select className="select-box select-box--primary-style" id="shipping-district" onChange={handleDistrictChange} value={selectedDistrict}>
+                                                            <option value="">Choose District</option>
+                                                            {districtData.map(district => (
+                                                                <option key={district.DistrictID} value={district.DistrictID}>{district.DistrictName}</option>
+                                                            ))}
                                                         </select>
                                                         {/*====== End - Select Box ======*/}
                                                     </div>
                                                     <div className="u-s-m-b-30">
 
-                                                        <label className="gl-label" for="shipping-zip">ZIP/POSTAL CODE *</label>
-
-                                                        <input className="input-text input-text--primary-style" type="text" id="shipping-zip" placeholder="Zip/Postal Code"/></div>
+                                                        <label className="gl-label" htmlFor="shipping-ward">WARD *</label>
+                                                        <select className="select-box select-box--primary-style" id="shipping-ward">
+                                                            <option value="">Choose Ward</option>
+                                                            {wardData.map(ward => (
+                                                                <option key={ward.WardCode} value={ward.WardName}>{ward.WardName}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
                                                     <div className="u-s-m-b-30">
 
                                                         <a className="f-cart__ship-link btn--e-transparent-brand-b-2" href="cart.html">CALCULATE SHIPPING</a></div>
@@ -312,7 +264,7 @@ const Cart = () => {
                                                             <tbody>
                                                                 <tr>
                                                                     <td>SHIPPING</td>
-                                                                    <td>$4.00</td>
+                                                                    <td>${cartTotal}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>TAX</td>
@@ -320,11 +272,11 @@ const Cart = () => {
                                                                 </tr>
                                                                 <tr>
                                                                     <td>SUBTOTAL</td>
-                                                                    <td>$379.00</td>
+                                                                    <td>${cartTotal}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>GRAND TOTAL</td>
-                                                                    <td>$379.00</td>
+                                                                    <td>${cartTotal}</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>

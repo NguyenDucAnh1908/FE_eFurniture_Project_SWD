@@ -10,6 +10,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import BrandSlider from '../components/BrandSlider/BrandSlider';
 import HomeSlider from '../components/HomeSlider/HomeSlider';
 import { Link } from 'react-router-dom';
+import {UserContext} from '../context/UserContext';
 
 function Home() {
     const [listProduct, setListProduct] = useState([]);
@@ -49,6 +50,7 @@ function Home() {
     };
 
 
+
     // const fetchProducts = async (categoryId = null) => {
     //     let url = await fetchAllProductByCategory();
     //     if (categoryId) {
@@ -70,22 +72,33 @@ function Home() {
         if (categoryId) {
             url += `?category_id=${categoryId}`;
         }
-
+    
         try {
-            const response = await axios.get(url);
+            const token = localStorage.getItem('jwt');
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+    
+            const response = await axios.get(url, config);
+            console.log("Check response get all products", response.data);
             if (response && response.data) {
                 setProducts(response.data);
             }
         } catch (error) {
             console.error("Lỗi khi lấy danh sách sản phẩm:", error);
         }
-    }
+    };
+    
 
     const handleCategoryClick = (categoryId) => {
         setSelectedCategory(categoryId);
     };
-    console.log("Check product by category: ", products)
+    //console.log("Check product by category: ", products)
     // console.log(listProduct);
+    // const {user} = React.useContext(UserContext);
+    // console.log("Check useContext: ", user)
     return (
         <div>
             {/* <div className="preloader is-active">
@@ -99,62 +112,7 @@ function Home() {
 
                 {/*====== App Content ======*/}
                 <div className="app-content">
-
-                    {/*====== Primary Slider ======*/}
-                    {/* <div className="s-skeleton s-skeleton--h-640 s-skeleton--bg-grey">
-                        <div className="owl-carousel primary-style-3" id="hero-slider">
-                            <div className="hero-slide hero-slide--7">
-                                <div className="primary-style-3-wrap">
-                                    <div className="container">
-                                        <div className="row">
-                                            <div className="col-12">
-                                                <div className="slider-content slider-content--animation">
-
-                                                    <span className="content-span-1 u-c-white">Update Your Fashion</span>
-
-                                                    <span className="content-span-2 u-c-white">10% Discount on Outwear</span>
-
-                                                    <span className="content-span-3 u-c-white">Find outwear on best prices</span>
-
-                                                    <span className="content-span-4 u-c-white">Starting At
-
-                                                        <span className="u-c-brand">$100.00</span></span>
-
-                                                    <a className="shop-now-link btn--e-brand" href="shop-side-version-2.html">SHOP NOW</a></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div> */}
-                    {/*====== End - Primary Slider ======*/}
                     <HomeSlider />
-                    {/* <div className="hero-slide hero-slide--8">
-                            <div className="primary-style-3-wrap">
-                                <div className="container">
-                                    <div className="row">
-                                        <div className="col-12">
-                                            <div className="slider-content slider-content--animation">
-
-                                                <span className="content-span-1 u-c-white">Open Your Eyes</span>
-
-                                                <span className="content-span-2 u-c-white">10% Off On Intimates</span>
-
-                                                <span className="content-span-3 u-c-white">Find intimates on best prices</span>
-
-                                                <span className="content-span-4 u-c-white">Starting At
-
-                                                    <span className="u-c-brand">$100.00</span></span>
-
-                                                <a className="shop-now-link btn--e-brand" href="shop-side-version-2.html">SHOP NOW</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
-
                     {/*====== Section 1 ======*/}
                     <div className="u-s-p-y-60">
 
@@ -207,56 +165,6 @@ function Home() {
                         <div className="section__content">
                             <div className="container">
                                 <div className="container">
-                                    {/* <div className="row">
-                                        <div className="col-lg-6 col-md-12">
-
-                                            <a className="i3-banner" href="shop-side-version-2.html">
-                                                <div className="aspect aspect--bg-grey-fb aspect--square">
-
-                                                    <img className="aspect__img i3-banner__img" src="images/banners/i3-banner-1.jpg" alt="" /></div>
-                                            </a>
-                                        </div>
-                                        <div className="col-lg-6 col-md-12">
-                                            <div className="row">
-                                                {listProduct && listProduct.length > 0 &&
-                                                    listProduct.map((productItem, index) => {
-                                                        return (
-                                                            <div className="col-lg-6 col-md-6 col-sm-6 u-s-m-b-30">
-                                                                <div className="product-short u-h-100">
-                                                                    <div className="product-short__container">
-                                                                        <div className="product-short__img-wrap">
-
-                                                                            <a className="aspect aspect--bg-grey-fb aspect--square u-d-block" href="product-detail.html">
-
-                                                                                <img className="aspect__img product-short__img" src={productItem.thumbnail} alt="" /></a></div>
-                                                                        <div className="product-short__info">
-
-                                                                            <span className="product-short__price">$126.77</span>
-
-                                                                            <span className="product-short__name">
-
-                                                                                <a href="product-detail.html">Women Shoes</a></span>
-
-                                                                            <span className="product-short__category">
-
-                                                                                <a href="shop-side-version-2.html">Women Clothing</a></span></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    })
-                                                }
-
-                                                <div className="col-lg-12">
-
-                                                    <a className="i3-banner" href="shop-side-version-2.html">
-                                                        <div className="aspect aspect--bg-grey-fb aspect--1048-334">
-
-                                                            <img className="aspect__img i3-banner__img" src="images/banners/i3-banner-2.jpg" alt="" /></div>
-                                                    </a></div>
-                                            </div>
-                                        </div>
-                                    </div> */}
                                     <div className="row">
                                         <div className="col-lg-5 col-md-5 u-s-m-b-30">
 
@@ -379,7 +287,7 @@ function Home() {
 
                                                                     <Link to={`/product-detail/${productItem.id}`}>{productItem.name}</Link></span>
 
-                                                                <span className="product-r__price">{productItem.price_sale}</span></div>
+                                                                <span className="product-r__price">{productItem.price}</span></div>
 
                                                             <span className="product-r__description">{productItem.description}</span>
                                                         </div>
@@ -473,9 +381,9 @@ function Home() {
                                                                         {/* <span className="product-bs__review">(23)</span> */}
                                                                     </div>
 
-                                                                    <span className="product-bs__price">${product.price_sale}
+                                                                    <span className="product-bs__price">${product.price}
 
-                                                                        <span className="product-bs__discount">${product.price}</span></span>
+                                                                        <span className="product-bs__discount">${product.price_sale}</span></span>
                                                                 </div>
                                                             </div>
                                                         </div>

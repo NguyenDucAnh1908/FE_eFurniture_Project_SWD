@@ -5,18 +5,25 @@ import axios from 'axios';
 import { fetchallBrand } from '../services/BrandApi/BrandApi';
 import { fetchallCategory } from '../services/CategoryApi/CategoryApi';
 import { fetchallTagProduct } from '../services/TagProductApi/TagProductApi';
+import { useCart } from 'react-use-cart';
+import { Link } from 'react-router-dom';
 import { wait } from '@testing-library/user-event/dist/utils';
 import Pagination from '../components/Pagination/Pagination';
 
 function Shop() {
+  const { addItem } = useCart();
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [tagProducts, setTagProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectTagProducts, setSelectTagProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
 
   useEffect(() => {
     getCategory();
@@ -29,23 +36,24 @@ function Shop() {
   }, [selectedCategory, selectedBrands, currentPage]);
 
 
-  const fetchProducts = async (page) => {
+  const fetchProducts = async (page, minPrice, maxPrice) => {
     try {
       const response = await axios.get('http://localhost:8080/api/v1/products', {
         params: {
           keyword: '',
           page: currentPage - 1,
           limit: 1,
-          minPrice: '',
-          maxPrice: '',
-          brandId: selectedBrands.map(brand => brand.id).join(','),
-          tagsProductId: '',
+          minPrice: minPrice,
+          maxPrice: maxPrice,
+          brandIds: selectedBrands.map(brand => brand.id).join(','),
+          tagsProductIds: selectTagProducts.map(tagProduct => tagProduct.id).join(','),
           // categoryId: selectedCategory ? selectedCategory.id : ''
-          categoryId: selectedCategory.map(category => category.id).join(',')
+          categoryIds: selectedCategory.map(category => category.id).join(',')
         }
       });
       setProducts(response.data.products);
       setTotalPages(response.data.totalPages);
+      setTotalProducts(response.data.totalProducts);
       console.log("Check product: ", response.data.products)
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -97,6 +105,31 @@ function Shop() {
     }
   };
 
+  const handleProductTagToggle = (tagProduct) => {
+    const isSelected = selectTagProducts.includes(tagProduct);
+    if (isSelected) {
+      setSelectTagProducts(selectTagProducts.filter((t) => t !== tagProduct));
+    } else {
+      setSelectTagProducts([...selectTagProducts, tagProduct]);
+    }
+  };
+
+  // const handleSubmitPriceFilter = (event) => {
+  //   event.preventDefault(); // Ngăn chặn sự kiện mặc định của form
+  //   const minPrice = document.getElementById('price-min').value;
+  //   const maxPrice = document.getElementById('price-max').value;
+  //   fetchProducts(1, minPrice, maxPrice);
+  // };
+  const handleSubmitPriceFilter = (event) => {
+    event.preventDefault(); // Ngăn chặn sự kiện mặc định của form
+    const minPriceInput = document.getElementById('price-min').value; // Lấy giá trị của ô nhập giá tiền tối thiểu
+    const maxPriceInput = document.getElementById('price-max').value; // Lấy giá trị của ô nhập giá tiền tối đa
+    setMinPrice(minPriceInput);
+    setMaxPrice(maxPriceInput);
+    const filter = { minPrice: minPriceInput, maxPrice: maxPriceInput };
+    fetchProducts(1, filter); // Gọi hàm fetchProducts với object filter
+  };
+
   return (
     <div>
       {/*====== App Content ======*/}
@@ -121,7 +154,7 @@ function Shop() {
                         </div>
                         <div className="shop-w__wrap collapse show" id="s-category">
                           <ul className="shop-w__category-list gl-scroll">
-                          {categories.map((category) => (
+                            {categories.map((category) => (
                               <li key={category.id}>
                                 <div className="list__content">
                                   <input
@@ -231,28 +264,29 @@ function Shop() {
                         </div>
                       </div>
                     </div>
-                    {/* SHIPPING */}
+                    {/* TAGPRODUCT */}
                     <div className="u-s-m-b-30">
                       <div className="shop-w">
                         <div className="shop-w__intro-wrap">
-                          <h1 className="shop-w__h">SHIPPING</h1>
+                          <h1 className="shop-w__h">TAG PRODUCT</h1>
 
                           <span className="fas fa-minus shop-w__toggle" data-target="#s-shipping" data-toggle="collapse"></span>
                         </div>
                         <div className="shop-w__wrap collapse show" id="s-shipping">
                           <ul className="shop-w__list gl-scroll">
-                            <li>
-
-                              {/*====== Check Box ======*/}
-                              <div className="check-box">
-
-                                <input type="checkbox" id="free-shipping" />
-                                <div className="check-box__state check-box__state--primary">
-
-                                  <label className="check-box__label" for="free-shipping">Free Shipping</label></div>
-                              </div>
-                              {/*====== End - Check Box ======*/}
-                            </li>
+                            {tagProducts.map((tagProduct) => (
+                              <li key={tagProduct.id}>
+                                <div className="list__content">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectTagProducts.includes(tagProduct)}
+                                    onChange={() => handleProductTagToggle(tagProduct)}
+                                  />
+                                  <span>{tagProduct.name}</span>
+                                </div>
+                                {/* <span className="shop-w__total-text">(23)</span> */}
+                              </li>
+                            ))}
                           </ul>
                         </div>
                       </div>
@@ -266,18 +300,18 @@ function Shop() {
                           <span className="fas fa-minus shop-w__toggle" data-target="#s-price" data-toggle="collapse"></span>
                         </div>
                         <div className="shop-w__wrap collapse show" id="s-price">
-                          <form className="shop-w__form-p">
+                          <form className="shop-w__form-p" onSubmit={handleSubmitPriceFilter}>
                             <div className="shop-w__form-p-wrap">
                               <div>
 
                                 <label for="price-min"></label>
 
-                                <input className="input-text input-text--primary-style" type="text" id="price-min" placeholder="Min" /></div>
+                                <input className="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min" /></div>
                               <div>
 
                                 <label for="price-max"></label>
 
-                                <input className="input-text input-text--primary-style" type="text" id="price-max" placeholder="Max" /></div>
+                                <input className="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max" /></div>
                               <div>
 
                                 <button className="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" type="submit"></button></div>
@@ -475,27 +509,67 @@ function Shop() {
                   <div className="shop-p__toolbar u-s-m-b-30">
                     <div className="shop-p__meta-wrap u-s-m-b-60">
 
-                      <span className="shop-p__meta-text-1">FOUND 18 RESULTS</span>
+                      <span className="shop-p__meta-text-1">FOUND {totalProducts} RESULTS</span>
                       <div className="shop-p__meta-text-2">
-                        <span>Related Searches:</span>
+                        <span>Related Searches:&nbsp;&nbsp;</span>
                         {/* {selectedCategory && (
                           <a className="gl-tag btn--e-brand-shadow" href="#">
                             {selectedCategory.name}
                             <i className="fas fa-trash" onClick={clearSelectedCategory} style={{ marginLeft: '5px' }}></i>
                           </a>
                         )} */}
-                        {selectedCategory.map((category) => (
-                          <a className="gl-tag btn--e-brand-shadow" key={category.id} href="#">
-                            {category.name}
-                            {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
+                        {selectedCategory.length > 0 && (
+                          <a className="gl-tag btn--e-brand-shadow" href="#">
+                            CATEGORY:&nbsp;
+                            {selectedCategory.map((category, index) => (
+                              <span key={category.id}>
+                                {category.name}
+                                {index !== selectedCategory.length - 1 && ', '}
+                              </span>
+                            ))}
                           </a>
-                        ))}
-                        {selectedBrands.map((brand) => (
+                        )}
+                        {selectedBrands.length > 0 && (
+                          <a className="gl-tag btn--e-brand-shadow" href="#">
+                            BRAND:&nbsp;
+                            {selectedBrands.map((brand, index) => (
+                              <span key={brand.id}>
+                                {brand.name}
+                                {index !== selectedBrands.length - 1 && ', '}
+                              </span>
+                            ))}
+                          </a>
+                        )}
+                        {/* {selectedBrands.map((brand) => (
                           <a className="gl-tag btn--e-brand-shadow" key={brand.id} href="#">
                             {brand.name}
-                            {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
+                           
                           </a>
-                        ))}
+                        ))} */}
+                        {/* <i className="fas fa-trash" onClick={clearSelectedBrand} style={{ marginLeft: '5px' }}></i> */}
+                        {selectTagProducts.length > 0 && (
+                          <a className="gl-tag btn--e-brand-shadow" href="#">
+                            TAGBRAND:&nbsp;
+                            {selectTagProducts.map((tagProduct, index) => (
+                              <span key={tagProduct.id}>
+                                {tagProduct.name}
+                                {index !== selectTagProducts.length - 1 && ', '}
+                              </span>
+                            ))}
+                          </a>
+                        )}
+                        {/* {selectTagProducts.map((tagProduct) => (
+                          <a className="gl-tag btn--e-brand-shadow" key={tagProduct.id} href="#">
+                            {tagProduct.name}
+                          </a>
+                        ))} */}
+
+                        {minPrice && maxPrice && (
+                          <a className="gl-tag btn--e-brand-shadow" href="#">
+                            PRICE:&nbsp;
+                            {`Price: $${minPrice} - $${maxPrice}`}
+                          </a>
+                        )}
                       </div>
                       {/* <div className="shop-p__meta-text-2">
                         <span>Related Searches: </span>
@@ -539,20 +613,20 @@ function Shop() {
                   <div className="shop-p__collection">
                     <div className="row is-grid-active">
                       {/* Here product */}
-                      {products.map(product => (
+                      {products.map((product) => (
                         <div className="col-lg-4 col-md-6 col-sm-6">
-                          <div className="product-m">
+                          <div key={product.id} className="product-m">
                             <div className="product-m__thumb">
 
-                              <a className="aspect aspect--bg-grey aspect--square u-d-block" href="product-detail.html">
+                              <Link className="aspect aspect--bg-grey aspect--square u-d-block" to={`/product-detail/${product.id}`}>
 
-                                <img className="aspect__img" src={product.thumbnail} alt="" /></a>
+                                <img className="aspect__img" src={product.thumbnail} alt="" /></Link>
                               <div className="product-m__quick-look">
 
                                 <a className="fas fa-search" data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick Look"></a></div>
                               <div className="product-m__add-cart">
 
-                                <a className="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart">Add to Cart</a></div>
+                                <a className="btn--e-brand" data-modal="modal" data-modal-id="#add-to-cart" onClick={() => addItem(product)}>Add to Cart</a></div>
                             </div>
                             <div className="product-m__content">
                               <div className="product-m__category">
@@ -566,9 +640,9 @@ function Shop() {
 
                                 {/* <span className="product-m__review">(23)</span> */}
                               </div>
-                              <div class="product-m__price">${product.price_sale}
+                              <div class="product-m__price">${product.price}
 
-                                <span class="product-m__discount">${product.price}</span>
+                                <span class="product-m__discount">${product.price_sale}</span>
                               </div>
                               <div className="product-m__hover">
                                 <div className="product-m__preview-description">
