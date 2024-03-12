@@ -30,7 +30,6 @@ import ProductByBrand from '../pages/Product/ProductByBrand'
 
 import Design from '../pages/Design'
 import DesignDetail from '../pages/DesignDetail'
-import { Routes, Route } from 'react-router-dom'
 
 function Routers() {
 
