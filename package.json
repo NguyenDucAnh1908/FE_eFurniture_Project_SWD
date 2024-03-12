@@ -17,6 +17,7 @@
     "lodash": "^4.17.21",
     "owl.carousel": "^2.3.4",
     "react": "^18.1.0",
+    "react-datepicker": "^6.3.0",
     "react-dom": "^18.1.0",
     "react-image-magnify": "^2.1.1",
     "react-loader-spinner": "^6.1.6",

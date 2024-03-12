@@ -3,7 +3,6 @@ import axios from 'axios';
 import TextEditor from '../components/Editor/TextEditor';
 import { useFeedback } from '../Feedback/FeedbackContext';
 
-
 function Feedback({ productId, onReviewSubmission }) {
     const [reviews, setReviews] = useState([]);
     const [productDetail, setProductDetail] = useState(null);
@@ -17,6 +16,8 @@ function Feedback({ productId, onReviewSubmission }) {
     const [replyingReviewId, setReplyingReviewId] = useState(null);
     const [replyText, setReplyText] = useState('');
     const { state, dispatch } = useFeedback();
+    const [displayedItems, setDisplayedItems] = useState({});
+
 
     const handleRatingChange = (value) => {
         setRating(value);
@@ -53,6 +54,17 @@ function Feedback({ productId, onReviewSubmission }) {
         fetchProductDetail();
     }, [productId]);
 
+    useEffect(() => {
+        // Initialize displayedItems for each feedback
+        const initialDisplayedItems = {};
+        reviews.forEach((review) => {
+            initialDisplayedItems[review.id] = 2; // Initial number of displayed items
+        });
+        setDisplayedItems(initialDisplayedItems);
+    }, [reviews]);
+
+
+
     const fetchFeedbackData = async (page) => {
         try {
             const response1 = await axios.get(`http://localhost:8080/api/v1/feedbacks/product/${productId}?size=10&page=${page}`);
@@ -81,7 +93,7 @@ function Feedback({ productId, onReviewSubmission }) {
         try {
             const response = await axios.post(`http://localhost:8080/api/v1/feedbacks/create`, {
                 rating,
-                status: 'status',
+                status: 'Unconfirmed',
                 comment: reviewText,
                 productId: productId,
                 userId: 1,
@@ -108,25 +120,45 @@ function Feedback({ productId, onReviewSubmission }) {
                 console.error('Error submitting review:', error);
             }
         }
-    };  
+    };
 
-    const handleSubmitReply = async (event, feedbackId, replyText) => {
+    const handleLoadMore = (feedbackId) => {
+        setDisplayedItems((prevItems) => {
+            const newDisplayedItems = { ...prevItems };
+            newDisplayedItems[feedbackId] = (newDisplayedItems[feedbackId] || 2) + 2;
+            return newDisplayedItems;
+        });
+    };
+    
+    const handleSubmitReply = async (event, feedbackId, replyText, level) => {
         event.preventDefault();
+        console.log('FeedbackId:', feedbackId);
         try {
-            if (feedbackId) {
-                const response = await axios.post(`http://localhost:8080/api/v1/feedbacks/reply/${feedbackId}?replierId=2&reply=${replyText}`);
-                dispatch({ type: 'ADD_REPLY', payload: { id: feedbackId, reply: response.data } });
-                fetchFeedbackData(currentPage);
-                onReviewSubmission();
-                console.log('Reply submitted successfully:', response.data);
-            } else {
+            if (!feedbackId) {
                 console.error('Invalid feedbackId:', feedbackId);
-                console.error('error:',);
+                return;
             }
+
+            const response = await axios.post(`http://localhost:8080/api/v1/feedbacks/reply/${feedbackId}/`, {
+                comment: replyText,
+                level: level + 1,
+                replierId: 1,
+            });
+
+            dispatch({ type: 'ADD_REPLY', payload: { feedbackId, reply: response.data } });
+            fetchFeedbackData(currentPage);
+            onReviewSubmission();
+            console.log('Reply submitted successfully:', response.data);
         } catch (error) {
             console.error('Error submitting reply:', error);
+        } finally {
+            // Reset the reply state after submission, whether it succeeds or fails
+            setReplyText('');
+            setReplyingReviewId(null);
         }
     };
+
+
 
 
 
@@ -212,49 +244,55 @@ function Feedback({ productId, onReviewSubmission }) {
 
                                             <p className="review-o__text" dangerouslySetInnerHTML={{ __html: review.comment }}></p>
 
-                                            {review.reply && (
-                                                <div className="review-o u-s-m-b-15">
+                                            {review.replies && review.replies.map((reply) => (
+                                                <div key={reply.id} className="review-o u-s-m-b-15" style={{ marginLeft: `${(reply.level + 1) * 48}px` }}>
                                                     <div className="review-o__info u-s-m-b-8">
-                                                        <span className="review-o__name">Replier: {review.replierName}</span>
-                                                        <span className="review-o__date">{review.updated_at}</span>
+                                                        <span className="review-o__name">Replier: {reply.userFullName}</span>
+                                                        <span className="review-o__date">{reply.updated_at}</span>
                                                     </div>
-                                                    <p className="reply-o__text">{review.reply}</p>
+                                                    <p className="reply-o__text">{reply.comment}</p>
+
+                                                    {!replyingReviewId && (
+                                                        <a onClick={() => handleReplyClick(reply.id)}>Reply</a>
+                                                    )}
+
+                                                    {replyingReviewId === reply.id && (
+                                                        <form onSubmit={(event) => handleSubmitReply(event, review.id, replyText, reply.level)}>
+                                                            <label htmlFor="replyText">Your Reply:</label>
+                                                            <textarea
+                                                                id="replyText"
+                                                                value={replyText}
+                                                                onChange={(e) => setReplyText(e.target.value)}
+                                                            ></textarea>
+                                                            <button type="submit">Submit Reply</button>
+                                                            <button type="button" onClick={() => setReplyingReviewId(null)}>Cancel</button>
+                                                        </form>
+                                                    )}
                                                 </div>
+                                            ))}
+
+                                            {review.replies && review.replies.length > (displayedItems[review.id] || 2) && (
+                                                <a onClick={() => handleLoadMore(review.id)} type="button">
+                                                    Load More
+                                                </a>
                                             )}
 
-                                            {!replyingReviewId && (
-                                                <a onClick={() => handleReplyClick(review.id)}>Reply</a>
-                                            )}
-                                            {replyingReviewId === review.id && (
-                                                <form onSubmit={(event) => handleSubmitReply(event, review.id, replyText)}>
-                                                    <label htmlFor="replyText">Your Reply:</label>
-                                                    <textarea
-                                                        id="replyText"
-                                                        value={replyText}
-                                                        onChange={(e) => setReplyText(e.target.value)}
-                                                    ></textarea>
-                                                    <button type="submit">Submit Reply</button>
-                                                </form>
-                                            )}
                                         </div>
-
-
                                     ))}
                                     {totalPages > 1 && (
                                         <div className="u-s-p-y-60">
                                             <ul className="shop-p__pagination">
                                                 <li>
-                                                    <a className="fas fa-angle-left" type="button" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
-                                                    </a>
+                                                    <a className="fas fa-angle-left" type="button" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}></a>
                                                 </li>
                                                 <span>{`Page ${currentPage + 1} of ${totalPages}`}</span>
                                                 <li>
-                                                    <a className="fas fa-angle-right" type="button" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
-                                                    </a>
+                                                    <a className="fas fa-angle-right" type="button" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}></a>
                                                 </li>
                                             </ul>
                                         </div>
                                     )}
+
                                 </>
                             )}
                         </div>
@@ -315,6 +353,7 @@ function Feedback({ productId, onReviewSubmission }) {
                                 </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>

@@ -3,21 +3,53 @@ import axios from 'axios';
 
 const Booking = () => {
     const [bookings, setBookings] = useState([]);
+    const [bookingsPage, setBookingsPage] = useState({
+        totalPages: 0,
+        totalElements: 0,
+        currentPage: 0
+    });
 
     useEffect(() => {
-        fetchAllBooking();
+        fetchBookings();
     }, []);
 
-    const fetchAllBooking = async () => {
-        axios.get('http://localhost:8080/api/v1/booking/all')
-            .then(response => {
-                setBookings(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching bookings:', error);
+    const fetchBookings = async (page) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/v1/booking/all?page=${page}&size=10`);
+            setBookingsPage({
+                totalPages: response.data.totalPages,
+                totalElements: response.data.totalElements,
+                currentPage: response.data.number
             });
+            setBookings(response.data.content);
+        } catch (error) {
+            console.error('Error fetching bookings:', error);
+        }
+    }
+    const handlePageChange = (pageNumber) => {
+        fetchBookings(pageNumber);
     }
 
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'confirmed':
+                return 'badge-success-lighten';
+            case 'cancel':
+                return 'badge-danger-lighten';
+            default:
+                return 'badge-info-lighten';
+        }
+    }
+
+    const formatSchedule = (schedule) => {
+        if (schedule) {
+            const date = new Date(parseInt(schedule));
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+            return date.toLocaleString('en-US', options);
+        }
+        return '';
+    };
+        
     return (
         <div>
 
@@ -78,7 +110,7 @@ const Booking = () => {
                                                         <a href="/track-order">Track Order</a></li>
                                                     <li>
 
-                                                        <a  href="/my-order">My Orders</a></li>
+                                                        <a href="/my-order">My Orders</a></li>
                                                     <li>
 
                                                         <a href="/payment-option">My Payment Options</a></li>
@@ -132,37 +164,38 @@ const Booking = () => {
                                                 <h1 className="dash__h1 u-s-m-b-14">My Booking</h1>
 
                                                 <span className="dash__text u-s-m-b-30">Here you can see all design you have booking.</span>
-                                                <form className="m-booking u-s-m-b-30">
-                                                    <div className="m-booking__select-wrapper">
 
-                                                        <label className="u-s-m-r-8" for="my-booking-sort">Show:</label><select className="select-box select-box--primary-style" id="my-booking-sort">
-                                                            <option selected>Last 5 bookings</option>
-                                                            <option>Last 15 days</option>
-                                                            <option>Last 30 days</option>
-                                                            <option>Last 6 months</option>
-                                                            <option>Bookings placed in 2018</option>
-                                                            <option>All Bookings</option>
-                                                        </select></div>
-                                                </form>
                                                 <div className="m-booking__list">
                                                     {bookings.map(booking => (
                                                         <div key={booking.id} className="m-booking__get">
                                                             <div className="manage-o__header u-s-m-b-30">
-                                                            <div className="description-title">Booking at:{booking.created_at}</div>                                                            </div>
+                                                                <div className="description-title">
+                                                                    <div className="description-title" style={{ fontWeight: '300', fontSize: 'smaller' }}>August 05 2018 10:29 PM</div>
+                                                                </div>
+                                                            </div>
                                                             <div className="manage-o__description">
                                                                 <div className="description__container">
-                                                                    <div className="description-title">{booking.id}</div>
+                                                                    <a href="/" className="description-title">#000{booking.id}</a>
                                                                 </div>
                                                                 <div className="description__info-wrap">
                                                                     <div>
-                                                                        <span className={`manage-o__badge badge--${booking.status.toLowerCase()}`}>
+                                                                        <span className={`manage-o__badge badge ${getStatusColor(booking.status.toLowerCase())}`}>
                                                                             {booking.status}
                                                                         </span>
+
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     ))}
+                                                    <br />
+                                                    <div className="m-booking__list">
+                                                        <div className="pagination justify-content-end pr-3">
+                                                            <a className="btn btn-secondary" onClick={() => handlePageChange(bookingsPage.currentPage - 1)} disabled={bookingsPage.currentPage === 0}>Previous</a>
+                                                            <span className="align-self-center mr-2">&nbsp;&nbsp;Page {bookingsPage.currentPage + 1} of {bookingsPage.totalPages}&nbsp;&nbsp;</span>
+                                                            <a className="btn btn-secondary" onClick={() => handlePageChange(bookingsPage.currentPage + 1)} disabled={bookingsPage.currentPage === bookingsPage.totalPages - 1}>Next</a>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
