@@ -15,6 +15,7 @@ import HomeSlider from '../components/HomeSlider/HomeSlider';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
+
 function Home() {
     const [listProduct, setListProduct] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -26,6 +27,8 @@ function Home() {
     const [initialProductCount, setInitialProductCount] = useState(12);
     const [productsPerPage, setProductsPerPage] = useState(8);
     const visibleProducts = products.slice(0, initialProductCount);
+    const [slides, setSlides] = useState([]);
+    const [tags, setTags] = useState({});
     useEffect(() => {
         getProduct();
         fetchCategories();
@@ -149,6 +152,27 @@ function Home() {
     // console.log(listProduct);
     // const {user} = React.useContext(UserContext);
     // console.log("Check useContext: ", user)
+
+
+
+    useEffect(() => {
+        fetch('http://localhost:8080/api/v1/blogs/latest-three-blogs')
+            .then(response => response.json())
+            .then(data => setSlides(data))
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
+    
+    
+    const truncateText = (text, maxLength) => {
+        if (text.length > maxLength) {
+            return text.slice(0, maxLength) + '...';
+        } else {
+            return text;
+        }
+    };
+
+
     return (
         <div>
             {/* <div className="preloader is-active">
@@ -602,42 +626,57 @@ function Home() {
                             <div className="section__content">
                                 <div className="container">
                                     <div className="row">
-                                        <div className="col-lg-4 col-md-6 u-s-m-b-30">
-                                            <div className="bp-mini bp-mini--img u-h-100">
-                                                <div className="bp-mini__thumbnail">
-                                                    {/*====== Image Code ======*/}
-                                                    <a className="aspect aspect--bg-grey aspect--1366-768 u-d-block" href="blog-detail.html">
-                                                        <img className="aspect__img" src="images/blog/post-2.jpg" alt /></a>
-                                                    {/*====== End - Image Code ======*/}
-                                                </div>
-                                                <div className="bp-mini__content">
-                                                    <div className="bp-mini__stat">
-                                                        <span className="bp-mini__stat-wrap">
-                                                            <span className="bp-mini__publish-date">
-                                                                <a>
-                                                                    <span>25 February 2018</span></a></span></span>
-                                                        <span className="bp-mini__stat-wrap">
-                                                            <span className="bp-mini__preposition">By</span>
-                                                            <span className="bp-mini__author">
-                                                                <a href="#">Dayle</a></span></span>
-                                                        <span className="bp-mini__stat">
-                                                            <span className="bp-mini__comment">
-                                                                <a href="blog-detail.html"><i className="far fa-comments u-s-m-r-4" />
-                                                                    <span>8</span></a></span></span></div>
-                                                    <div className="bp-mini__category">
-                                                        <a>Learning</a>
-                                                        <a>News</a>
-                                                        <a>Health</a></div>
-                                                    <span className="bp-mini__h1">
-                                                        <a href="blog-detail.html">Life is an extraordinary Adventure</a></span>
-                                                    <p className="bp-mini__p">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                                    <div className="blog-t-w">
-                                                        <a className="gl-tag btn--e-transparent-hover-brand-b-2">Travel</a>
-                                                        <a className="gl-tag btn--e-transparent-hover-brand-b-2">Culture</a>
-                                                        <a className="gl-tag btn--e-transparent-hover-brand-b-2">Place</a></div>
+                                        {slides.map((blog, index) => (
+                                            <div className="col-lg-4 col-md-6 u-s-m-b-30">
+                                                <div className="bp-mini bp-mini--img u-h-100">
+                                                    <div className="bp-mini__thumbnail">
+                                                        {/*====== Image Code ======*/}
+                                                        <Link to={`/blog-detail/${blog.id}`} className="aspect aspect--bg-grey aspect--1366-768 u-d-block">
+                                                            <img className="aspect__img" src={blog.thumbnail} alt="" />
+
+                                                        </Link>
+                                                        {/*====== End - Image Code ======*/}
+                                                    </div>
+                                                    <div className="bp-mini__content">
+                                                        <div className="bp-mini__stat">
+                                                            <span className="bp-mini__stat-wrap">
+                                                                <span className="bp-mini__publish-date">
+                                                                    <a>
+                                                                        <span>{blog.createdAt}</span></a></span></span>
+                                                            <span className="bp-mini__stat-wrap">
+                                                                <span className="bp-mini__preposition"></span>
+                                                                <span className="bp-mini__author">
+                                                                    <a href="#">{blog.userFullName}</a></span></span>
+                                                        </div>
+                                                        <div className="bp-mini__category">
+                                                            {blog.categoryNames.map((category, index) => (
+                                                                <React.Fragment key={index}>
+                                                                    <a>{category}</a>
+                                                                    {index < blog.categoryNames.length - 1 && ' '}
+                                                                </React.Fragment>
+                                                            ))}
+                                                        </div>
+                                                        <Link to={`/blog-detail/${blog.id}`} className="bp__h1">
+                                                        <span className="bp-mini__h1">
+                                                            <a href="blog-detail.html">{blog.title}</a></span></Link>
+                                                        <p className="bp-mini__p">{truncateText(blog.content.replace(/<[^>]*>/g, ''), 100)}</p>
+                                                        <div className="blog-t-w">
+                                                            {blog.tagsBlogName.map((tag, index) => (
+                                                                <a key={index} className="gl-tag btn--e-transparent-hover-brand-b-2">{tag}</a>
+                                                            ))}
+
+                                                        </div>
+                                                        <span className="bp__read-more">
+
+                                                            <Link to={`/blog-detail/${blog.id}`} className="bp__read-more">
+                                                                <a href="blog-detail">READ MORE</a>
+                                                            </Link>
+
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
