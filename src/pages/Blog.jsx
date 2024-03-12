@@ -11,8 +11,8 @@ const Blog = () => {
     const [categories, setCategories] = useState({});
     const [allCategories, setAllCategories] = useState([]);
     const [allTags, setAllTags] = useState([]);
-   
-    
+
+
 
 
 
@@ -290,8 +290,7 @@ const Blog = () => {
                                                     </div>
 
                                                 </div>
-
-
+                                                
                                                 <p>{truncateText(blog.content.replace(/<[^>]*>/g, ''), 240)}</p>
 
                                                 <div className="gl-l-r">
