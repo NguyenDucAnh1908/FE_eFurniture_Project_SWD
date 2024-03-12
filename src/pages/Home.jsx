@@ -108,14 +108,14 @@ function Home() {
         }
 
         try {
-            const token = localStorage.getItem('jwt');
-            const config = {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            };
-
-            const response = await axios.get(url, config);
+            // const token = localStorage.getItem('jwt');
+            // const config = {
+            //     headers: {
+            //         'Authorization': `Bearer ${token}`
+            //     }
+            // };
+            // const response = await axios.get(url, config);
+            const response = await axios.get(url);
             console.log("Check response get all products", response.data);
             if (response && response.data) {
                 setProducts(response.data);
