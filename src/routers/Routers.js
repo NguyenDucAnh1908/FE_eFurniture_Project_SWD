@@ -22,6 +22,7 @@ import NotFound from '../pages/NotFound'
 import PrivateRounter from './PrivateRount/PrivateRounter'
 import Test from '../pages/test'
 import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
+import ProjectBooking from '../pages/Account/ProjectBooking'
 
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
@@ -76,7 +77,7 @@ function Routers() {
           <Route path='/product-brand' element={<ProductByBrand />} />
 
           <Route path='/edit-address' element={<AddressBookEdit />} />
-
+          <Route path='/view-list-projectbooking/:bookingId' element={<ProjectBooking />} />
           <Route path='*' element={<NotFound />} />
 
           {/* {user && user.isLoading ?
