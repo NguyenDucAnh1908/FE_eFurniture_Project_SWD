@@ -8,9 +8,11 @@ import './ProductDetailImage.css'
 import FormCheckOut from '../components/FormCheckOut/FormCheckOut'
 import OrderSummary from '../components/FormCheckOut/OrderSummary'
 import { UserContext } from '../context/UserContext'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 
 const CheckOut = () => {
     const { user } = useContext(UserContext);
+    const navigate = useNavigate()
     const [user_id, setUserId] = useState(null);
     const [phone_number, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
@@ -46,6 +48,9 @@ const CheckOut = () => {
     const [calculatedAmount, setCalculatedAmount] = useState(null);
     const [discountAmount, setDiscountAmount] = useState(0);
 
+    const [isValidEmail, setIsValidEmail] = useState(true);
+    const [isValidShippingDate, setIsValidShippingDate] = useState(true);
+
     const {
         isEmpty,
         totalUniqueItems,
@@ -63,20 +68,49 @@ const CheckOut = () => {
             quantity: item.quantity
         }));
         const user_id = user.account.user.id;
-        let res = await checkOutOrder(
-            user_id, address, phone_number, email, fullName, discounts, notes, 1, 1, shipping_date, shipping_method, province,
-            district, ward, payment_method, coupon_id, total_amount, sub_total, cart_items
-        );
+        try {
+            let res = await checkOutOrder(
+                user_id, address, phone_number, email, fullName, discounts, notes, 1, 1, shipping_date, shipping_method, province,
+                district, ward, payment_method, coupon_id, total_amount, sub_total, cart_items
+            );
+            console.log("Check Check out order: ", res);
+            const id = res.data.id;
         console.log("Check Check out order: ", res);
-        if (res && res.id) {
-            setUserId(''); setPhoneNumber(''); setEmail(''); setAddress(''); setFullName(''); setDiscounts(''); setNotes(''); setOrderStatus(''); setPaymentStatus('');
-            setShippingDate(''); setShippingMethod(''); setProvince(''); setDistrict(''); setWard(''); setPaymentMethod(''); setCouponId('');
-            setTotalAmount(''); setSubTotal(''); emptyCart();
-            console.log("A User is created success!!");
-        } else {
-            console.log("A user is created error!!");
+
+        // Đợi 1 giây trước khi chuyển hướng
+        setTimeout(() => {
+            navigate(`/check-out/${id}/thank-you`);
+        }, 1000);
+            if (res && res.id) {
+                
+                setUserId('');
+                setPhoneNumber('');
+                setEmail('');
+                setAddress('');
+                setFullName('');
+                setDiscounts('');
+                setNotes('');
+                setOrderStatus('');
+                setPaymentStatus('');
+                setShippingDate('');
+                setShippingMethod('');
+                setProvince('');
+                setDistrict('');
+                setWard('');
+                setPaymentMethod('');
+                setCouponId('');
+                setTotalAmount('');
+                setSubTotal('');
+                emptyCart();
+                console.log("A User is created success!!");
+            } else {
+                console.log("An error occurred during creating order!!");
+            }
+        } catch (error) {
+            console.error("Error creating order: ", error);
         }
     };
+
 
     useEffect(() => {
         getAddressUser();
@@ -139,6 +173,27 @@ const CheckOut = () => {
         console.log("Check save provinces: ", "Total amound: ", total_amount, "Discount: ", discounts)
     };
 
+    const handleEmailChange = (event) => {
+        const { value } = event.target;
+        setEmail(value);
+
+        // Kiểm tra định dạng email bằng regex
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        setIsValidEmail(emailPattern.test(value));
+    };
+
+    const handleShippingDateChange = (event) => {
+        const selectedDate = new Date(event.target.value);
+        const currentDate = new Date();
+
+        if (selectedDate <= currentDate) {
+            setIsValidShippingDate(false); // Ngày giao hàng không được nhỏ hơn hoặc bằng ngày hiện tại
+        } else {
+            setIsValidShippingDate(true);
+            setShippingDate(event.target.value);
+        }
+    };
+
     return (
         <div>
             {/*====== App Content ======*/}
@@ -192,14 +247,15 @@ const CheckOut = () => {
                                                     <input type="checkbox" id="get-address" />
                                                     <div className="check-box__state check-box__state--primary">
 
-                                                        <label className="check-box__label" for="get-address">Use default shipping and billing address from account</label></div>
+                                                        {/* <label className="check-box__label" for="get-address">Use default shipping and billing address from account</label> */}
+                                                    </div>
                                                 </div>
                                                 {/*====== End - Check Box ======*/}
                                             </div>
 
                                             {/*====== First Name, Last Name ======*/}
                                             <div className="gl-inline">
-                                               {/* <div className="u-s-m-b-15">
+                                                {/* <div className="u-s-m-b-15">
 
                                                     <label className="gl-label" for="billing-fname">user_id *</label>
 
@@ -222,13 +278,17 @@ const CheckOut = () => {
 
                                             {/*====== E-MAIL ======*/}
                                             <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-MAIL *</label>
-
-                                                <input className="input-text input-text--primary-style" type="text" id="billing-email" data-bill=""
+                                                <label className="gl-label" htmlFor="billing-email">E-MAIL *</label>
+                                                <input
+                                                    className={`input-text input-text--primary-style ${isValidEmail ? '' : 'invalid-email'}`}
+                                                    type="text"
+                                                    id="billing-email"
+                                                    data-bill=""
                                                     value={email}
-                                                    onChange={(event) => setEmail(event.target.value)}
-                                                /></div>
+                                                    onChange={handleEmailChange}
+                                                />
+                                                {!isValidEmail && <p className="error-message">Please enter a valid email address</p>}
+                                            </div>
                                             {/*====== End - E-MAIL ======*/}
 
                                             <div className="u-s-m-b-15">
@@ -332,13 +392,17 @@ const CheckOut = () => {
                                             </select>
 
                                             <div className="u-s-m-b-15">
-
-                                                <label className="gl-label" for="billing-email">E-shipping_date *</label>
-
-                                                <input className="input-text input-text--primary-style" type="date" id="billing-email" data-bill=""
+                                                <label className="gl-label" htmlFor="shipping-date">E-shipping_date *</label>
+                                                <input
+                                                    className={`input-text input-text--primary-style ${isValidShippingDate ? '' : 'invalid-date'}`}
+                                                    type="date"
+                                                    id="shipping-date"
+                                                    data-bill=""
                                                     value={shipping_date}
-                                                    onChange={(event) => setShippingDate(event.target.value)}
-                                                /></div>
+                                                    onChange={handleShippingDateChange}
+                                                />
+                                                {!isValidShippingDate && <p className="error-message">Please select a date after today</p>}
+                                            </div>
                                             {/*====== End - ZIP/POSTAL ======*/}
                                             {/* <div className="u-s-m-b-10"> */}
 
