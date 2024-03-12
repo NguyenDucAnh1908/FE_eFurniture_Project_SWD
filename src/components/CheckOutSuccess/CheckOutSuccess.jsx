@@ -1,7 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import OrderProductItem from './OrderProductItem'
 import './CheckOutSuccess.css'
+import { useNavigate, useParams, Link } from 'react-router-dom'
+import axios from 'axios'
+
 const CheckOutSuccess = () => {
+
+    const { id } = useParams();
+    const navigate = useNavigate()
+    const [orderDetail, setOrderDetail] = useState(null);
+
+    useEffect(() => {
+        fetchProductDetail();
+    }, []);
+
+    const fetchProductDetail = async () => {
+        try {
+            const res = await axios.get(`http://localhost:8080/api/v1/orders/2`);
+            setOrderDetail(res.data);
+            //console.log("Check product detail: ", res.data);
+        } catch (error) {
+            console.error('Error fetching order detail:', error);
+        }
+    };
     return (
         <>
             {/*====== App Content ======*/}
@@ -81,18 +102,20 @@ const CheckOutSuccess = () => {
                                         </div> */}
                                         {/*====== End - Dashboard Features ======*/}
                                     </div>
+
                                     <div className="col-lg-9 col-md-12">
                                         <h1 className="dash__h1 u-s-m-b-30">Thank you</h1>
+
                                         <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                             <div className="dash__pad-2">
                                                 <div className="dash-l-r">
                                                     <div>
-                                                        <div className="manage-o__text-2 u-c-secondary">Order #305423126</div>
+                                                        <div className="manage-o__text-2 u-c-secondary">Order #{orderDetail.fullName}</div>
                                                         <div className="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
                                                     </div>
                                                     <div>
                                                         <div className="manage-o__text-2 u-c-silver">Total:
-                                                            <span className="manage-o__text-2 u-c-secondary">$16.00</span></div>
+                                                            <span className="manage-o__text-2 u-c-secondary">${orderDetail.total_amount}</span></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -134,21 +157,23 @@ const CheckOutSuccess = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="manage-o__description">
-                                                        <div className="description__container">
-                                                            <div className="description__img-wrap">
-                                                                <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt /></div>
-                                                            <div className="description-title">Yellow Wireless Headphone</div>
+                                                    {orderDetail.order_details.map((item, index) => (
+                                                        <div className="manage-o__description">
+                                                            <div className="description__container">
+                                                                <div className="description__img-wrap">
+                                                                    <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt /></div>
+                                                                <div className="description-title">Yellow Wireless Headphone</div>
+                                                            </div>
+                                                            <div className="description__info-wrap">
+                                                                <div>
+                                                                    <span className="manage-o__text-2 u-c-silver">Quantity:
+                                                                        <span className="manage-o__text-2 u-c-secondary">{item.quantity}</span></span></div>
+                                                                <div>
+                                                                    <span className="manage-o__text-2 u-c-silver">Total:
+                                                                        <span className="manage-o__text-2 u-c-secondary">${item.quantity * item.price}</span></span></div>
+                                                            </div>
                                                         </div>
-                                                        <div className="description__info-wrap">
-                                                            <div>
-                                                                <span className="manage-o__text-2 u-c-silver">Quantity:
-                                                                    <span className="manage-o__text-2 u-c-secondary">1</span></span></div>
-                                                            <div>
-                                                                <span className="manage-o__text-2 u-c-silver">Total:
-                                                                    <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
-                                                        </div>
-                                                    </div>
+                                                    ))}
                                                 </div>
                                             </div>
                                         </div>
@@ -157,17 +182,9 @@ const CheckOutSuccess = () => {
                                                 <div className="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
                                                     <div className="dash__pad-3">
                                                         <h2 className="dash__h2 u-s-m-b-8">Shipping Address</h2>
-                                                        <h2 className="dash__h2 u-s-m-b-8">John Doe</h2>
-                                                        <span className="dash__text-2">4247 Ashford Drive Virginia - VA-20006 - USA</span>
-                                                        <span className="dash__text-2">(+0) 900901904</span>
-                                                    </div>
-                                                </div>
-                                                <div className="dash__box dash__box--bg-white dash__box--shadow dash__box--w">
-                                                    <div className="dash__pad-3">
-                                                        <h2 className="dash__h2 u-s-m-b-8">Billing Address</h2>
-                                                        <h2 className="dash__h2 u-s-m-b-8">John Doe</h2>
-                                                        <span className="dash__text-2">4247 Ashford Drive Virginia - VA-20006 - USA</span>
-                                                        <span className="dash__text-2">(+0) 900901904</span>
+                                                        <h2 className="dash__h2 u-s-m-b-8">{orderDetail.fullName}</h2>
+                                                        <span className="dash__text-2">{orderDetail.address} - {orderDetail.ward} - {orderDetail.district} - {orderDetail.province}</span>
+                                                        <span className="dash__text-2">{orderDetail.phone_number}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -177,17 +194,17 @@ const CheckOutSuccess = () => {
                                                         <h2 className="dash__h2 u-s-m-b-8">Total Summary</h2>
                                                         <div className="dash-l-r u-s-m-b-8">
                                                             <div className="manage-o__text-2 u-c-secondary">Subtotal</div>
-                                                            <div className="manage-o__text-2 u-c-secondary">$16.00</div>
+                                                            <div className="manage-o__text-2 u-c-secondary">${orderDetail.sub_total}</div>
                                                         </div>
                                                         <div className="dash-l-r u-s-m-b-8">
-                                                            <div className="manage-o__text-2 u-c-secondary">Shipping Fee</div>
-                                                            <div className="manage-o__text-2 u-c-secondary">$16.00</div>
+                                                            <div className="manage-o__text-2 u-c-secondary">Discount</div>
+                                                            <div className="manage-o__text-2 u-c-secondary">${orderDetail.discounts}</div>
                                                         </div>
                                                         <div className="dash-l-r u-s-m-b-8">
                                                             <div className="manage-o__text-2 u-c-secondary">Total</div>
-                                                            <div className="manage-o__text-2 u-c-secondary">$30.00</div>
+                                                            <div className="manage-o__text-2 u-c-secondary">${orderDetail.total_amount}</div>
                                                         </div>
-                                                        <span className="dash__text-2">Paid by Cash on Delivery</span>
+                                                        <span className="dash__text-2">Paid by {orderDetail.payment_method}</span>
                                                     </div>
                                                 </div>
                                             </div>
