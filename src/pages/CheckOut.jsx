@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios';
 import { useCart } from 'react-use-cart';
 import { checkOutOrder } from '../services/CartApi/CartApi';
@@ -7,8 +7,10 @@ import { FetchAllAddress, fetchAllAddress } from '../services/AddressApi/Address
 import './ProductDetailImage.css'
 import FormCheckOut from '../components/FormCheckOut/FormCheckOut'
 import OrderSummary from '../components/FormCheckOut/OrderSummary'
+import { UserContext } from '../context/UserContext'
 
 const CheckOut = () => {
+    const { user } = useContext(UserContext);
     const [user_id, setUserId] = useState(null);
     const [phone_number, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
@@ -26,6 +28,7 @@ const CheckOut = () => {
     const [payment_method, setPaymentMethod] = useState('');
     const [coupon_id, setCouponId] = useState(null);
     const [total_amount, setTotalAmount] = useState(null);
+    const [sub_total, setSubTotal] = useState(null);
     const [cart_items, setCartItems] = useState([]);
 
     const [provinceData, setProvinceData] = useState([]);
@@ -59,15 +62,16 @@ const CheckOut = () => {
             product_id: item.id,
             quantity: item.quantity
         }));
+        const user_id = user.account.user.id;
         let res = await checkOutOrder(
-            user_id, address, phone_number, email, fullName, discounts, notes, 1, 1,shipping_date, shipping_method, province,
-            district, ward, payment_method, coupon_id, total_amount, cart_items
+            user_id, address, phone_number, email, fullName, discounts, notes, 1, 1, shipping_date, shipping_method, province,
+            district, ward, payment_method, coupon_id, total_amount, sub_total, cart_items
         );
         console.log("Check Check out order: ", res);
         if (res && res.id) {
             setUserId(''); setPhoneNumber(''); setEmail(''); setAddress(''); setFullName(''); setDiscounts(''); setNotes(''); setOrderStatus(''); setPaymentStatus('');
             setShippingDate(''); setShippingMethod(''); setProvince(''); setDistrict(''); setWard(''); setPaymentMethod(''); setCouponId('');
-            setTotalAmount(''); emptyCart();
+            setTotalAmount(''); setSubTotal(''); emptyCart();
             console.log("A User is created success!!");
         } else {
             console.log("A user is created error!!");
@@ -80,9 +84,10 @@ const CheckOut = () => {
     }, []);
 
     useEffect(() => {
+        setSubTotal(cartTotal);
         setTotalAmount(calculatedAmount);
         setDiscounts(discountAmount.toFixed(2));
-    }, [calculatedAmount, discountAmount]);
+    }, [calculatedAmount, discountAmount, cartTotal]);
 
     const getAddressUser = async () => {
         let res = await fetchAllAddress();
@@ -194,14 +199,15 @@ const CheckOut = () => {
 
                                             {/*====== First Name, Last Name ======*/}
                                             <div className="gl-inline">
-                                                <div className="u-s-m-b-15">
+                                               {/* <div className="u-s-m-b-15">
 
                                                     <label className="gl-label" for="billing-fname">user_id *</label>
 
                                                     <input className="input-text input-text--primary-style" type="text" id="billing-fname" data-bill=""
                                                         value={user_id}
                                                         onChange={(event) => setUserId(event.target.value)}
-                                                    /></div>
+                                                    />
+                                                </div>*/}
                                                 <div className="u-s-m-b-15">
 
                                                     <label className="gl-label" for="billing-lname">FULL NAME *</label>

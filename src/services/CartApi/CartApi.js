@@ -17,6 +17,7 @@ const checkOutOrder = (
     payment_method,
     coupon_id,
     total_amount,
+    sub_total,
     cart_items
 ) => {
     const token = localStorage.getItem("jwt");
@@ -37,6 +38,7 @@ const checkOutOrder = (
         payment_method,
         coupon_id,
         total_amount,
+        sub_total,
         cart_items
     }, {
         headers: {

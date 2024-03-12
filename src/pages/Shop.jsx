@@ -198,7 +198,7 @@ function Shop() {
                       </div>
                     </div> */}
                     {/* RATING */}
-                    <div className="u-s-m-b-30">
+                    {/* <div className="u-s-m-b-30">
                       <div className="shop-w">
                         <div className="shop-w__intro-wrap">
                           <h1 className="shop-w__h">RATING</h1>
@@ -263,7 +263,7 @@ function Shop() {
                           </ul>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     {/* TAGPRODUCT */}
                     <div className="u-s-m-b-30">
                       <div className="shop-w">
@@ -346,7 +346,7 @@ function Shop() {
                         </div>
                       </div>
                     </div>
-                    <div className="u-s-m-b-30">
+                    {/* <div className="u-s-m-b-30">
                       <div className="shop-w">
                         <div className="shop-w__intro-wrap">
                           <h1 className="shop-w__h">COLOR</h1>
@@ -403,104 +403,8 @@ function Shop() {
                           </ul>
                         </div>
                       </div>
-                    </div>
-                    <div className="u-s-m-b-30">
-                      <div className="shop-w">
-                        <div className="shop-w__intro-wrap">
-                          <h1 className="shop-w__h">SIZE</h1>
+                    </div> */}
 
-                          <span className="fas fa-minus collapsed shop-w__toggle" data-target="#s-size" data-toggle="collapse"></span>
-                        </div>
-                        <div className="shop-w__wrap collapse" id="s-size">
-                          <ul className="shop-w__list gl-scroll">
-                            <li>
-
-                              {/*====== Check Box ======*/}
-                              <div className="check-box">
-
-                                <input type="checkbox" id="xs" />
-                                <div className="check-box__state check-box__state--primary">
-
-                                  <label className="check-box__label" for="xs">XS</label></div>
-                              </div>
-                              {/*====== End - Check Box ======*/}
-
-                              <span className="shop-w__total-text">(2)</span>
-                            </li>
-                            <li>
-
-                              {/*====== Check Box ======*/}
-                              <div className="check-box">
-
-                                <input type="checkbox" id="small" />
-                                <div className="check-box__state check-box__state--primary">
-
-                                  <label className="check-box__label" for="small">Small</label></div>
-                              </div>
-                              {/*====== End - Check Box ======*/}
-
-                              <span className="shop-w__total-text">(4)</span>
-                            </li>
-                            <li>
-
-                              {/*====== Check Box ======*/}
-                              <div className="check-box">
-
-                                <input type="checkbox" id="medium" />
-                                <div className="check-box__state check-box__state--primary">
-
-                                  <label className="check-box__label" for="medium">Medium</label></div>
-                              </div>
-                              {/*====== End - Check Box ======*/}
-
-                              <span className="shop-w__total-text">(6)</span>
-                            </li>
-                            <li>
-
-                              {/*====== Check Box ======*/}
-                              <div className="check-box">
-
-                                <input type="checkbox" id="large" />
-                                <div className="check-box__state check-box__state--primary">
-
-                                  <label className="check-box__label" for="large">Large</label></div>
-                              </div>
-                              {/*====== End - Check Box ======*/}
-
-                              <span className="shop-w__total-text">(8)</span>
-                            </li>
-                            <li>
-
-                              {/*====== Check Box ======*/}
-                              <div className="check-box">
-
-                                <input type="checkbox" id="xl" />
-                                <div className="check-box__state check-box__state--primary">
-
-                                  <label className="check-box__label" for="xl">XL</label></div>
-                              </div>
-                              {/*====== End - Check Box ======*/}
-
-                              <span className="shop-w__total-text">(10)</span>
-                            </li>
-                            <li>
-
-                              {/*====== Check Box ======*/}
-                              <div className="check-box">
-
-                                <input type="checkbox" id="xxl" />
-                                <div className="check-box__state check-box__state--primary">
-
-                                  <label className="check-box__label" for="xxl">XXL</label></div>
-                              </div>
-                              {/*====== End - Check Box ======*/}
-
-                              <span className="shop-w__total-text">(12)</span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -658,7 +562,7 @@ function Shop() {
                       ))}
                     </div>
                   </div>
-                  <div className="u-s-p-y-60">
+                  {/* <div className="u-s-p-y-60">
                     <ul className="shop-p__pagination">
                       {[...Array(totalPages).keys()].map((index) => (
                         <li key={index} className={currentPage === index + 1 ? 'is-active' : ''}>
@@ -669,7 +573,34 @@ function Shop() {
                         <a className="fas fa-angle-right" href="#" onClick={() => handlePageChange(currentPage + 1)}></a>
                       </li>
                     </ul>
+                  </div> */}
+                  <div className="u-s-p-y-60">
+                    <ul className="shop-p__pagination">
+                      {/* Hiển thị trang đầu tiên */}
+                      <li className={currentPage === 1 ? 'is-active' : ''}>
+                        <a onClick={() => handlePageChange(1)}>1</a>
+                      </li>
+                      {/* Hiển thị dấu "..." nếu có nhiều hơn 5 trang */}
+                      {currentPage > 3 && <li><span>...</span></li>}
+                      {/* Hiển thị 5 trang tiếp theo từ trang hiện tại */}
+                      {[...Array(totalPages).keys()].slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2)).map(index => (
+                        <li key={index} className={currentPage === index + 1 ? 'is-active' : ''}>
+                          <a  onClick={() => handlePageChange(index + 1)}>{index + 1}</a>
+                        </li>
+                      ))}
+                      {/* Hiển thị dấu "..." nếu có nhiều hơn 5 trang và trang cuối cùng */}
+                      {currentPage < totalPages - 2 && <li><span>...</span></li>}
+                      {/* Hiển thị trang cuối cùng */}
+                      <li className={currentPage === totalPages ? 'is-active' : ''}>
+                        <a onClick={() => handlePageChange(totalPages)}>{totalPages}</a>
+                      </li>
+                      {/* Nút chuyển đến trang kế tiếp */}
+                      <li>
+                        <a className="fas fa-angle-right" onClick={() => handlePageChange(currentPage + 1)}></a>
+                      </li>
+                    </ul>
                   </div>
+
                 </div>
               </div>
             </div>

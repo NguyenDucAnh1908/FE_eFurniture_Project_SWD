@@ -25,6 +25,9 @@ import IndexProductDetail from '../components/ViewProductDetail/IndexProductDeta
 
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import ProductByCategory from '../pages/Product/ProductByCategory'
+import ProductByTag from '../pages/Product/ProductByTag'
+import ProductByBrand from '../pages/Product/ProductByBrand'
 
 function Routers() {
 
@@ -65,6 +68,12 @@ function Routers() {
           <Route path='/payment-option' element={<PaymentOption />} />
 
           <Route path='/wish-list' element={<Wishlist />} />
+
+          <Route path='/product-category/:id' element={<ProductByCategory />} />
+
+          <Route path='/product-tag' element={<ProductByTag />} />
+
+          <Route path='/product-brand' element={<ProductByBrand />} />
 
           <Route path='/edit-address' element={<AddressBookEdit />} />
 
