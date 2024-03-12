@@ -20,3 +20,18 @@
     transition: opacity 500ms ease-in;
   }
   
+  .btn--load-more {
+    padding: 10px 20px; /* Điều chỉnh khoảng cách giữa nội dung và biên của nút */
+    font-size: 16px; /* Điều chỉnh kích thước chữ của nút */
+    border-radius: 30px; /* Bo tròn góc của nút */
+    background-color: #FE4500; /* Màu nền của nút */
+    color: #ffffff; /* Màu chữ của nút */
+    border: 2px solid #FE4500; /* Độ dày và màu sắc của viền */
+    transition: all 0.3s ease; /* Hiệu ứng chuyển đổi khi hover */
+}
+
+.btn--load-more:hover {
+    background-color: #b45c3c; /* Màu nền của nút khi hover */
+    border-color: #FE4500; /* Màu sắc của viền nút khi hover */
+    color: #ffffff; /* Màu chữ của nút khi hover */
+}

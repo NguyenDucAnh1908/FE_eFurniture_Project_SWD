@@ -293,7 +293,7 @@ function Header() {
                                                         <span className="subtotal-value">${cartTotal}</span></div>
                                                     <div className="mini-action">
 
-                                                        <a className="mini-link btn--e-brand-b-2" href="#checkout.html">PROCEED TO CHECKOUT</a>
+                                                        <a className="mini-link btn--e-brand-b-2" href="">PROCEED TO CHECKOUT</a>
 
                                                         <a className="mini-link btn--e-transparent-secondary-b-2" href="/cart">VIEW CART</a></div>
                                                 </div>

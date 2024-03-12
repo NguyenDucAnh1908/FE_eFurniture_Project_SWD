@@ -22,11 +22,14 @@ import NotFound from '../pages/NotFound'
 import PrivateRounter from './PrivateRount/PrivateRounter'
 import Test from '../pages/test'
 import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
+import ProjectBooking from '../pages/Account/ProjectBooking'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import ProductByCategory from '../pages/Product/ProductByCategory'
+import ProductByTag from '../pages/Product/ProductByTag'
+import ProductByBrand from '../pages/Product/ProductByBrand'
+
 import Design from '../pages/Design'
 import DesignDetail from '../pages/DesignDetail'
-
-
-
 import { Routes, Route } from 'react-router-dom'
 
 function Routers() {
@@ -71,9 +74,20 @@ function Routers() {
 
         <Route path='/payment-option' element={<PaymentOption />} />
 
+          <Route path='/product-category/:id' element={<ProductByCategory />} />
+
+          <Route path='/product-tag' element={<ProductByTag />} />
+
+          <Route path='/product-brand' element={<ProductByBrand />} />
+
+          <Route path='/edit-address' element={<AddressBookEdit />} />
+          <Route path='/view-list-projectbooking/:bookingId' element={<ProjectBooking />} />
+          <Route path='*' element={<NotFound />} />
+
         <Route path='/wish-list' element={<Wishlist />} />
 
         <Route path='/edit-address' element={<AddressBookEdit />} />
+
 
         <Route path='*' element={<NotFound />} />
 

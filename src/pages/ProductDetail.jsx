@@ -6,12 +6,14 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import RecommendedProductsSlider from '../components/RecommendedProductsSlider/RecommendedProductsSlider';
 import Feedback from './Feedback';
+import { useCart } from 'react-use-cart';
 
 const ProductDetail = () => {
     const [images, setImages] = useState([]);
     const [largeImage, setLargeImage] = useState('');
     const [productDetail, setProductDetail] = useState(null);
     const [feedbackData, setFeedbackData] = useState({ totalElements: 0, averageRating: 0 });
+    const { addItem } = useCart();
 
     const { id } = useParams();
 
@@ -245,7 +247,7 @@ const ProductDetail = () => {
                                                     </div>
                                                     <div className="u-s-m-b-15">
 
-                                                        <button className="btn btn--e-brand-b-2" type="submit">Add to Cart</button></div>
+                                                        <button className="btn btn--e-brand-b-2" type="submit" onClick={() => addItem(productDetail)}>Add to Cart</button></div>
                                                 </div>
                                             </form>
                                         </div>
