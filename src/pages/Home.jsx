@@ -500,37 +500,37 @@ function Home() {
                         <div className="section__content">
                             <div className="container">
                                 <div className="row">
-                                    {listProduct && listProduct.length > 0 &&
-                                        listProduct.map((productItem, index) => {
-                                            return (
-                                                <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
-                                                    <div className="product-short u-h-100">
-                                                        <div className="product-short__container">
-                                                            <div className="product-short__img-wrap">
+                                    {visibleProducts && visibleProducts.length > 0 && visibleProducts.map((productItem, index) => (
+                                        <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
+                                            <div className="product-short u-h-100">
+                                                <div className="product-short__container">
+                                                    <div className="product-short__img-wrap">
 
-                                                                <Link className="aspect aspect--bg-grey-fb aspect--square u-d-block" to={`/product-detail/${productItem.id}`}>
+                                                        <Link className="aspect aspect--bg-grey-fb aspect--square u-d-block" to={`/product-detail/${productItem.id}`}>
 
-                                                                    <img className="aspect__img product-short__img" src={productItem.thumbnail} alt="" />
-                                                                </Link>
-                                                            </div>
-                                                            <div className="product-short__info">
-
-                                                                <span className="product-short__price">$126.77</span>
-
-                                                                <span className="product-short__name">
-
-                                                                    <Link to={`/product-detail/${productItem.id}`}>New Dress A Nice Elegant</Link></span>
-
-                                                                <span className="product-short__category">
-
-                                                                    <Link to={`/product-detail/${productItem.id}`}>Women Clothing</Link></span></div>
-                                                        </div>
+                                                            <img className="aspect__img product-short__img" src={productItem.thumbnail} alt="" />
+                                                        </Link>
                                                     </div>
-                                                </div>
-                                            )
-                                        })
-                                    }
+                                                    <div className="product-short__info">
 
+                                                        <span className="product-short__price">$126.77</span>
+
+                                                        <span className="product-short__name">
+
+                                                            <Link to={`/product-detail/${productItem.id}`}>New Dress A Nice Elegant</Link></span>
+
+                                                        <span className="product-short__category">
+
+                                                            <Link to={`/product-detail/${productItem.id}`}>Women Clothing</Link></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    <div className="col-lg-12">
+                                        <div className="section__text-wrap">
+                                            <button className="btn btn--e-brand btn--load-more" type="button" onClick={handleLoadMore}>Load More</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
