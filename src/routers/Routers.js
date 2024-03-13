@@ -27,9 +27,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import ProductByCategory from '../pages/Product/ProductByCategory'
 import ProductByTag from '../pages/Product/ProductByTag'
 import ProductByBrand from '../pages/Product/ProductByBrand'
-
 import Design from '../pages/Design'
 import DesignDetail from '../pages/DesignDetail'
+import ThankYou from '../components/CheckOutSuccess/ThankYou'
 
 function Routers() {
 
@@ -51,7 +51,7 @@ function Routers() {
 
         {/* <Route path='/check-out' element={<CheckOut/>}/> */}
 
-        <Route path='/check-out/thank-you' element={<CheckOutSuccess />} />
+        {/* <Route path='/check-out/thank-you' element={<CheckOutSuccess />} /> */}
 
         <Route path='/blog' element={<Blog />} />
 
@@ -73,15 +73,17 @@ function Routers() {
 
         <Route path='/payment-option' element={<PaymentOption />} />
 
-          <Route path='/product-category/:id' element={<ProductByCategory />} />
+        <Route path='/product-category/:id' element={<ProductByCategory />} />
 
-          <Route path='/product-tag' element={<ProductByTag />} />
+        <Route path='/product-tag' element={<ProductByTag />} />
 
-          <Route path='/product-brand' element={<ProductByBrand />} />
+        <Route path='/product-brand' element={<ProductByBrand />} />
 
-          <Route path='/edit-address' element={<AddressBookEdit />} />
-          <Route path='/view-list-projectbooking/:bookingId' element={<ProjectBooking />} />
-          <Route path='*' element={<NotFound />} />
+        <Route path='/edit-address' element={<AddressBookEdit />} />
+
+        <Route path='/view-list-projectbooking/:bookingId' element={<ProjectBooking />} />
+
+        <Route path='*' element={<NotFound />} />
 
         <Route path='/wish-list' element={<Wishlist />} />
 
@@ -91,16 +93,40 @@ function Routers() {
         <Route path='*' element={<NotFound />} />
 
         {/* {user && user.isLoading ?
+
+        
           
         } */}
-        <Route
+         {/* <Route
+          path="/thank" element={
+            <PrivateRounter >
+              <ThankYou />
+            </PrivateRounter>
+
+          }
+        /> */}
+         {/* <Route path='/thank' element={<ThankYou />} /> */}
+        {/* <Route
           path="/check-out" element={
             <PrivateRounter >
               <CheckOut />
             </PrivateRounter>
 
           }
-        />
+        /> */}
+        <Route element={<PrivateRounter />}>
+            <Route path='/check-out' element={<CheckOut />} />
+            <Route path='/check-out/:id/thank-you' element={<CheckOutSuccess />} />
+        </Route>
+       
+        
+        {/* <Route
+          path="/check-out/thank-you" element={
+            <PrivateRounter >
+              <CheckOutSuccess/>
+            </PrivateRounter>
+          }
+        /> */}
 
         <Route path='/test' element={<Test />} />
 
