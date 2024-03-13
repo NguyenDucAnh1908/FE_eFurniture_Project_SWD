@@ -153,15 +153,15 @@ const AddressBook = () => {
                                                         {addresses.map(address => (
                                                             <tr key={address.id}>
                                                                 <td>
-                                                                    <a className="address-book-edit btn--e-transparent-platinum-b-2" href={`/address-edit/${address.id}`}>Edit</a>
+                                                                    <a className="address-book-edit btn--e-transparent-platinum-b-2" href={`/edit-address-detail/${address.id}`}>Edit</a>
                                                                 </td>
                                                                 <td>{`${address.firstName} ${address.lastName}`}</td>
                                                                 <td>{`${address.streetAddress}, ${address.wardName}, ${address.districtName}, ${address.provinceName}`}</td>
                                                                 
                                                                 <td>{address.phoneNumber}</td>
                                                                 <td>
-                                                                    <div className="gl-text">Default Shipping Address</div>
-                                                                    <div className="gl-text">Default Billing Address</div>
+                                                                    <div className="gl-text"></div>
+                                                                   
                                                                 </td>
                                                             </tr>
                                                         ))}

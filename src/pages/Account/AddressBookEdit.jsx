@@ -77,13 +77,13 @@ const AddressBookEdit = () => {
 
     const handleDistrictChange = (e) => {
         const districtCode = e.target.value;
-        const districtName = e.target.options[e.target.selectedIndex].text; // Lấy tên của quận/huyện
+        const districtName = e.target.options[e.target.selectedIndex].text;
         setFormData(prevState => ({
             ...prevState,
             districtCode: districtCode,
             districtName: districtName,
-            wardCode: '', // Reset ward when district changes
-            wardName: ''  // Reset ward name when district changes
+            wardCode: '', 
+            wardName: ''  
         }));
         axios.get(`https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtCode}`, {
             headers: {
@@ -234,9 +234,9 @@ const AddressBookEdit = () => {
                                     <div class="col-lg-9 col-md-12">
                                         <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
                                             <div class="dash__pad-2">
-                                                <h1 class="dash__h1 u-s-m-b-14">Edit Address</h1>
+                                                <h1 class="dash__h1 u-s-m-b-14">Add Address</h1>
 
-                                                <span class="dash__text u-s-m-b-30">We need an address where we could deliver products.</span>
+                                                {/* <span class="dash__text u-s-m-b-30">We need an address where we could deliver products.</span> */}
                                                 <form class="dash-address-manipulation" onSubmit={handleSubmit}>
                                                     <div class="gl-inline">
                                                         <div class="u-s-m-b-30">
