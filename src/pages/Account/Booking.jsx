@@ -5,6 +5,7 @@ import { UserContext } from '../../context/UserContext';
 const Booking = () => {
     const [bookings, setBookings] = useState([]);
     const { user } = useContext(UserContext);
+    const user_id = user.account.user.id;
     const [bookingsPage, setBookingsPage] = useState({
         totalPages: 0,
         totalElements: 0,
@@ -15,9 +16,9 @@ const Booking = () => {
         fetchBookings();
     }, []);
 
-    const fetchBookings = async (page, user) => {
+    const fetchBookings = async (page) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/booking/all-by-user-id/${user.id}/?page=${page}&size=10`);
+            const response = await axios.get(`http://localhost:8080/api/v1/booking/all-by-user-id/${user_id}/?page=${page}&size=10`);
             setBookingsPage({
                 totalPages: response.data.totalPages,
                 totalElements: response.data.totalElements,
@@ -27,10 +28,11 @@ const Booking = () => {
         } catch (error) {
             console.error('Error fetching bookings:', error);
         }
-    }
+    };
+
     const handlePageChange = (pageNumber) => {
         fetchBookings(pageNumber);
-    }
+    };
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -41,16 +43,8 @@ const Booking = () => {
             default:
                 return 'badge--processing';
         }
-    }
-
-    const formatSchedule = (schedule) => {
-        if (schedule) {
-            const date = new Date(parseInt(schedule));
-            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
-            return date.toLocaleString('en-US', options);
-        }
-        return '';
     };
+
 
     return (
         <div>
@@ -195,13 +189,8 @@ const Booking = () => {
                                                                     <div>
                                                                         <span className={`manage-o__badge badge ${getStatusColor(booking.status.toLowerCase())}`}>
                                                                             {booking.status}
-                                                                        </span></div>
-
-                                                                    <div>
-
-                                                                        <span className="manage-o__text-2 u-c-silver">Total:
-
-                                                                            <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
+                                                                        </span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>

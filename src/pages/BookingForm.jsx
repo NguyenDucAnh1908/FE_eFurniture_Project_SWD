@@ -4,6 +4,7 @@ import { UserContext } from '../context/UserContext';
 
 const Booking = () => {
   const { user } = useContext(UserContext);
+  const user_id =user.account.user.id;
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -17,7 +18,7 @@ const Booking = () => {
     provinceName: '',
     status: '',
     note: '',
-    userId: user.id
+    userId: user_id
   });
 
   const [provinces, setProvinces] = useState([]);
