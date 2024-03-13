@@ -585,7 +585,7 @@ function Shop() {
                       {/* Hiển thị 5 trang tiếp theo từ trang hiện tại */}
                       {[...Array(totalPages).keys()].slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2)).map(index => (
                         <li key={index} className={currentPage === index + 1 ? 'is-active' : ''}>
-                          <a  onClick={() => handlePageChange(index + 1)}>{index + 1}</a>
+                          <a onClick={() => handlePageChange(index + 1)}>{index + 1}</a>
                         </li>
                       ))}
                       {/* Hiển thị dấu "..." nếu có nhiều hơn 5 trang và trang cuối cùng */}

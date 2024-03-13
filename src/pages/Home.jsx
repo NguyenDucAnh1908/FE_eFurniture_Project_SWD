@@ -33,8 +33,8 @@ function Home() {
         getProduct();
         fetchCategories();
         //fetchProducts();
-        fetchTop5ProducstBestSelling();
-        fetchTop5ProducstRating();
+        // fetchTop5ProducstBestSelling();
+        // fetchTop5ProducstRating();
     }, []);
     const ProductList = () => {
         // ...
