@@ -1,9 +1,26 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios';
+import { UserContext } from '../../context/UserContext'
+import { Link } from 'react-router-dom';
 const MyOrder = () => {
-   
+    const { user } = useContext(UserContext);
+    const [orderUsers, setOrderUsers] = useState([]);
 
-     
+    useEffect(() => {
+        fetchOrderUsers();
+    }, []);
+
+    const fetchOrderUsers = async () => {
+        try {
+            const id = user.account.user.id;
+            const res = await axios.get(`http://localhost:8080/api/v1/orders/user/${id}`)
+            setOrderUsers(res.data)
+        } catch (error) {
+            console.error('Error fetching order detail:', error);
+        }
+    }
+
+
     return (
         <div>
 
@@ -122,127 +139,54 @@ const MyOrder = () => {
                                                             <option selected> 5 ProjectBoking</option>
                                                             <option> 15 ProjectBooking</option>
                                                             <option> 30 ProjectBooking</option>
-                                                            
-                                                    
+
+
                                                             <option>All ProjectBooking</option>
                                                         </select></div>
                                                 </form>
-                                                <div className="m-order__list">
-                                                    <div className="m-order__get">
-                                                        <div className="manage-o__header u-s-m-b-30">
-                                                            <div className="dash-l-r">
-                                                                <div>
-                                                                    <div className="manage-o__text-2 u-c-secondary">Order #305423126</div>
-                                                                    <div className="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
-                                                                </div>
-                                                                <div>
-                                                                    <div className="dash__link dash__link--brand">
+                                                {orderUsers.map((order) => (
 
-                                                                        <a href="/manage-order">MANAGE</a></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="manage-o__description">
-                                                            <div className="description__container">
-                                                                <div className="description__img-wrap">
+                                                    <div className="m-order__list">
+                                                        <div className="m-order__get">
+                                                            <div className="manage-o__header u-s-m-b-30">
+                                                                <div className="dash-l-r">
+                                                                    <div>
+                                                                        <div className="manage-o__text-2 u-c-secondary">Order #{order.fullName}</div>
+                                                                        <div className="manage-o__text u-c-silver">Placed on {order.createdAt}</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div className="dash__link dash__link--brand">
 
-                                                                    <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt="" /></div>
-                                                                <div className="description-title">Yellow Wireless Headphone</div>
-                                                            </div>
-                                                            <div className="description__info-wrap">
-                                                                <div>
-
-                                                                    <span className="manage-o__badge badge--processing">Processing</span></div>
-                                                                <div>
-
-                                                                    <span className="manage-o__text-2 u-c-silver">Quantity:
-
-                                                                        <span className="manage-o__text-2 u-c-secondary">1</span></span></div>
-                                                                <div>
-
-                                                                    <span className="manage-o__text-2 u-c-silver">Total:
-
-                                                                        <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="m-order__get">
-                                                        <div className="manage-o__header u-s-m-b-30">
-                                                            <div className="dash-l-r">
-                                                                <div>
-                                                                    <div className="manage-o__text-2 u-c-secondary">Order #305423126</div>
-                                                                    <div className="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
-                                                                </div>
-                                                                <div>
-                                                                    <div className="dash__link dash__link--brand">
-
-                                                                        <a href="/manage-order">MANAGE</a></div>
+                                                                            <Link to={`/manage-order/${order.id}`}>MANAGE</Link></div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div className="manage-o__description">
-                                                            <div className="description__container">
-                                                                <div className="description__img-wrap">
+                                                            {/* <div className="manage-o__description">
+                                                                <div className="description__container">
+                                                                    <div className="description__img-wrap">
 
-                                                                    <img className="u-img-fluid" src="images/product/women/product8.jpg" alt="" /></div>
-                                                                <div className="description-title">New Dress D Nice Elegant</div>
-                                                            </div>
-                                                            <div className="description__info-wrap">
-                                                                <div>
+                                                                        <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt="" /></div>
+                                                                    <div className="description-title">Yellow Wireless Headphone</div>
+                                                                </div>
+                                                                <div className="description__info-wrap">
+                                                                    <div>
 
-                                                                    <span className="manage-o__badge badge--shipped">Shipped</span></div>
-                                                                <div>
+                                                                        <span className="manage-o__badge badge--processing">Processing</span></div>
+                                                                    <div>
 
-                                                                    <span className="manage-o__text-2 u-c-silver">Quantity:
+                                                                        <span className="manage-o__text-2 u-c-silver">Quantity:
 
-                                                                        <span className="manage-o__text-2 u-c-secondary">1</span></span></div>
-                                                                <div>
+                                                                            <span className="manage-o__text-2 u-c-secondary">1</span></span></div>
+                                                                    <div>
 
-                                                                    <span className="manage-o__text-2 u-c-silver">Total:
+                                                                        <span className="manage-o__text-2 u-c-silver">Total:
 
-                                                                        <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
-                                                            </div>
+                                                                            <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
+                                                                </div>
+                                                            </div> */}
                                                         </div>
                                                     </div>
-                                                    <div className="m-order__get">
-                                                        <div className="manage-o__header u-s-m-b-30">
-                                                            <div className="dash-l-r">
-                                                                <div>
-                                                                    <div className="manage-o__text-2 u-c-secondary">Order #305423126</div>
-                                                                    <div className="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
-                                                                </div>
-                                                                <div>
-                                                                    <div className="dash__link dash__link--brand">
-
-                                                                        <a href="/manage-order">MANAGE</a></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="manage-o__description">
-                                                            <div className="description__container">
-                                                                <div className="description__img-wrap">
-
-                                                                    <img className="u-img-fluid" src="images/product/men/product8.jpg" alt="" /></div>
-                                                                <div className="description-title">New Fashion D Nice Elegant</div>
-                                                            </div>
-                                                            <div className="description__info-wrap">
-                                                                <div>
-
-                                                                    <span className="manage-o__badge badge--delivered">Delivered</span></div>
-                                                                <div>
-
-                                                                    <span className="manage-o__text-2 u-c-silver">Quantity:
-
-                                                                        <span className="manage-o__text-2 u-c-secondary">1</span></span></div>
-                                                                <div>
-
-                                                                    <span className="manage-o__text-2 u-c-silver">Total:
-
-                                                                        <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                ))}
                                             </div>
                                         </div>
                                     </div>
@@ -258,6 +202,6 @@ const MyOrder = () => {
 
         </div>
     )
-}   
+}
 
 export default MyOrder

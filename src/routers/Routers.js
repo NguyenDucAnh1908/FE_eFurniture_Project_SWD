@@ -31,6 +31,7 @@ import Design from '../pages/Design'
 import DesignDetail from '../pages/DesignDetail'
 import ThankYou from '../components/CheckOutSuccess/ThankYou'
 import EditAddress from '../pages/Account/EditAddress'
+import ManagerOrderDetail from "../pages/Account/ManagerOrderDetail";
 
 function Routers() {
   return (
@@ -68,6 +69,8 @@ function Routers() {
         <Route path='/my-order' element={<MyOrder />} />
 
         <Route path='/track-order' element={<TrackOrder />} />
+
+        <Route path='/manage-order/:id' element={<ManagerOrderDetail />} />
 
         <Route path='/cancellation' element={<Cancellation />} />
 
