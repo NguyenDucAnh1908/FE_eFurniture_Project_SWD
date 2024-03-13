@@ -87,12 +87,7 @@ const ProjectBooking = () => {
                             </a>
                           </li>
                           <li>
-                            <a
-                              className="dash-active"
-                              yhref="/view-list-projectbooking"
-                            >
-                              Manage My ProjectBooking
-                            </a>
+                            <a className="dash-active" href="/booking">My Booking Design</a>
                           </li>
                         </ul>
                       </div>
@@ -163,35 +158,22 @@ const ProjectBooking = () => {
                             key={projectBookings.id}
                             className="project-booking-card"
                             style={{
-                              border: "1px solid #ddd",
-                              borderRadius: "8px",
-                              padding: "20px",
-                              margin: "10px 0",
-                              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                              backgroundColor: "#f9f9f9",
-                              display: "flex",
-                              flexDirection: "column",
+                              border: '1px solid #ddd',
+                              borderRadius: '8px',
+                              padding: '20px',
+                              margin: '10px 0',
+                              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                              backgroundColor: '#f9f9f9',
+                              display: 'flex',
+                              flexDirection: 'column',
                             }}
                           >
                             <div className="project-booking-header">
-                              <div
-                                className="order-info"
-                                style={{
-                                  marginBottom: "10px",
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                }}
-                              >
-                                <div
-                                  className="order-number"
-                                  style={{
-                                    fontWeight: "bold",
-                                    fontSize: "40px ",
-                                  }}
-                                >{`Order #${projectBookings.code}`}</div>
-                                {/* <span className="status-badge" style={{ backgroundColor: 'green', color: '#fff', padding: '5px 10px', borderRadius: '4px' }}>
-          Delivered
-        </span> */}
+                              <div className="order-info" style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                                <div className="order-number" style={{ fontWeight: 'bold', fontSize: '18px' }}>{`Booking Project #${projectBookings.code}`}</div>
+                                <span className="status-badge" style={{ backgroundColor: 'green', color: '#fff', padding: '5px 10px', borderRadius: '4px' }}>
+                                  Delivered
+                                </span>
                               </div>
                             </div>
                             <div className="project-booking-details">

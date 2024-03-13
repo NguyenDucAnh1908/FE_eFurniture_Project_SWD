@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom';
 import RecommendedProductsSlider from '../components/RecommendedProductsSlider/RecommendedProductsSlider';
 import Feedback from './Feedback';
 import { useCart } from 'react-use-cart';
+import { FeedbackProvider } from '../Feedback/FeedbackContext';
+
 
 const ProductDetail = () => {
     const [images, setImages] = useState([]);
@@ -15,13 +17,46 @@ const ProductDetail = () => {
     const [feedbackData, setFeedbackData] = useState({ totalElements: 0, averageRating: 0 });
     const { addItem } = useCart();
 
+    const [reviews, setReviews] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [averageRating, setAverageRating] = useState(null);
+    const [rating, setRating] = useState(0);
+    const [reviewText, setReviewText] = useState('');
     const { id } = useParams();
 
 
     useEffect(() => {
         fetchProductImages();
         fetchProductDetail();
+        fetchFeedbackData();
     }, [id]);
+
+
+    const fetchFeedbackData = async (page) => {
+        try {
+            setLoading(true); // Set loading to true before making the API call
+            const response1 = await axios.get(`http://localhost:8080/api/v1/feedbacks/product/${id}`);
+            const response2 = await axios.get(`http://localhost:8080/api/v1/feedbacks/average-rating/${id}`);
+
+            setReviews(response1.data.content);
+            setAverageRating(response2.data);
+            setTotalPages(response1.data.totalPages);
+            setTotalElements(response1.data.totalElements);
+            setLoading(false); // Set loading to false after the API call is complete
+            console.log("Check feedback1: ", response1.data);
+            console.log("Check feedback2: ", response2.data);
+        } catch (error) {
+            console.error('Error fetching feedback:', error);
+            setLoading(false); // Set loading to false in case of an error
+        }
+    };
+
+    const handleReviewSubmission = () => {
+        fetchFeedbackData();
+    };
 
     const fetchProductImages = async () => {
         try {
@@ -43,13 +78,6 @@ const ProductDetail = () => {
             console.error('Error fetching product detail:', error);
         }
     };
-
-    const handleFeedbackData = (data) => {
-        setFeedbackData((prevData) => ({
-          ...prevData,
-          ...data,
-        }));
-      };
 
     const generateStarRating = (rating) => {
         const fullStars = Math.floor(rating);
@@ -178,10 +206,10 @@ const ProductDetail = () => {
                                         </div>
                                         <div className="u-s-m-b-15">
                                             <div className="pd-detail__rating gl-rating-style">
-                                                <i>{generateStarRating(feedbackData.averageRating)}</i>
+                                                <i>{generateStarRating(averageRating)}</i>
                                                 <span className="pd-detail__review u-s-m-l-4">
 
-                                                    <a data-click-scroll="#view-review">{feedbackData.totalElements} Reviews</a></span></div>
+                                                    <a data-click-scroll="#view-review">{totalElements} Reviews</a></span></div>
                                         </div>
                                         <div className="u-s-m-b-15">
                                             <div className="pd-detail__inline">
@@ -290,7 +318,7 @@ const ProductDetail = () => {
                                                 <a className="nav-link" data-toggle="tab" href="#pd-tag">TAGS</a></li>
                                             <li className="nav-item">
 
-                                                <a className="nav-link" id="view-review" data-toggle="tab" href="#pd-rev">REVIEWS ( {feedbackData.totalElements})
+                                                <a className="nav-link" id="view-review" data-toggle="tab" href="#pd-rev">REVIEWS ( {totalElements})
                                                 </a></li>
                                         </ul>
                                     </div>
@@ -388,7 +416,9 @@ const ProductDetail = () => {
 
                                         {/*--====== Tab 3 ======*/}
                                         <div className="tab-pane" id="pd-rev">
-                                            <Feedback productId={id} onFeedbackData={handleFeedbackData} />
+                                            <FeedbackProvider>
+                                                <Feedback productId={id} onReviewSubmission={handleReviewSubmission} />
+                                            </FeedbackProvider>
                                         </div>
 
                                         {/*--====== End - Tab 3 ======*/}

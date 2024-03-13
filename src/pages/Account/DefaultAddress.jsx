@@ -38,7 +38,7 @@ const DefaultAddress = () => {
                                                 <span className="dash__text u-s-m-b-16">Hello, John Doe</span>
                                                 <ul className="dash__f-list">
                                                     <li>
-                                                        <a href="dashboard">Manage My Account</a></li>
+                                                        <a href="/dashboard">Manage My Account</a></li>
                                                     <li>
                                                         <a href="/my-profile">My Profile</a></li>
                                                     <li>
@@ -51,6 +51,8 @@ const DefaultAddress = () => {
                                                         <a href="/payment-option">My Payment Options</a></li>
                                                     <li>
                                                         <a href="/cancellation">My Returns &amp; Cancellations</a></li>
+                                                    <li>
+                                                        <a href="/booking">My Booking Design</a></li>
                                                 </ul>
                                             </div>
                                         </div>
