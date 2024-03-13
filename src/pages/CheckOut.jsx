@@ -75,9 +75,7 @@ const CheckOut = () => {
             );
             console.log("Check Check out order: ", res);
             const id = res.data.id;
-        console.log("Check Check out order: ", res);
-
-        // Đợi 1 giây trước khi chuyển hướng
+        // console.log("Check Check out order: ", res);
         setTimeout(() => {
             navigate(`/check-out/${id}/thank-you`);
         }, 1000);
@@ -221,11 +219,6 @@ const CheckOut = () => {
                     </div>
                 </div>
                 {/*====== End - Section 1 ======*/}
-
-
-
-
-
                 {/*====== Section 3 ======*/}
                 <div className="u-s-p-b-60">
 
