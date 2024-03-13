@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 // import Shop from './pages/Shop'
 import Shop from "../pages/Shop"
 import Home from "../pages/Home"
@@ -33,7 +33,6 @@ import ThankYou from '../components/CheckOutSuccess/ThankYou'
 import EditAddress from '../pages/Account/EditAddress'
 
 function Routers() {
-
   return (
     <>
       {/* <BrowserRouter> */}
@@ -134,7 +133,7 @@ function Routers() {
       </Routes>
       {/* </BrowserRouter> */}
     </>
-  )
+  );
 }
 
-export default Routers
+export default Routers;
