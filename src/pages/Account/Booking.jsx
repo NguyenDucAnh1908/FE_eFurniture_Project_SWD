@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { UserContext } from '../../context/UserContext';
 
 const Booking = () => {
     const [bookings, setBookings] = useState([]);
+    const { user } = useContext(UserContext);
     const [bookingsPage, setBookingsPage] = useState({
         totalPages: 0,
         totalElements: 0,
@@ -13,9 +15,9 @@ const Booking = () => {
         fetchBookings();
     }, []);
 
-    const fetchBookings = async (page) => {
+    const fetchBookings = async (page, user) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/booking/all?page=${page}&size=10`);
+            const response = await axios.get(`http://localhost:8080/api/v1/booking/all-by-user-id/${user.id}/?page=${page}&size=10`);
             setBookingsPage({
                 totalPages: response.data.totalPages,
                 totalElements: response.data.totalElements,
@@ -33,11 +35,11 @@ const Booking = () => {
     const getStatusColor = (status) => {
         switch (status) {
             case 'confirmed':
-                return 'badge-success-lighten';
+                return 'badge--shipped';
             case 'cancel':
-                return 'badge-danger-lighten';
+                return 'badge--delivered';
             default:
-                return 'badge-info-lighten';
+                return 'badge--processing';
         }
     }
 
@@ -49,7 +51,7 @@ const Booking = () => {
         }
         return '';
     };
-        
+
     return (
         <div>
 
@@ -167,26 +169,44 @@ const Booking = () => {
 
                                                 <div className="m-booking__list">
                                                     {bookings.map(booking => (
-                                                        <div key={booking.id} className="m-booking__get">
+                                                        <div className="m-order__get">
                                                             <div className="manage-o__header u-s-m-b-30">
-                                                                <div className="description-title">
-                                                                    <div className="description-title" style={{ fontWeight: '300', fontSize: 'smaller' }}>August 05 2018 10:29 PM</div>
+                                                                <div className="dash-l-r">
+                                                                    <div>
+                                                                        <div className="manage-o__text-2 u-c-secondary">Booking #{booking.id}</div>
+                                                                        <div>
+                                                                            <div className="manage-o__text-2 u-c-secondary" ><span className="manage-o__text-2 u-c-silver">Meet time:   </span> August 05 2018 10:29 PM</div>
+                                                                        </div>                                                                    </div>
+                                                                    <div>
+                                                                        <div className="dash__link dash__link--brand">
+
+                                                                            <a href={`/view-list-projectbooking/${booking.id}`}>View Detail</a></div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div className="manage-o__description">
                                                                 <div className="description__container">
-                                                                    <a href="/" className="description-title">#000{booking.id}</a>
+                                                                    <div className="description__img-wrap">
+
+                                                                        <img className="u-img-fluid" src="images/product/women/product8.jpg" alt="" /></div>
+                                                                    <div className="description-title">New Dress D Nice Elegant</div>
                                                                 </div>
                                                                 <div className="description__info-wrap">
                                                                     <div>
                                                                         <span className={`manage-o__badge badge ${getStatusColor(booking.status.toLowerCase())}`}>
                                                                             {booking.status}
-                                                                        </span>
+                                                                        </span></div>
 
-                                                                    </div>
+                                                                    <div>
+
+                                                                        <span className="manage-o__text-2 u-c-silver">Total:
+
+                                                                            <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
                                                     ))}
                                                     <br />
                                                     <div className="m-booking__list">

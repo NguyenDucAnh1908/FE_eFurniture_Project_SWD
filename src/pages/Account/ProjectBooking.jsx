@@ -87,12 +87,7 @@ const ProjectBooking = () => {
                             </a>
                           </li>
                           <li>
-                            <a
-                              className="dash-active"
-                              yhref="/view-list-projectbooking"
-                            >
-                              Manage My ProjectBooking
-                            </a>
+                            <a className="dash-active" href="/booking">My Booking Design</a>
                           </li>
                         </ul>
                       </div>
@@ -150,8 +145,7 @@ const ProjectBooking = () => {
                         </h1>
 
                         <span className="dash__text u-s-m-b-30">
-                          Here you can see all products that have been
-                          delivered.
+                          Here you can see your booking project.
                         </span>
                         <form className="m-order u-s-m-b-30">
                           <div className="m-order__select-wrapper"></div>
@@ -284,58 +278,58 @@ const ProjectBooking = () => {
                                                     </div> */}
                           {error && <div>Error: {error}</div>}
                           <div
-  key={projectBookings.id}
-  className="project-booking-card"
-  style={{
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    padding: '20px',
-    margin: '10px 0',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-    backgroundColor: '#f9f9f9',
-    display: 'flex',
-    flexDirection: 'column',
-  }}
->
-  <div className="project-booking-header">
-    <div className="order-info" style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
-      <div className="order-number" style={{ fontWeight: 'bold', fontSize: '18px' }}>{`Order #${projectBookings.code}`}</div>
-      <span className="status-badge" style={{ backgroundColor: 'green', color: '#fff', padding: '5px 10px', borderRadius: '4px' }}>
-          Delivered
-        </span>
-    </div>
-  </div>
-  <div className="project-booking-details" style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-    <div className="project-booking-image" style={{ marginRight: '20px' }}>
-      <img
-        className="project-booking-image"
-        src={`images/product/men/${projectBookings.projectType}.jpg`}
-        alt=""
-        style={{ maxWidth: '150px', borderRadius: '8px' }}
-      />
-    </div>
-    <div className="project-booking-info">
-      <div className="project-name" style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>
-        {projectBookings.projectName}
-      </div>
-      <div className="order-status" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-       
-        <div className="order-date" style={{ color: '#666' }}>{`Placed on ${projectBookings.timeLine}`}</div>
-        
-      </div>
-      <div className="occupants-number" style={{ fontSize: '16px', color: '#666', marginBottom: '5px' }}>{`Quantity: ${projectBookings.occupantsNumber}`}</div>
-      <div className="total-price" style={{ fontSize: '16px', color: '#666' }}>{`Total: $${projectBookings.projectPrice}`}</div>
-      <div className="size" style={{ fontSize: '16px', color: '#666', marginTop: '10px' }}>{`Size: ${projectBookings.size}`}</div>
-      <div className="design-style" style={{ fontSize: '16px', color: '#666', marginTop: '10px' }}>{`Design Style: ${projectBookings.designStyle}`}</div>
-      <div className="color-schemes" style={{ fontSize: '16px', color: '#666', marginTop: '10px' }}>{`Color Schemes: ${projectBookings.colorSchemes}`}</div>
-      <div className="intend-use" style={{ fontSize: '16px', color: '#666', marginTop: '10px' }}>{`Intended Use: ${projectBookings.intendUse}`}</div>
-      <div className="occupants-number" style={{ fontSize: '16px', color: '#666', marginTop: '10px' }}>{`Occupants Number: ${projectBookings.occupantsNumber}`}</div>
-    </div>
-  </div>
-  <div className="manage-link" style={{ marginTop: '20px' }}>
-    <a href="/manage-order" style={{ color: 'blue', textDecoration: 'underline' }}>MANAGE</a>
-  </div>
-</div>
+                            key={projectBookings.id}
+                            className="project-booking-card"
+                            style={{
+                              border: '1px solid #ddd',
+                              borderRadius: '8px',
+                              padding: '20px',
+                              margin: '10px 0',
+                              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                              backgroundColor: '#f9f9f9',
+                              display: 'flex',
+                              flexDirection: 'column',
+                            }}
+                          >
+                            <div className="project-booking-header">
+                              <div className="order-info" style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                                <div className="order-number" style={{ fontWeight: 'bold', fontSize: '18px' }}>{`Booking Project #${projectBookings.code}`}</div>
+                                <span className="status-badge" style={{ backgroundColor: 'green', color: '#fff', padding: '5px 10px', borderRadius: '4px' }}>
+                                  Delivered
+                                </span>
+                              </div>
+                            </div>
+                            <div className="project-booking-details" style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                              <div className="project-booking-image" style={{ marginRight: '20px' }}>
+                                <img
+                                  className="project-booking-image"
+                                  src={`images/product/men/${projectBookings.projectType}.jpg`}
+                                  alt=""
+                                  style={{ maxWidth: '150px', borderRadius: '8px' }}
+                                />
+                              </div>
+                              <div className="project-booking-info">
+                                <div className="project-name" style={{ fontWeight: 'bold', fontSize: '20px', marginBottom: '10px' }}>
+                                  {projectBookings.projectName}
+                                </div>
+                                <div className="order-status" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+
+                                  <div className="order-date" style={{ color: '#666' }}>{`Placed on ${projectBookings.timeLine}`}</div>
+
+                                </div>
+                                <div className="occupants-number" style={{ fontSize: '16px', color: '#666', marginBottom: '5px' }}>{`Quantity: ${projectBookings.occupantsNumber}`}</div>
+                                <div className="total-price" style={{ fontSize: '16px', color: '#666' }}>{`Total: $${projectBookings.projectPrice}`}</div>
+                                <div className="size" style={{ fontSize: '16px', color: '#666', marginTop: '10px' }}>{`Size: ${projectBookings.size}`}</div>
+                                <div className="design-style" style={{ fontSize: '16px', color: '#666', marginTop: '10px' }}>{`Design Style: ${projectBookings.designStyle}`}</div>
+                                <div className="color-schemes" style={{ fontSize: '16px', color: '#666', marginTop: '10px' }}>{`Color Schemes: ${projectBookings.colorSchemes}`}</div>
+                                <div className="intend-use" style={{ fontSize: '16px', color: '#666', marginTop: '10px' }}>{`Intended Use: ${projectBookings.intendUse}`}</div>
+                                <div className="occupants-number" style={{ fontSize: '16px', color: '#666', marginTop: '10px' }}>{`Occupants Number: ${projectBookings.occupantsNumber}`}</div>
+                              </div>
+                            </div>
+                            <div className="manage-link" style={{ marginTop: '20px' }}>
+                              <a href="/manage-order" style={{ color: 'blue', textDecoration: 'underline' }}>MANAGE</a>
+                            </div>
+                          </div>
 
                         </div>
                       </div>

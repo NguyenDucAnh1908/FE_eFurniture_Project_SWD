@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { UserContext } from '../context/UserContext';
 
 const Booking = () => {
+  const { user } = useContext(UserContext);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -15,7 +17,7 @@ const Booking = () => {
     provinceName: '',
     status: '',
     note: '',
-    userId: '1'
+    userId: user.id
   });
 
   const [provinces, setProvinces] = useState([]);
@@ -23,6 +25,7 @@ const Booking = () => {
   const [wards, setWards] = useState([]);
 
   useEffect(() => {
+    console.log(user.id);
     axios.get('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', {
       headers: {
         'token': '05e9c956-d27f-11ee-9414-ce214539f696'
