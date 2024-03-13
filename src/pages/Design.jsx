@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const Design = () => {
+    const { id } = useParams(); // Lấy tham số `id` từ URL
+
     const [designs, setDesigns] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/v1/designs/get-designs-by-project/1')
+        axios.get(`http://localhost:8080/api/v1/designs/get-designs-by-project/${id}`)
             .then(response => {
                 setDesigns(response.data);
             })
             .catch(error => {
                 console.error('Error fetching designs:', error);
             });
-    }, []);
+    }, [id]);
+
+ 
+
 
 
     return (
@@ -82,7 +88,9 @@ const Design = () => {
                                                         <a href="/cancellation">My Returns & Cancellations</a></li>
                                                     <li>
 
-                                                        <a className="dash-active" href="/design">Design</a></li>
+                                                        
+                                                    <a href="/booking">My Booking Design</a>
+                                                        </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -174,9 +182,7 @@ const Design = () => {
                                         </div>
                                         <div>
 
-                                            <a className="dash__custom-link btn--e-brand-b-2" href="/edit-address"><i className="fas fa-plus u-s-m-r-8"></i>
-
-                                                <span>Add New Address</span></a></div>
+                                           </div>
                                     </div>
                                 </div>
                             </div>

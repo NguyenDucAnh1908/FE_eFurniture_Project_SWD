@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 const ProjectBooking = () => {
   const { bookingId } = useParams();
   const [projectBookings, setProjectBookings] = useState("");
@@ -87,11 +88,8 @@ const ProjectBooking = () => {
                             </a>
                           </li>
                           <li>
-                            <a
-                              className="dash-active"
-                              yhref="/view-list-projectbooking"
-                            >
-                              Manage My ProjectBooking
+                            <a className="dash-active" href="/booking">
+                              My Booking Design
                             </a>
                           </li>
                         </ul>
@@ -150,234 +148,253 @@ const ProjectBooking = () => {
                         </h1>
 
                         <span className="dash__text u-s-m-b-30">
-                          Here you can see detail project booking that have been 
-                          
+                          Here you can see your booking project.
                         </span>
                         <form className="m-order u-s-m-b-30">
                           <div className="m-order__select-wrapper"></div>
                         </form>
                         <div className="m-order__list">
-                          {/* <div>
-                            {error && <div>Error: {error}</div>}
-                            <h2>Project Bookings</h2>
-                            <ul>
-                              {projectBookings.map((booking) => (
-                                <li key={booking.id}>
-                                  {booking.projectName} - {booking.projectType}
-                                </li>
-                              ))}
-                            </ul>
-                          </div> */}
-                          {/* <div className="m-order__get">
-                                                        <div className="manage-o__header u-s-m-b-30">
-                                                            <div className="dash-l-r">
-                                                                <div>
-                                                                    <div className="manage-o__text-2 u-c-secondary">Order #305423126</div>
-                                                                    <div className="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
-                                                                </div>
-                                                                <div>
-                                                                    <div className="dash__link dash__link--brand">
-
-                                                                        <a href="/manage-order">MANAGE</a></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="manage-o__description">
-                                                            <div className="description__container">
-                                                                <div className="description__img-wrap">
-
-                                                                    <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt="" /></div>
-                                                                <div className="description-title">Yellow Wireless Headphone</div>
-                                                            </div>
-                                                            <div className="description__info-wrap">
-                                                                <div>
-
-                                                                    <span className="manage-o__badge badge--processing">Processing</span></div>
-                                                                <div>
-
-                                                                    <span className="manage-o__text-2 u-c-silver">Quantity:
-
-                                                                        <span className="manage-o__text-2 u-c-secondary">1</span></span></div>
-                                                                <div>
-
-                                                                    <span className="manage-o__text-2 u-c-silver">Total:
-
-                                                                        <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="m-order__get">
-                                                        <div className="manage-o__header u-s-m-b-30">
-                                                            <div className="dash-l-r">
-                                                                <div>
-                                                                    <div className="manage-o__text-2 u-c-secondary">Order #305423126</div>
-                                                                    <div className="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
-                                                                </div>
-                                                                <div>
-                                                                    <div className="dash__link dash__link--brand">
-
-                                                                        <a href="/manage-order">MANAGE</a></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="manage-o__description">
-                                                            <div className="description__container">
-                                                                <div className="description__img-wrap">
-
-                                                                    <img className="u-img-fluid" src="images/product/women/product8.jpg" alt="" /></div>
-                                                                <div className="description-title">New Dress D Nice Elegant</div>
-                                                            </div>
-                                                            <div className="description__info-wrap">
-                                                                <div>
-
-                                                                    <span className="manage-o__badge badge--shipped">Shipped</span></div>
-                                                                <div>
-
-                                                                    <span className="manage-o__text-2 u-c-silver">Quantity:
-
-                                                                        <span className="manage-o__text-2 u-c-secondary">1</span></span></div>
-                                                                <div>
-
-                                                                    <span className="manage-o__text-2 u-c-silver">Total:
-
-                                                                        <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
-                                                            </div>
-                                                        </div>
-                                                    </div> */}
-                          {/* <div className="m-order__get">
-                                                        <div className="manage-o__header u-s-m-b-30">
-                                                            <div className="dash-l-r">
-                                                                <div>
-                                                                    <div className="manage-o__text-2 u-c-secondary">Order #305423126</div>
-                                                                    <div className="manage-o__text u-c-silver">Placed on 26 Oct 2016 09:08:37</div>
-                                                                </div>
-                                                                <div>
-                                                                    <div className="dash__link dash__link--brand">
-
-                                                                        <a href="/manage-order">MANAGE</a></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="manage-o__description">
-                                                            <div className="description__container">
-                                                                <div className="description__img-wrap">
-
-                                                                    <img className="u-img-fluid" src="images/product/men/product8.jpg" alt="" /></div>
-                                                                <div className="description-title">New Fashion D Nice Elegant</div>
-                                                            </div>
-                                                            <div className="description__info-wrap">
-                                                                <div>
-
-                                                                    <span className="manage-o__badge badge--delivered">Delivered</span></div>
-                                                                <div>
-
-                                                                    <span className="manage-o__text-2 u-c-silver">Quantity:
-
-                                                                        <span className="manage-o__text-2 u-c-secondary">1</span></span></div>
-                                                                <div>
-
-                                                                    <span className="manage-o__text-2 u-c-silver">Total:
-
-                                                                        <span className="manage-o__text-2 u-c-secondary">$16.00</span></span></div>
-                                                            </div>
-                                                        </div>
-                                                    </div> */}
-                          {error && <div>Error: {error}</div>}
-                          <div
-                            key={projectBookings.id}
-                            className="project-booking-card"
-                            style={{
-                              border: "1px solid #ddd",
-                              borderRadius: "8px",
-                              padding: "20px",
-                              margin: "10px 0",
-                              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                              backgroundColor: "#f9f9f9",
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <div className="project-booking-header">
-                              <div
-                                className="order-info"
-                                style={{
-                                  marginBottom: "10px",
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                }}
-                              >
+                          {error && <div>{}</div>}
+                          {projectBookings ? (
+                            <div
+                              key={projectBookings.id}
+                              className="project-booking-card"
+                              style={{
+                                border: "1px solid #ddd",
+                                borderRadius: "8px",
+                                padding: "20px",
+                                margin: "10px 0",
+                                boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                                backgroundColor: "#f9f9f9",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <div className="project-booking-header">
                                 <div
-                                  className="order-number"
+                                  className="order-info"
                                   style={{
-                                    fontWeight: "bold",
-                                    fontSize: "40px ",
+                                    marginBottom: "10px",
+                                    display: "flex",
+                                    justifyContent: "space-between",
                                   }}
-                                >{`Order #${projectBookings.code}`}</div>
-                                {/* <span className="status-badge" style={{ backgroundColor: 'green', color: '#fff', padding: '5px 10px', borderRadius: '4px' }}>
-          Delivered
-        </span> */}
+                                >
+                                  <div
+                                    className="order-number"
+                                    style={{
+                                      fontWeight: "bold",
+                                      fontSize: "25px",
+                                    }}
+                                  >{`Booking Project: #${projectBookings.code}`}</div>
+                                  <span
+                                    className="status-badge"
+                                    style={{
+                                      color: "#fff",
+                                      padding: "5px 10px",
+                                      borderRadius: "4px",
+                                    }}
+                                  >
+                                    <button
+                                      style={{
+                                        backgroundColor: "blue",
+                                        color: "white",
+                                        fontSize: "18px",
+                                        border: "none",
+                                        padding: "10px 20px",
+                                        borderRadius: "5px",
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      <Link
+                                        to={`/design/${projectBookings.id}`}
+                                        style={{
+                                          color: "white",
+                                          textDecoration: "none",
+                                        }}
+                                      >
+                                        MANAGE
+                                      </Link>
+                                    </button>
+                                  </span>
+                                </div>
+                                <hr style={{ margin: "10px 0" }} />{" "}
+                                {/* Add horizontal rule here */}
+                              </div>
+
+                              <div className="project-booking-details">
+                                <div className="project-booking-image">
+                                  <img
+                                    className="project-booking-image"
+                                    src={`images/product/men/${projectBookings.projectType}.jpg`}
+                                    alt=""
+                                    style={{
+                                      maxWidth: "150px",
+                                      borderRadius: "8px",
+                                    }}
+                                  />
+                                </div>
+                                <div
+                                  className="project-booking-info"
+                                  style={{ fontSize: "18px" }}
+                                >
+                                  <div className="project-name">
+                                    <span
+                                      style={{
+                                        fontWeight: "bold",
+                                        fontSize: "30px",
+                                      }}
+                                    >
+                                      {projectBookings.projectName}
+                                    </span>
+                                  </div>
+                                  <div className="order-status">
+                                    <span
+                                      style={{
+                                        fontWeight: "bold",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      TimeLine:
+                                    </span>{" "}
+                                    <span
+                                      style={{
+                                        color: "#666",
+                                        fontSize: "20px",
+                                      }}
+                                    >{`${projectBookings.timeLine}`}</span>
+                                  </div>
+                                  <div className="occupants-number">
+                                    <span
+                                      style={{
+                                        fontWeight: "bold",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      OccupantsNumber:
+                                    </span>{" "}
+                                    <span
+                                      style={{
+                                        color: "#666",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      {projectBookings.occupantsNumber}
+                                    </span>
+                                  </div>
+
+                                  <div className="design-style">
+                                    <span
+                                      style={{
+                                        fontWeight: "bold",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      Design Style:
+                                    </span>{" "}
+                                    <span
+                                      style={{
+                                        color: "#666",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      {projectBookings.designStyle}
+                                    </span>
+                                  </div>
+                                  <div className="color-schemes">
+                                    <span
+                                      style={{
+                                        fontWeight: "bold",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      Color Schemes:
+                                    </span>{" "}
+                                    <span
+                                      style={{
+                                        color: "#666",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      {projectBookings.colorSchemes}
+                                    </span>
+                                  </div>
+                                  <div className="intend-use">
+                                    <span
+                                      style={{
+                                        fontWeight: "bold",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      Intended Use:
+                                    </span>{" "}
+                                    <span
+                                      style={{
+                                        color: "#666",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      {projectBookings.intendUse}
+                                    </span>
+                                  </div>
+                                  {/* <div className="occupants-number">
+                                  <span
+                                    style={{
+                                      fontWeight: "bold",
+                                      fontSize: "20px",
+                                    }}
+                                  >
+                                    Occupants Number:
+                                  </span>{" "}
+                                  <span
+                                    style={{ color: "#666", fontSize: "20px" }}
+                                  >
+                                    {projectBookings.occupantsNumber}
+                                  </span>
+                                </div> */}
+                                  <div className="size">
+                                    <span
+                                      style={{
+                                        fontWeight: "bold",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      Size:
+                                    </span>{" "}
+                                    <span
+                                      style={{
+                                        color: "#666",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      {projectBookings.size}
+                                    </span>
+                                  </div>
+                                  <div className="total-price">
+                                    <span
+                                      style={{
+                                        fontWeight: "bold",
+                                        fontSize: "20px",
+                                      }}
+                                    >
+                                      Price:
+                                    </span>{" "}
+                                    <span
+                                      style={{
+                                        color: "#666",
+                                        fontSize: "20px",
+                                      }}
+                                    >{`$${projectBookings.projectPrice}`}</span>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                            <div className="project-booking-details">
-  <div className="project-booking-image">
-    <img
-      className="project-booking-image"
-      src={`images/product/men/${projectBookings.projectType}.jpg`}
-      alt=""
-      style={{
-        maxWidth: "150px",
-        borderRadius: "8px",
-      }}
-    />
-  </div>
-  <div className="project-booking-info" style={{ fontSize: "18px" }}>
-    <div className="project-name">
-      <span style={{ fontWeight: "bold", fontSize: "30px" }}>{projectBookings.projectName}</span>
-    </div>
-    <div className="order-status">
-    <span style={{ fontWeight: "bold", fontSize: "20px" }}>TimeLine:</span>{" "}
-      <span style={{ color: "#666", fontSize: "20px" }}>{`${projectBookings.timeLine}`}</span>
-    </div>
-    <div className="occupants-number">
-      <span style={{ fontWeight: "bold", fontSize: "20px" }}>OccupantsNumber:</span>{" "}
-      <span style={{ color: "#666", fontSize: "20px" }}>{projectBookings.occupantsNumber}</span>
-    </div>
-    <div className="size">
-      <span style={{ fontWeight: "bold", fontSize: "20px" }}>Size:</span>{" "}
-      <span style={{ color: "#666", fontSize: "20px" }}>{projectBookings.size}</span>
-    </div>
-    <div className="design-style">
-      <span style={{ fontWeight: "bold", fontSize: "20px" }}>Design Style:</span>{" "}
-      <span style={{ color: "#666", fontSize: "20px" }}>{projectBookings.designStyle}</span>
-    </div>
-    <div className="color-schemes">
-      <span style={{ fontWeight: "bold", fontSize: "20px" }}>Color Schemes:</span>{" "}
-      <span style={{ color: "#666", fontSize: "20px" }}>{projectBookings.colorSchemes}</span>
-    </div>
-    <div className="intend-use">
-      <span style={{ fontWeight: "bold", fontSize: "20px" }}>Intended Use:</span>{" "}
-      <span style={{ color: "#666", fontSize: "20px" }}>{projectBookings.intendUse}</span>
-    </div>
-    <div className="occupants-number">
-      <span style={{ fontWeight: "bold", fontSize: "20px" }}>Occupants Number:</span>{" "}
-      <span style={{ color: "#666", fontSize: "20px" }}>{projectBookings.occupantsNumber}</span>
-    </div>
-    <div className="total-price">
-      <span style={{ fontWeight: "bold", fontSize: "20px" }}>Price:</span>{" "}
-      <span style={{ color: "#666", fontSize: "20px" }}>{`$${projectBookings.projectPrice}`}</span>
-    </div>
-  </div>
-</div>
-
-<div className="manage-button" style={{ marginTop: "20px" }}>
-  <button style={{ backgroundColor: "blue", color: "white", fontSize: "18px", border: "none", padding: "10px 20px", borderRadius: "5px", cursor: "pointer" }}>
-    <a href="/manage-order" style={{ color: "white", textDecoration: "none" }}>
-      MANAGE
-    </a>
-  </button>
-</div>
-
-                          </div>
+                          ) : (
+                            <div
+                              style={{ marginTop: "20px", fontSize: "50px" }}
+                            >
+                              Empty
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

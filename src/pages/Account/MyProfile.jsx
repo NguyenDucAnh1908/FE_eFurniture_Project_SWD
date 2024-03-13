@@ -91,7 +91,11 @@ const MyProfile = () => {
                                                         <a href="/cancellation">My Returns & Cancellations</a></li>
                                                     <li>
 
-                                                        <a href="/design">Design</a></li>
+                                                        <a href="/booking">My Booking Design</a>
+
+                                                 
+                                                    </li>
+
                                                 </ul>
                                             </div>
                                         </div>

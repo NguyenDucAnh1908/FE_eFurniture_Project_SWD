@@ -22,6 +22,9 @@ import NotFound from '../pages/NotFound'
 import PrivateRounter from './PrivateRount/PrivateRounter'
 import Test from '../pages/test'
 import IndexProductDetail from '../components/ViewProductDetail/IndexProductDetail'
+import BookingForm from '../pages/BookingForm'
+import Dashboard from '../pages/Account/Dashboard'
+import Booking from '../pages/Account/Booking'
 import ProjectBooking from '../pages/Account/ProjectBooking'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import ProductByCategory from '../pages/Product/ProductByCategory'
@@ -44,6 +47,40 @@ function Routers() {
 
         <Route path='/login' element={<Login />} />
 
+        <Route path='/product-detail/:id' element={<ProductDetail />} />
+
+        <Route path='/cart' element={<Cart />} />
+
+        {/* <Route path='/check-out' element={<CheckOut/>}/> */}
+
+        <Route path='/check-out/thank-you' element={<CheckOutSuccess />} />
+
+        <Route path='/blog' element={<Blog />} />
+
+        <Route path='/blog-detail/:id' element={<BlogDetail />} />
+
+        <Route path='/my-profile' element={<MyProfile />} />
+
+        <Route path='/address-book' element={<AddressBook />} />
+
+        <Route path='/my-order' element={<MyOrder />} />
+
+        <Route path='/track-order' element={<TrackOrder />} />
+
+        <Route path='/cancellation' element={<Cancellation />} />
+
+        <Route path='/payment-option' element={<PaymentOption />} />
+
+        <Route path='/wish-list' element={<Wishlist />} />
+
+        <Route path='/edit-address' element={<AddressBookEdit />} />
+
+        <Route path='/booking-form' element={<BookingForm />} />
+
+        <Route path='/booking' element={<Booking />} />
+
+        <Route path='/dashboard' element={<Dashboard />} />
+
         <Route path='/register' element={<Register />} />
 
         <Route path='/product-detail/:id' element={<ProductDetail />} />
@@ -56,7 +93,7 @@ function Routers() {
 
         <Route path='/blog' element={<Blog />} />
 
-        <Route path='/design' element={<Design />} />
+        <Route path='/design/:id' element={<Design />} />
 
         <Route path='/design-detail/:id' element={<DesignDetail />} />
 

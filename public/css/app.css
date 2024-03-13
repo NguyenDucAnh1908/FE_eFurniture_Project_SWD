@@ -6415,3 +6415,38 @@ input::-ms-clear {
 #js-product-detail-modal-thumbnail:hover .pt-prev, #js-product-detail-modal-thumbnail:hover .pt-next {
   opacity: .8; }
 
+  .badge-success-lighten {
+    background-color: #28a745;
+    color: #fff;
+  }
+  
+  .badge-danger-lighten {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+  .badge-info-lighten {
+    background-color: #17a2b8;
+    color: #fff;
+  }
+.pagination .btn-secondary {
+  background-color: #6c757d; 
+  border-color: #6c757d; 
+  color: #fff;
+  padding: 0.375rem 0.75rem;
+}
+
+.pagination .btn-secondary:hover {
+  background-color: #5a6268; 
+  border-color: #5a6268; 
+  color: #fff; 
+}
+
+.pagination .btn-secondary:focus {
+  box-shadow: none;
+}
+
+.pagination .btn-secondary:active {
+  background-color: #495057;
+  border-color: #495057; 
+}

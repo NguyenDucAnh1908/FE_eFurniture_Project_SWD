@@ -1,68 +1,91 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import TextEditor from '../components/Editor/TextEditor';
+import { useFeedback } from '../Feedback/FeedbackContext';
 
-function Feedback({ productId, onFeedbackData }) {
+function Feedback({ productId, onReviewSubmission }) {
     const [reviews, setReviews] = useState([]);
     const [productDetail, setProductDetail] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [loadingReviews, setLoadingReviews] = useState(true);
     const [averageRating, setAverageRating] = useState(null);
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState('');
+    const [replyingReviewId, setReplyingReviewId] = useState(null);
+    const [replyText, setReplyText] = useState('');
+    const { state, dispatch } = useFeedback();
+    const [displayedItems, setDisplayedItems] = useState({});
+
 
     const handleRatingChange = (value) => {
         setRating(value);
     };
 
-    const handleReviewTextChange = (event) => {
-        setReviewText(event.target.value);
+    const handleReplyClick = (reviewId) => {
+        setReplyingReviewId(reviewId);
     };
 
-    const handlePageChange = (newPage) => {
-        if (newPage >= 0 && newPage < totalPages) {
-            setCurrentPage(newPage);
-        }
+    const handleReviewTextChange = (newData) => {
+        setReviewText(newData);
     };
 
-    const fetchProductDetail = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/v1/products/${productId}`);
-            setProductDetail(response.data);
-        } catch (error) {
-            console.error('Error fetching product detail:', error);
-        }
-    };
-
-    const fetchFeedbackData = async () => {
-        try {
-            const response1 = await axios.get(`http://localhost:8080/api/v1/feedbacks/product/${productId}`);
-            const response2 = await axios.get(`http://localhost:8080/api/v1/feedbacks/average-rating/${productId}?size=10&page=${currentPage}`);
-
-            setReviews(response1.data.content);
-            setAverageRating(response2.data);
-            setCurrentPage(response1.data.number);
-            setTotalPages(response1.data.totalPages);
-            setTotalElements(response1.data.totalElements);
-            setLoading(false);
-
-            if (onFeedbackData && typeof onFeedbackData === 'function') {
-                onFeedbackData({ totalElements, averageRating });
+    const handlePageChange = async (newPage) => {
+        if (newPage >= 0 && newPage < totalPages && newPage !== currentPage) {
+            try {
+                setCurrentPage(newPage);
+            } catch (error) {
+                console.error('Error fetching feedback:', error);
+                setLoadingReviews(false);
             }
-        } catch (error) {
-            console.error('Error fetching feedback:', error);
-            setLoading(false);
         }
     };
 
     useEffect(() => {
+        const fetchProductDetail = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/v1/products/${productId}`);
+                setProductDetail(response.data);
+            } catch (error) {
+                console.error('Error fetching product detail:', error);
+            }
+        };
         fetchProductDetail();
     }, [productId]);
 
     useEffect(() => {
-        fetchFeedbackData();
-    }, [productId, currentPage, onFeedbackData]);
+        // Initialize displayedItems for each feedback
+        const initialDisplayedItems = {};
+        reviews.forEach((review) => {
+            initialDisplayedItems[review.id] = 2; // Initial number of displayed items
+        });
+        setDisplayedItems(initialDisplayedItems);
+    }, [reviews]);
+
+
+
+    const fetchFeedbackData = async (page) => {
+        try {
+            const response1 = await axios.get(`http://localhost:8080/api/v1/feedbacks/product/${productId}?size=10&page=${page}`);
+            const response2 = await axios.get(`http://localhost:8080/api/v1/feedbacks/average-rating/${productId}?size=10&page=${page}`);
+
+            setReviews(response1.data.content);
+            setAverageRating(response2.data);
+            setTotalPages(response1.data.totalPages);
+            setTotalElements(response1.data.totalElements);
+            setLoadingReviews(false);
+            console.log("Check feedback1: ", response1.data);
+            console.log("Check feedback2: ", response2.data);
+        } catch (error) {
+            console.error('Error fetching feedback:', error);
+            setLoadingReviews(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchFeedbackData(currentPage);
+    }, [currentPage]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -70,20 +93,74 @@ function Feedback({ productId, onFeedbackData }) {
         try {
             const response = await axios.post(`http://localhost:8080/api/v1/feedbacks/create`, {
                 rating,
-                status: 'status',
+                status: 'Unconfirmed',
                 comment: reviewText,
                 productId: productId,
                 userId: 1,
             });
 
-            // Update the reviews state immediately with the new review
-            setReviews((prevReviews) => [response.data, ...prevReviews]);
+            dispatch({ type: 'ADD_FEEDBACKS', payload: response.data.content });
 
+            setReviews((prevReviews) => [response.data, ...prevReviews]);
+            setTotalElements((prevCount) => prevCount + 1);
+            const newAverageRating = ((averageRating || 0) * totalElements + response.data.rating) / (totalElements + 1);
+            setAverageRating(newAverageRating);
+            setRating(0);
+            setReviewText('');
+            const ratingRadios = document.getElementsByName('rating');
+            ratingRadios.forEach((radio) => (radio.checked = false));
+
+            fetchFeedbackData(currentPage);
+            onReviewSubmission();
             console.log('Review submitted successfully:', response.data);
         } catch (error) {
-            console.error('Error submitting review:', error);
+            if (error.response && error.response.status === 400) {
+                console.log('Validation errors:', error.response.data);
+            } else {
+                console.error('Error submitting review:', error);
+            }
         }
     };
+
+    const handleLoadMore = (feedbackId) => {
+        setDisplayedItems((prevItems) => {
+            const newDisplayedItems = { ...prevItems };
+            newDisplayedItems[feedbackId] = (newDisplayedItems[feedbackId] || 2) + 2;
+            return newDisplayedItems;
+        });
+    };
+    
+    const handleSubmitReply = async (event, feedbackId, replyText, level) => {
+        event.preventDefault();
+        console.log('FeedbackId:', feedbackId);
+        try {
+            if (!feedbackId) {
+                console.error('Invalid feedbackId:', feedbackId);
+                return;
+            }
+
+            const response = await axios.post(`http://localhost:8080/api/v1/feedbacks/reply/${feedbackId}/`, {
+                comment: replyText,
+                level: level + 1,
+                replierId: 1,
+            });
+
+            dispatch({ type: 'ADD_REPLY', payload: { feedbackId, reply: response.data } });
+            fetchFeedbackData(currentPage);
+            onReviewSubmission();
+            console.log('Reply submitted successfully:', response.data);
+        } catch (error) {
+            console.error('Error submitting reply:', error);
+        } finally {
+            // Reset the reply state after submission, whether it succeeds or fails
+            setReplyText('');
+            setReplyingReviewId(null);
+        }
+    };
+
+
+
+
 
     const generateStarRating = (rating) => {
         const fullStars = Math.floor(rating);
@@ -107,33 +184,32 @@ function Feedback({ productId, onFeedbackData }) {
         return stars;
     };
 
-    const parseHtml = (htmlString) => {
-        const doc = new DOMParser().parseFromString(htmlString, 'text/html');
-        return doc.body.textContent || '';
-    };
-
     return (
         <div>
             <div className="tab-pane" id="pd-rev">
                 <div className="pd-tab__rev">
                     <div className="u-s-m-b-30">
-                        {reviews.length > 0 && averageRating !== null && !isNaN(averageRating) && (
-                            <div className="pd-tab__rev-score">
-                                <div className="u-s-m-b-8">
-                                    <h2>
-                                        {totalElements} Reviews - {averageRating.toFixed(1)} (Overall)
-                                    </h2>
+                        {loadingReviews ? (
+                            <p>Loading reviews...</p>
+                        ) : (
+                            reviews.length > 0 && averageRating !== null && !isNaN(averageRating) && (
+                                <div className="pd-tab__rev-score">
+                                    <div className="u-s-m-b-8">
+                                        <h2>
+                                            {totalElements} Reviews - {averageRating.toFixed(1)} (Overall)
+                                        </h2>
+                                    </div>
+                                    <div className="gl-rating-style-2 u-s-m-b-8">{generateStarRating(averageRating)}</div>
+                                    <div className="u-s-m-b-8">
+                                        <h4>We want to hear from you!</h4>
+                                    </div>
+                                    <span className="gl-text">Tell us what you think about this item</span>
                                 </div>
-                                <div className="gl-rating-style-2 u-s-m-b-8">{generateStarRating(averageRating)}</div>
-                                <div className="u-s-m-b-8">
-                                    <h4>We want to hear from you!</h4>
-                                </div>
-                                <span className="gl-text">Tell us what you think about this item</span>
-                            </div>
+                            )
                         )}
                     </div>
                     <div className="u-s-m-b-30">
-                        <form className="pd-tab__rev-f1">
+                        <div className="pd-tab__rev-f1">
                             <div className="rev-f1__group">
                                 <div className="u-s-m-b-15">
                                     <div>
@@ -148,7 +224,7 @@ function Feedback({ productId, onFeedbackData }) {
                                     </select>
                                 </div>
                             </div>
-                            {loading ? (
+                            {loadingReviews ? (
                                 <p>Loading reviews...</p>
                             ) : (
                                 <>
@@ -156,39 +232,74 @@ function Feedback({ productId, onFeedbackData }) {
                                         <div key={index} className="review-o u-s-m-b-15">
                                             <div className="review-o__info u-s-m-b-8">
                                                 <span className="review-o__name">{review.userFullName}</span>
-                                                <span className="review-o__date">{review.createdAt}</span>
+                                                <span className="review-o__date">{review.created_at}</span>
                                             </div>
-                                            <div key={index} className="review-o__item">
+
+                                            <div className="review-o__item">
                                                 <div className="review-o__rating gl-rating-style u-s-m-b-8">
                                                     {generateStarRating(review.rating)}
                                                     <span>({review.rating})</span>
                                                 </div>
                                             </div>
-                                            <p className="review-o__text">{parseHtml(review.comment)}</p>
-                                            {/* <p className="review-o__text" dangerouslySetInnerHTML={{ __html: review.comment }}></p> */}
+
+                                            <p className="review-o__text" dangerouslySetInnerHTML={{ __html: review.comment }}></p>
+
+                                            {review.replies && review.replies.map((reply) => (
+                                                <div key={reply.id} className="review-o u-s-m-b-15" style={{ marginLeft: `${(reply.level + 1) * 48}px` }}>
+                                                    <div className="review-o__info u-s-m-b-8">
+                                                        <span className="review-o__name">Replier: {reply.userFullName}</span>
+                                                        <span className="review-o__date">{reply.updated_at}</span>
+                                                    </div>
+                                                    <p className="reply-o__text">{reply.comment}</p>
+
+                                                    {!replyingReviewId && (
+                                                        <a onClick={() => handleReplyClick(reply.id)}>Reply</a>
+                                                    )}
+
+                                                    {replyingReviewId === reply.id && (
+                                                        <form onSubmit={(event) => handleSubmitReply(event, review.id, replyText, reply.level)}>
+                                                            <label htmlFor="replyText">Your Reply:</label>
+                                                            <textarea
+                                                                id="replyText"
+                                                                value={replyText}
+                                                                onChange={(e) => setReplyText(e.target.value)}
+                                                            ></textarea>
+                                                            <button type="submit">Submit Reply</button>
+                                                            <button type="button" onClick={() => setReplyingReviewId(null)}>Cancel</button>
+                                                        </form>
+                                                    )}
+                                                </div>
+                                            ))}
+
+                                            {review.replies && review.replies.length > (displayedItems[review.id] || 2) && (
+                                                <a onClick={() => handleLoadMore(review.id)} type="button">
+                                                    Load More
+                                                </a>
+                                            )}
+
                                         </div>
                                     ))}
-
                                     {totalPages > 1 && (
-                                        <div className="pagination">
-                                            <button type="button" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
-                                                Previous
-                                            </button>
-
-                                            <span>{`Page ${currentPage + 1} of ${totalPages}`}</span>
-                                            <button type="button" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
-                                                Next
-                                            </button>
+                                        <div className="u-s-p-y-60">
+                                            <ul className="shop-p__pagination">
+                                                <li>
+                                                    <a className="fas fa-angle-left" type="button" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}></a>
+                                                </li>
+                                                <span>{`Page ${currentPage + 1} of ${totalPages}`}</span>
+                                                <li>
+                                                    <a className="fas fa-angle-right" type="button" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}></a>
+                                                </li>
+                                            </ul>
                                         </div>
                                     )}
+
                                 </>
                             )}
-                        </form>
+                        </div>
                     </div>
                     <div className="u-s-m-b-30">
                         <form className="pd-tab__rev-f2" onSubmit={handleSubmit}>
                             <h2 className="u-s-m-b-15">Add a Review</h2>
-                            <span className="gl-text u-s-m-b-15">Your email address will not be published. Required fields are marked *</span>
                             <div className="u-s-m-b-30">
                                 <div className="rev-f2__table-wrap gl-scroll">
                                     <table className="rev-f2__table">
@@ -231,12 +342,7 @@ function Feedback({ productId, onFeedbackData }) {
                                             <label className="gl-label" htmlFor="reviewer-text">
                                                 YOUR REVIEW *
                                             </label>
-                                            <textarea
-                                                className="text-area text-area--primary-style"
-                                                id="reviewer-text"
-                                                value={reviewText}
-                                                onChange={handleReviewTextChange}
-                                            />
+                                            <TextEditor data={reviewText} onChange={handleReviewTextChange} />
                                         </div>
                                     </div>
                                 </div>
@@ -247,6 +353,7 @@ function Feedback({ productId, onFeedbackData }) {
                                 </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
