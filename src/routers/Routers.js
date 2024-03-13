@@ -92,7 +92,7 @@ function Routers() {
 
         <Route path='/blog' element={<Blog />} />
 
-        <Route path='/design' element={<Design />} />
+        <Route path='/design/:id' element={<Design />} />
 
         <Route path='/design-detail/:id' element={<DesignDetail />} />
 

@@ -71,7 +71,7 @@ const MyProfile = () => {
 
                                                         <a href="/booking">My Booking Design</a>
 
-                                                        <a href="/design">Design</a>
+                                                 
                                                     </li>
 
                                                 </ul>
