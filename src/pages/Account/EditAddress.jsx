@@ -1,6 +1,166 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom'; // Import useParams hook
 
 const EditAddress = () => {
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        streetAddress: '',
+        provinceCode: '',
+        districtCode: '',
+        wardCode: '',
+        provinceName: '',
+        districtName: '',
+        wardName: ''
+    });
+
+    const { id } = useParams(); // Extract the id parameter from the URL
+
+    useEffect(() => {
+        // Gọi API để lấy thông tin của địa chỉ dựa trên ID
+        const fetchAddress = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/v1/address/get-address-by-id/${id}`);
+                const addressData = response.data;
+                // Cập nhật trạng thái của component với thông tin địa chỉ nhận được từ API
+                setFormData({
+                    firstName: addressData.firstName,
+                    lastName: addressData.lastName,
+                    phoneNumber: addressData.phoneNumber,
+                    streetAddress: addressData.streetAddress,
+                    provinceCode: addressData.provinceCode,
+                    districtCode: addressData.districtCode,
+                    provinceName: addressData.provinceName,
+                    districtName: addressData.districtName,
+                    wardCode: addressData.wardCode,
+                    wardName: addressData.wardName
+
+                });
+            } catch (error) {
+                console.error('Đã xảy ra lỗi khi lấy thông tin địa chỉ:', error);
+            }
+        };
+
+        fetchAddress(); // Gọi hàm fetchAddress khi component được mount
+    }, [id]);
+
+
+
+    const [provinces, setProvinces] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [wards, setWards] = useState([]);
+
+    useEffect(() => {
+        axios.get('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+            headers: {
+                'token': '05e9c956-d27f-11ee-9414-ce214539f696'
+            }
+        })
+            .then(response => {
+                const fetchedProvinces = response.data.data.map(province => ({
+                    id: province.ProvinceID,
+                    name: province.ProvinceName
+                }));
+                setProvinces(fetchedProvinces);
+            })
+            .catch(error => {
+                console.error('Error fetching provinces:', error);
+            });
+
+
+    }, []);
+
+
+    const handleProvinceChange = (e) => {
+        const provinceCode = e.target.value;
+        const provinceName = e.target.options[e.target.selectedIndex].text; 
+        setFormData(prevState => ({
+            ...prevState,
+            provinceCode: provinceCode,
+            provinceName: provinceName,
+            districtCode: '', 
+            districtName: '', 
+            wardCode: '',     
+            wardName: ''    
+        }));
+
+        axios.get(`https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${provinceCode}`, {
+            headers: {
+                'token': '05e9c956-d27f-11ee-9414-ce214539f696'
+            }
+        })
+            .then(response => {
+                const fetchedDistricts = response.data.data.map(district => ({
+                    id: district.DistrictID,
+                    name: district.DistrictName
+                }));
+                setDistricts(fetchedDistricts);
+            })
+            .catch(error => {
+                console.error('Error fetching districts:', error);
+            });
+    };
+
+    const handleDistrictChange = (e) => {
+        const districtCode = e.target.value;
+        const districtName = e.target.options[e.target.selectedIndex].text;
+        setFormData(prevState => ({
+            ...prevState,
+            districtCode: districtCode,
+            districtName: districtName,
+            wardCode: '', 
+            wardName: ''  
+        }));
+        axios.get(`https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtCode}`, {
+            headers: {
+                'token': '05e9c956-d27f-11ee-9414-ce214539f696'
+            }
+        })
+            .then(response => {
+                const fetchedWards = response.data.data.map(ward => ({
+                    id: ward.WardCode,
+                    name: ward.WardName
+                }));
+                setWards(fetchedWards);
+            })
+            .catch(error => {
+                console.error('Error fetching wards:', error);
+            });
+    };
+
+    const handleWardChange = (e) => {
+        const wardCode = e.target.value;
+        const wardName = e.target.options[e.target.selectedIndex].text; // Lấy tên của phường/xã
+        setFormData(prevState => ({
+            ...prevState,
+            wardCode: wardCode,
+            wardName: wardName
+        }));
+    };
+
+
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.put(`http://localhost:8080/api/v1/address/update/${id}`, formData);
+            console.log('Địa chỉ đã được cập nhật thành công!');
+        } catch (error) {
+            console.error('Đã xảy ra lỗi khi cập nhật địa chỉ:', error);
+        }
+    };
+
     return (
         <div>
             {/*====== App Content ======*/}
@@ -83,61 +243,146 @@ const EditAddress = () => {
                                         {/*====== End - Dashboard Features ======*/}
                                     </div>
                                     <div className="col-lg-9 col-md-12">
+
                                         <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white">
                                             <div className="dash__pad-2">
                                                 <h1 className="dash__h1 u-s-m-b-14">Edit Address</h1>
-                                                <span className="dash__text u-s-m-b-30">We need an address where we could deliver products.</span>
-                                                <form className="dash-address-manipulation">
+                                                {/* <span className="dash__text u-s-m-b-30">We need an address where we could deliver products.</span> */}
+                                                <form className="dash-address-manipulation" onSubmit={handleSubmit}>
+                                                <div>
                                                     <div className="gl-inline">
                                                         <div className="u-s-m-b-30">
                                                             <label className="gl-label" htmlFor="address-fname">FIRST NAME *</label>
-                                                            <input className="input-text input-text--primary-style" type="text" id="address-fname" placeholder="John Doe" /></div>
+                                                            <input
+                                                                className="input-text input-text--primary-style"
+                                                                type="text"
+                                                                id="address-fname"
+                                                                name="firstName"
+                                                                placeholder="John Doe"
+                                                                value={formData.firstName}
+                                                                onChange={handleChange}
+                                                                required
+                                                            />
+                                                        </div>
                                                         <div className="u-s-m-b-30">
                                                             <label className="gl-label" htmlFor="address-lname">LAST NAME *</label>
-                                                            <input className="input-text input-text--primary-style" type="text" id="address-lname" placeholder="Doe" /></div>
+                                                            <input
+                                                                className="input-text input-text--primary-style"
+                                                                type="text"
+                                                                id="address-lname"
+                                                                name="lastName"
+                                                                placeholder="Doe"
+                                                                value={formData.lastName}
+                                                                onChange={handleChange}
+                                                                required
+                                                            />
+                                                        </div>
                                                     </div>
                                                     <div className="gl-inline">
                                                         <div className="u-s-m-b-30">
-                                                            <label className="gl-label" htmlFor="address-phone">PHONE *</label>
-                                                            <input className="input-text input-text--primary-style" type="text" id="address-phone" placeholder="(+0) 900901904" /></div>
+                                                            <label className="gl-label" htmlFor="address-phoneNumber">phoneNumber *</label>
+                                                            <input
+                                                                className="input-text input-text--primary-style"
+                                                                type="text"
+                                                                id="address-phoneNumber"
+                                                                name="phoneNumber"
+                                                                placeholder='+84'
+                                                                value={formData.phoneNumber}
+                                                                onChange={handleChange}
+                                                                required
+                                                            /></div>
                                                         <div className="u-s-m-b-30">
                                                             <label className="gl-label" htmlFor="address-street">STREET ADDRESS *</label>
-                                                            <input className="input-text input-text--primary-style" type="text" id="address-street" placeholder="4247 Ashford Drive Virginia" /></div>
+                                                            <input
+                                                                className="input-text input-text--primary-style"
+                                                                type="text"
+                                                                id="address-street"
+                                                                name="streetAddress"
+                                                                placeholder="4247 Ashford Drive Virginia"
+                                                                value={formData.streetAddress}
+                                                                onChange={handleChange}
+                                                                required
+                                                            /></div>
                                                     </div>
                                                     <div className="gl-inline">
                                                         <div className="u-s-m-b-30">
                                                             {/*====== Select Box ======*/}
-                                                            <label className="gl-label" htmlFor="address-country">COUNTRY *</label><select className="select-box select-box--primary-style" id="address-country">
-                                                                <option selected value>Choose Country</option>
-                                                                <option value="uae">United Arab Emirate (UAE)</option>
-                                                                <option value="uk">United Kingdom (UK)</option>
-                                                                <option value="us">United States (US)</option>
+                                                            <label className="gl-label" htmlFor="address-country">PROVINCE *</label>
+                                                            <select
+                                                                className="select-box select-box--primary-style"
+                                                                id="provinceCode"
+                                                                name="provinceCode"
+                                                                value={formData.provinceCode}
+                                                                onChange={handleProvinceChange}
+                                                                required
+                                                            >
+                                                                <option value="">Select Province</option>
+                                                                {provinces.map(province => (
+                                                                    <option key={province.id} value={province.id}>{province.name}</option>
+                                                                ))}
                                                             </select>
+                                                            <input
+                                                                type="hidden"
+                                                                name="provinceName"
+                                                                value={formData.provinceName}
+                                                            />
                                                             {/*====== End - Select Box ======*/}
                                                         </div>
                                                         <div className="u-s-m-b-30">
                                                             {/*====== Select Box ======*/}
-                                                            <label className="gl-label" htmlFor="address-state">STATE/PROVINCE *</label><select className="select-box select-box--primary-style" id="address-state">
-                                                                <option selected value>Choose State/Province</option>
-                                                                <option value="al">Alabama</option>
-                                                                <option value="al">Alaska</option>
-                                                                <option value="ny">New York</option>
+                                                            <label className="gl-label" htmlFor="address-state">DISTRICT  *</label>
+                                                            <select
+                                                                className="select-box select-box--primary-style"
+                                                                id="districtCode"
+                                                                name="districtCode"
+                                                                value={formData.districtCode}
+                                                                onChange={handleDistrictChange}
+                                                                required
+                                                            >
+                                                                <option value="">{formData.districtName}</option>
+                                                                {districts.map(district => (
+                                                                    <option key={district.id} value={district.id}>{district.name}</option>
+                                                                ))}
                                                             </select>
+                                                            <input
+                                                                type="hidden"
+                                                                name="districtName"
+                                                                value={formData.districtName}
+                                                            />
                                                             {/*====== End - Select Box ======*/}
                                                         </div>
                                                     </div>
                                                     <div className="gl-inline">
                                                         <div className="u-s-m-b-30">
-                                                            <label className="gl-label" htmlFor="address-city">TOWN/CITY *</label>
-                                                            <input className="input-text input-text--primary-style" type="text" id="address-city" /></div>
+                                                            <label className="gl-label" htmlFor="address-city">WARD  *</label>
+
+                                                            <select
+                                                                className="select-box select-box--primary-style"
+                                                                id="wardCode"
+                                                                name="wardCode"
+                                                                value={formData.wardCode}
+                                                                onChange={handleWardChange}
+                                                                required
+                                                            >
+                                                                <option value="">{formData.wardName}</option>
+                                                                {wards.map(ward => (
+                                                                    <option key={ward.id} value={ward.id}>{ward.name}</option>
+                                                                ))}
+                                                            </select>
+                                                            <input
+                                                                type="hidden"
+                                                                name="wardName"
+                                                                value={formData.wardName}
+                                                            />
+                                                        </div>
                                                         <div className="u-s-m-b-30">
-                                                            <label className="gl-label" htmlFor="address-street">ZIP/POSTAL CODE *</label>
-                                                            <input className="input-text input-text--primary-style" type="text" id="address-postal" placeholder={20006} /></div>
+                                                        </div>
                                                     </div>
                                                     <button className="btn btn--e-brand-b-2" type="submit">SAVE</button>
-                                                </form>
+                                             </div>   </form>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>

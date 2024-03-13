@@ -33,6 +33,7 @@ import ProductByBrand from '../pages/Product/ProductByBrand'
 import Design from '../pages/Design'
 import DesignDetail from '../pages/DesignDetail'
 import ThankYou from '../components/CheckOutSuccess/ThankYou'
+import EditAddress from '../pages/Account/EditAddress'
 
 function Routers() {
   return (
@@ -122,10 +123,9 @@ function Routers() {
         <Route path='*' element={<NotFound />} />
 
         <Route path='/wish-list' element={<Wishlist />} />
+        
+        <Route path='/edit-address-detail/:id' element={<EditAddress />} />
 
-        <Route path='/edit-address' element={<AddressBookEdit />} />
-
-        <Route path='*' element={<NotFound />} />
 
         {/* {user && user.isLoading ?
 
