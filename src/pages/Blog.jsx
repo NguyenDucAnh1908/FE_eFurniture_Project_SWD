@@ -11,7 +11,7 @@ const Blog = () => {
     const [categories, setCategories] = useState({});
     const [allCategories, setAllCategories] = useState([]);
     const [allTags, setAllTags] = useState([]);
-
+    const [slides, setSlides] = useState([]);
 
 
 
@@ -32,7 +32,7 @@ const Blog = () => {
     }, [currentPage]);
 
 
-    const lastThreeBlogs = blogs.slice(-3);
+    
 
     useEffect(() => {
         const fetchCategoriesAndTags = async () => {
@@ -111,6 +111,17 @@ const Blog = () => {
         }
     };
 
+    useEffect(() => {
+        fetch('http://localhost:8080/api/v1/blogs/latest-three-blogs')
+            .then(response => response.json())
+            .then(data => setSlides(data))
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
+    
+    
+   
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -164,7 +175,7 @@ const Blog = () => {
                                             <span className="blog-w__h">RECENT POSTS</span>
                                             <ul className="blog-w__b-l">
                                                 {/* Map through the last 3 blogs */}
-                                                {lastThreeBlogs.map(blog => (
+                                                {slides.map((blog, index) => (
                                                     <li key={blog.id}>
                                                         <div className="b-l__block">
                                                             <div className="b-l__date">
