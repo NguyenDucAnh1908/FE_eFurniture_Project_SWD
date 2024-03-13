@@ -1,14 +1,15 @@
-/* HomeSlider.css */
 .home-slider-container {
-    max-width: 1920px; /* Kích thước khung bên ngoài */
-    width: 100%;
-    height: 900px;
-    overflow: hidden; /* Đảm bảo hình ảnh không vượt ra khỏi khung */
-    position: relative;
+    width: 100%; /* Chiều rộng tối đa của vùng chứa */
+    max-width: 1920px; /* Chiều rộng tối đa của vùng chứa */
+    height: 500px; /* Chiều cao của vùng chứa */
+    overflow: hidden; /* Ẩn phần nội dung vượt ra khỏi vùng chứa */
+    position: relative; /* Định vị tương đối để các phần tử con sẽ được định vị dựa trên vùng chứa */
 }
 
 .home-slider-image {
-    width: 100%; /* Đảm bảo hình ảnh chiếm toàn bộ chiều rộng của khung */
-    height: auto; /* Đảm bảo chiều cao tự động điều chỉnh để không biến dạng hình ảnh */
-    display: block; /* Đảm bảo hình ảnh hiển thị đúng cách */
+    width: 1600px; /* Chiều rộng của hình ảnh sẽ đầy đủ chiếm toàn bộ chiều rộng của vùng chứa */
+    height: 500px; /* Chiều cao của hình ảnh tự động điều chỉnh để không bị méo mó hình dáng */
+    display: block; /* Hiển thị hình ảnh dưới dạng phần tử block */
+    object-fit: fill; /* Hiển thị hình ảnh mà không giữ tỷ lệ khung */
+
 }

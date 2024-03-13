@@ -1,22 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
-const AddressBook = () => {
-    const [addresses, setAddresses] = useState([]);
+
+const DesignDetail = () => {
+    const [designDetail, setDesignDetail] = useState(null);
+    const { id } = useParams();
 
     useEffect(() => {
-
-        axios.get('http://localhost:8080/api/v1/address/get_all_address_by_id/1')
+        axios.get(`http://localhost:8080/api/v1/designs/get-by-id/${id}`)
             .then(response => {
-                setAddresses(response.data.address);
+                setDesignDetail(response.data);
             })
             .catch(error => {
-                console.error('Error fetching addresses:', error);
+                console.error('Error fetching design detail:', error);
             });
-    }, []);
+    }, [id]);
+
+
+
+    const handleDownload = () => {
+        window.location.href = `http://localhost:8080/api/v1/designs/download-file/${id}`;
+    };
+
+
+
 
     return (
         <div>
+
+            {/*====== App Content ======*/}
             <div className="app-content">
 
                 {/*====== Section 1 ======*/}
@@ -30,10 +43,10 @@ const AddressBook = () => {
                                     <ul className="breadcrumb__list">
                                         <li className="has-separator">
 
-                                            <a href="index">Home</a></li>
+                                            <a href="/">Home</a></li>
                                         <li className="is-marked">
 
-                                            <a href="address-book">My Account</a></li>
+                                            <a href="/my-order">My Account</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -61,13 +74,13 @@ const AddressBook = () => {
                                                 <ul className="dash__f-list">
                                                     <li>
 
-                                                        <a href="/dashboard">Manage My Account</a></li>
+                                                        <a href="dashboard">Manage My Account</a></li>
                                                     <li>
 
                                                         <a href="/my-profile">My Profile</a></li>
                                                     <li>
 
-                                                        <a className="dash-active" href="/address-book">Address Book</a></li>
+                                                        <a href="/address-book">Address Book</a></li>
                                                     <li>
 
                                                         <a href="/track-order">Track Order</a></li>
@@ -80,6 +93,9 @@ const AddressBook = () => {
                                                     <li>
 
                                                         <a href="/cancellation">My Returns & Cancellations</a></li>
+                                                    <li>
+
+                                                        <a className="dash-active" href="/design">Design</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -120,62 +136,76 @@ const AddressBook = () => {
                                     </div>
                                     <div className="col-lg-9 col-md-12">
                                         <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+
                                             <div className="dash__pad-2">
-                                                <div className="dash__address-header">
-                                                    <h1 className="dash__h1">Address Book</h1>
-                                                    <div>
+                                                {designDetail && (
+                                                    <h1 className="dash__h1 u-s-m-b-14">{designDetail.codeDesign}</h1>
+                                                )}
 
-                                                        <span className="dash__link dash__link--black u-s-m-r-8">
+                                                {designDetail && (
 
-                                                            <a href="/address-make-default">Make default shipping address</a></span>
 
-                                                        <span className="dash__link dash__link--black">
+                                                    <div className="m-order__list">
 
-                                                            <a href="/address-make-default">Make default shipping address</a></span></div>
-                                                </div>
+                                                        <div className="m-order__get">
+
+
+
+
+
+
+                                                            <div className="manage-o__description">
+                                                                <div className="description__container">
+                                                                    <div className="description__img-wrap" >
+                                                                        <img className="u-img-fluid" src={designDetail.imageUrls} alt="" />
+                                                                    </div>
+                                                                    <div className="description-title" >{designDetail.staffName}</div>
+                                                                </div>
+                                                                <div className="description__info-wrap">
+                                                                    <div>
+                                                                        <span className="manage-o__badge badge--delivered">{designDetail.status}</span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span className="manage-o__text-2 u-c-silver">Note: {designDetail.note} <span className="manage-o__text-2 u-c-secondary"></span></span>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="manage-o__header u-s-m-b-30">
+                                                                <div className="dash-l-r">
+                                                                    <div>
+
+                                                                    </div>
+                                                                    <div >
+                                                                        <div className="manage-o__text u-c-silver" >   {designDetail.createdAt}   </div>
+                                                                        <div className="dash__link dash__link--brand">
+                                                                            <button onClick={handleDownload}>Download</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+
+
+                                                        </div>
+
+
+                                                        <div>
+
+                                                            <embed src={`data:application/pdf;base64,${designDetail.fileData}`} type="application/pdf" width="100%" height="600px" />
+                                                        </div>
+
+                                                    </div>
+
+                                                )}
+
                                             </div>
+
+
+
                                         </div>
-                                        <div className="dash__box dash__box--shadow dash__box--bg-white dash__box--radius u-s-m-b-30">
-                                            <div className="dash__table-2-wrap gl-scroll">
-                                            <table className="dash__table-2">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Action</th>
-                                                            <th>Full Name</th>
-                                                            <th>Address</th>
-                                                          
-                                                            <th>Phone Number</th>
-                                                            <th>Status</th>
-                                                        </tr>
-                                                    </thead>
-
-                                                    <tbody>
-                                                        {addresses.map(address => (
-                                                            <tr key={address.id}>
-                                                                <td>
-                                                                    <a className="address-book-edit btn--e-transparent-platinum-b-2" href={`/address-edit/${address.id}`}>Edit</a>
-                                                                </td>
-                                                                <td>{`${address.firstName} ${address.lastName}`}</td>
-                                                                <td>{`${address.streetAddress}, ${address.wardName}, ${address.districtName}, ${address.provinceName}`}</td>
-                                                                
-                                                                <td>{address.phoneNumber}</td>
-                                                                <td>
-                                                                    <div className="gl-text">Default Shipping Address</div>
-                                                                    <div className="gl-text">Default Billing Address</div>
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-
-                                                </table>
-
-                                            </div>
-                                        </div>
-                                        <div>
-
-                                            <a className="dash__custom-link btn--e-brand-b-2" href="/edit-address"><i className="fas fa-plus u-s-m-r-8"></i>
-
-                                                <span>Add New Address</span></a></div>
                                     </div>
                                 </div>
                             </div>
@@ -185,8 +215,10 @@ const AddressBook = () => {
                 </div>
                 {/*====== End - Section 2 ======*/}
             </div>
+            {/*====== End - App Content ======*/}
+
         </div>
     )
 }
 
-export default AddressBook
+export default DesignDetail
