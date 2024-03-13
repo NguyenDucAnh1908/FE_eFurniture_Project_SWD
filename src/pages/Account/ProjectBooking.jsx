@@ -331,6 +331,7 @@ const ProjectBooking = () => {
                             </div>
                           </div>
 
+                          </div>
                         </div>
                       </div>
                     </div>
