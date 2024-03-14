@@ -147,7 +147,7 @@ function Feedback({ productId, onReviewSubmission }) {
             const response = await axios.post(`http://localhost:8080/api/v1/feedbacks/reply/${feedbackId}/`, {
                 comment: replyText,
                 level: level + 1,
-                replierId: 1,
+                replierId: user_id,
             });
 
             dispatch({ type: 'ADD_REPLY', payload: { feedbackId, reply: response.data } });
