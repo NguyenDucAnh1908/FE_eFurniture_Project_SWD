@@ -44,7 +44,22 @@ const Booking = () => {
                 return 'badge--processing';
         }
     };
-
+    const formatDateTime = (dateTimeString) => {
+        const options = {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false, 
+            timeZone: 'UTC' 
+        };
+    
+        const dateTime = new Date(dateTimeString);
+    
+        return dateTime.toLocaleString('en-US', options);
+    };
+    
 
     return (
         <div>
@@ -171,7 +186,7 @@ const Booking = () => {
                                                                         <div>
                                                                             <div className="manage-o__text-2 u-c-secondary">
                                                                                 <span className="manage-o__text-2 u-c-silver">Meet time: </span>
-                                                                                {booking.schedule ? booking.schedule : "Not confirmed"}
+                                                                                {booking.schedule ? formatDateTime(booking.schedule) : "Not confirmed"}
                                                                             </div>
                                                                         </div>
                                                                     </div>
