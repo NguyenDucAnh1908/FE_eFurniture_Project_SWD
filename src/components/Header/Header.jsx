@@ -236,7 +236,7 @@ function Header() {
                                             <a href="#shop-side-version-2.html">VALUE OF THE DAY</a></li>
                                         <li>
 
-                                            <a href="#shop-side-version-2.html">GIFT CARDS</a></li>
+                                            <a href="/booking-form">BOOKING</a></li>
                                     </ul>
                                     {/*====== End - List ======*/}
                                 </div>

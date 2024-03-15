@@ -6450,3 +6450,7 @@ input::-ms-clear {
   background-color: #495057;
   border-color: #495057; 
 }
+.error-message {
+  color: red;
+  font-size: 0.8em; 
+}
