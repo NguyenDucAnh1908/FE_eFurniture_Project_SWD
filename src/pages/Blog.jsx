@@ -12,6 +12,7 @@ const Blog = () => {
     const [allCategories, setAllCategories] = useState([]);
     const [allTags, setAllTags] = useState([]);
     const [slides, setSlides] = useState([]);
+    const [totalPages, setTotalPages] = useState(0);
 
 
 
@@ -21,6 +22,7 @@ const Blog = () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/v1/blogs/get_all_blogs?page=${currentPage}`);
                 setBlogs(response.data.blogs);
+                setTotalPages(response.data.totalPages);
                 setLoading(false);
             } catch (error) {
                 setError('Failed to fetch blogs');
@@ -98,9 +100,7 @@ const Blog = () => {
     }, [blogs]);
 
 
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-    };
+
 
 
     const truncateText = (text, maxLength) => {
@@ -119,7 +119,40 @@ const Blog = () => {
     }, []);
 
     
-    
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const generatePageNumbers = () => {
+        const maxPagesToShow = 4;
+        const firstPageIndex = Math.max(0, currentPage - 1);
+        const lastPageIndex = Math.min(totalPages - 1, firstPageIndex + maxPagesToShow - 1);
+
+        const pageNumbers = [];
+
+        for (let i = firstPageIndex; i <= lastPageIndex; i++) {
+            pageNumbers.push(i);
+        }
+
+        return pageNumbers;
+    };
+
+    const renderPaginationButtons = () => {
+        return generatePageNumbers().map(page => (
+            <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+                <button className="page-link" onClick={() => handlePageChange(page)}>{page + 1}</button>
+            </li>
+        ));
+    };
+
+    const handleNextButtonClick = () => {
+        handlePageChange(currentPage + 1);
+    };
+
+    const handlePrevButtonClick = () => {
+        handlePageChange(currentPage - 1);
+    };
+
    
 
     if (loading) {
@@ -341,22 +374,24 @@ const Blog = () => {
 
 
 
-                                <nav className="post-center-wrap u-s-p-y-60">
+                              
+                                    <nav className="post-center-wrap u-s-p-y-60">
                                     {/*====== Pagination ======*/}
-                                    <ul className="blog-pg">
-                                        {[1, 2].map(page => (
-                                            <li key={page} className={currentPage === page - 1 ? 'blog-pg--active' : ''}>
-                                                <button onClick={() => handlePageChange(page - 1)}>{page}</button>
+                                    <ul className="blog-pg" style={{ display: 'flex', listStyle: 'none', justifyContent: 'center', alignItems: 'center' }}>
+                                        {currentPage > 0 && (
+                                            <li style={{ margin: '0 5px' }}>
+                                                <button onClick={handlePrevButtonClick} className="page-link">Previous</button>
                                             </li>
-                                        ))}
-                                        <li>
-                                            <button onClick={() => handlePageChange(currentPage + 1)} className="fas fa-angle-right"></button>
-                                        </li>
+                                        )}
+                                        {renderPaginationButtons()}
+                                        {currentPage < totalPages - 1 && (
+                                            <li style={{ margin: '0 5px' }}>
+                                                <button onClick={handleNextButtonClick} className="page-link">Next</button>
+                                            </li>
+                                        )}
                                     </ul>
                                     {/*====== End - Pagination ======*/}
                                 </nav>
-
-
                             </div>
                         </div>
                     </div>
