@@ -3,6 +3,7 @@ import CartItem from '../components/CartItem/CartItem'
 import { useCart } from 'react-use-cart'
 import axios from 'axios';
 import EmptyCart from '../components/PageEmpty/EmptyCart';
+import { Link } from 'react-router-dom';
 const Cart = () => {
     const [provinceData, setProvinceData] = useState([]);
     const [districtData, setDistrictData] = useState([]);
@@ -283,7 +284,12 @@ const Cart = () => {
                                                     </div>
                                                     <div>
 
-                                                        <button className="btn btn--e-brand-b-2" type="submit"> PROCEED TO CHECKOUT</button></div>
+                                                        <button className="btn btn--e-brand-b-2">
+                                                            <Link to="/check-out" style={{ textDecoration: 'none', color: 'inherit' }}>
+                                                                PROCEED TO CHECKOUT
+                                                            </Link>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

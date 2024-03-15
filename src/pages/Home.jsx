@@ -14,9 +14,10 @@ import BrandSlider from '../components/BrandSlider/BrandSlider';
 import HomeSlider from '../components/HomeSlider/HomeSlider';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
-
+import { useCart } from 'react-use-cart';
 
 function Home() {
+    const { addItem } = useCart();
     const [listProduct, setListProduct] = useState([]);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
@@ -27,24 +28,48 @@ function Home() {
     const [initialProductCount, setInitialProductCount] = useState(12);
     const [productsPerPage, setProductsPerPage] = useState(8);
     const visibleProducts = products.slice(0, initialProductCount);
+
+    const [productsBestSelling, setProductsBestSelling] = useState([]);
+    const [initialProductCountBestSelling, setInitialProductCountBestSelling] = useState(12);
+    const [productsPerBestSellingPage, setProductsPerBestSellingPage] = useState(8);
+    const visibleProductsBestSelling = productsBestSelling.slice(0, initialProductCountBestSelling);
+
+    const [productsRecent, setProductsRecent] = useState([]);
+    const [initialProductCountRecent, setInitialProductCountRecent] = useState(12);
+    const [productsPerRecentPage, setProductsPerRecentPage] = useState(8);
+    const visibleProductsRecent = productsRecent.slice(0, initialProductCountRecent);
+
+    
     const [slides, setSlides] = useState([]);
     const [tags, setTags] = useState({});
     useEffect(() => {
         getProduct();
         fetchCategories();
-        //fetchProducts();
-        // fetchTop5ProducstBestSelling();
-        // fetchTop5ProducstRating();
+        getProductBestSelling();
+        getProductRecent();
     }, []);
     const ProductList = () => {
         // ...
     };
+
+    const getProductRecent = async () => {
+        let res = await fetchallProduct();
+        setProductsRecent(res)
+        //console.log("Check product all res: ", res)
+    }
+
+    const getProductBestSelling = async () => {
+        let res = await fetchallProduct();
+        setProductsBestSelling(res)
+        //console.log("Check product all res: ", res)
+    }
 
     const getProduct = async () => {
         let res = await fetchallProduct();
         setListProduct(res)
         //console.log("Check product all res: ", res)
     }
+
 
     useEffect(() => {
         fetchProducts(selectedCategory);
@@ -61,31 +86,6 @@ function Home() {
             console.error("Lỗi khi lấy danh sách danh mục:", error);
         }
     };
-
-    const fetchTop5ProducstBestSelling = async () => {
-        try {
-            const res = await fetchallProductByTop5BestSelling();
-            if (res && res) {
-                setTopFire(res);
-            }
-            //console.log("Check top 4", res);
-        } catch (error) {
-            console.error("Lỗi khi lấy danh sách danh mục:", error);
-        }
-    };
-
-    const fetchTop5ProducstRating = async () => {
-        try {
-            const res = await fetchallProductByTop5Rating();
-            if (res && res) {
-                setTopFireRating(res);
-            }
-            //console.log("Check top ", res);
-        } catch (error) {
-            console.error("Lỗi khi lấy danh sách danh mục:", error);
-        }
-    };
-
 
 
     // const fetchProducts = async (categoryId = null) => {
@@ -147,6 +147,14 @@ function Home() {
     }, []);
     const handleLoadMore = () => {
         setInitialProductCount(initialProductCount + productsPerPage);
+    };
+
+    const handleLoadMoreBestSelling = () => {
+        setInitialProductCountBestSelling(initialProductCountBestSelling + productsPerBestSellingPage);
+    };
+
+    const handleLoadMoreRecent = () => {
+        setInitialProductCountRecent(initialProductCountRecent + productsPerRecentPage);
     };
     //console.log("Check product by category: ", products)
     // console.log(listProduct);
@@ -254,26 +262,26 @@ function Home() {
                                     <div className="row">
                                         <div className="col-lg-5 col-md-5 u-s-m-b-30">
 
-                                            <a className="collection" href="shop-side-version-2.html">
+                                            <a className="collection" href="/shop">
                                                 <div className="aspect aspect--bg-grey aspect--square">
 
-                                                    <img className="aspect__img collection__img" src="images/collection/coll-1.jpg" alt="" /></div>
+                                                    <img className="aspect__img collection__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-eric-mufasa-1350789.jpg?alt=media&token=72c30b16-868b-47c3-b418-f813138155de" alt="" /></div>
                                             </a>
                                         </div>
                                         <div className="col-lg-7 col-md-7 u-s-m-b-30">
 
-                                            <a className="collection" href="shop-side-version-2.html">
+                                            <a className="collection" href="/shop">
                                                 <div className="aspect aspect--bg-grey aspect--1286-890">
 
-                                                    <img className="aspect__img collection__img" src="images/collection/coll-2.jpg" alt="" /></div>
+                                                    <img className="aspect__img collection__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-jonathan-borba-3285193.jpg?alt=media&token=5dc39cfe-5613-4a61-8cb4-1e52e6a6dfb0" alt="" /></div>
                                             </a>
                                         </div>
                                         <div className="col-lg-4 col-md-5 u-s-m-b-30">
 
-                                            <a className="collection" href="shop-side-version-2.html">
+                                            <a className="collection" href="/shop">
                                                 <div className="aspect aspect--bg-grey aspect--square">
 
-                                                    <img className="aspect__img collection__img" src="images/collection/coll-4.jpg" alt="" /></div>
+                                                    <img className="aspect__img collection__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-f-h-13201475.jpg?alt=media&token=8781dd14-418e-4b95-a5b9-7d30b94cd3c5" alt="" /></div>
                                             </a>
                                         </div>
                                         {/* <div className="col-lg-4 col-md-7 u-s-m-b-30">
@@ -286,18 +294,18 @@ function Home() {
                         </div> */}
                                         <div className="col-lg-4 col-md-5 u-s-m-b-30">
 
-                                            <a className="collection" href="shop-side-version-2.html">
+                                            <a className="collection" href="/shop">
                                                 <div className="aspect aspect--bg-grey aspect--square">
 
-                                                    <img className="aspect__img collection__img" src="images/collection/coll-4.jpg" alt="" /></div>
+                                                    <img className="aspect__img collection__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-freemockupsorg-775219.jpg?alt=media&token=e4d21dd0-377a-4602-a366-8e4a81767071" alt="" /></div>
                                             </a>
                                         </div>
                                         <div className="col-lg-4 col-md-5 u-s-m-b-30">
 
-                                            <a className="collection" href="shop-side-version-2.html">
+                                            <a className="collection" href="/shop">
                                                 <div className="aspect aspect--bg-grey aspect--square">
 
-                                                    <img className="aspect__img collection__img" src="images/collection/coll-4.jpg" alt="" /></div>
+                                                    <img className="aspect__img collection__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-pixabay-220749.jpg?alt=media&token=23c05da0-cdff-479b-836c-d5d5ec4fc2ae" alt="" /></div>
                                             </a>
                                         </div>
                                     </div>
@@ -333,7 +341,7 @@ function Home() {
                         <div className="section__content">
                             <div className="container">
                                 <div className="row">
-                                    {visibleProducts && visibleProducts.length > 0 && visibleProducts.map((productItem, index) => (
+                                    {visibleProductsRecent && visibleProductsRecent.length > 0 && visibleProductsRecent.map((productItem, index) => (
                                         <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30" key={`products-${productItem}`}>
                                             <div className="product-r u-h-100">
                                                 <div className="product-r__container">
@@ -349,7 +357,7 @@ function Home() {
                                                                 <a data-modal="modal" data-modal-id="#quick-look"><i className="fas fa-search-plus"></i></a></li>
                                                             <li>
 
-                                                                <a data-modal="modal" data-modal-id="#add-to-cart"><i className="fas fa-plus-circle"></i></a></li>
+                                                                <a data-modal="modal" data-modal-id="#add-to-cart" onClick={() => addItem(productItem)}><i className="fas fa-plus-circle"></i></a></li>
                                                             <li>
 
                                                                 <a href="signin.html"><i className="fas fa-heart"></i></a></li>
@@ -382,7 +390,7 @@ function Home() {
                         </div>
                         <div className="col-lg-12">
                             <div className="section__text-wrap">
-                                <button className="btn btn--e-brand btn--load-more" type="button" onClick={handleLoadMore}>Load More</button>
+                                <button className="btn btn--e-brand btn--load-more" type="button" onClick={handleLoadMoreRecent}>Load More</button>
 
                             </div>
                         </div>
@@ -453,7 +461,7 @@ function Home() {
                                                                                 <a data-modal="modal" data-modal-id="#quick-look"><i className="fas fa-search-plus"></i></a></li>
                                                                             <li>
 
-                                                                                <a data-modal="modal" data-modal-id="#add-to-cart"><i className="fas fa-plus-circle"></i></a></li>
+                                                                                <a data-modal="modal" data-modal-id="#add-to-cart" onClick={() => addItem(product)}><i className="fas fa-plus-circle"></i></a></li>
                                                                             <li>
 
                                                                                 <a href="signin.html"><i className="fas fa-heart"></i></a></li>
@@ -524,7 +532,7 @@ function Home() {
                         <div className="section__content">
                             <div className="container">
                                 <div className="row">
-                                    {visibleProducts && visibleProducts.length > 0 && visibleProducts.map((productItem, index) => (
+                                    {visibleProductsBestSelling && visibleProductsBestSelling.length > 0 && visibleProductsBestSelling.map((productItem, index) => (
                                         <div className="col-lg-3 col-md-4 col-sm-6 u-s-m-b-30">
                                             <div className="product-short u-h-100">
                                                 <div className="product-short__container">
@@ -552,7 +560,7 @@ function Home() {
                                     ))}
                                     <div className="col-lg-12">
                                         <div className="section__text-wrap">
-                                            <button className="btn btn--e-brand btn--load-more" type="button" onClick={handleLoadMore}>Load More</button>
+                                            <button className="btn btn--e-brand btn--load-more" type="button" onClick={handleLoadMoreBestSelling}>Load More</button>
                                         </div>
                                     </div>
                                 </div>

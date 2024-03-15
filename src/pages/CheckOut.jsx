@@ -124,7 +124,7 @@ const CheckOut = () => {
     const getAddressUser = async () => {
         let res = await fetchAllAddress();
         setListAdress(res.address)
-        //console.log("Check address: ", res.address)
+        console.log("Check address: ", res.address)
     };
 
     const getListCoupon = async () => {
@@ -503,17 +503,18 @@ const CheckOut = () => {
                                                 <div className="o-summary__box">
                                                     <table className="o-summary__table">
                                                         <tbody>
-                                                            <tr>
-                                                                <td>SHIPPING</td>
-                                                                <td>$4.00</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Discount</td>
-                                                                <td>${discountAmount.toFixed(2)}</td>
-                                                            </tr>
+                                                            
                                                             <tr>
                                                                 <td>SUBTOTAL</td>
                                                                 <td>${cartTotal}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Discount</td>
+                                                                <td>$-{discountAmount.toFixed(2)}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>SHIPPING</td>
+                                                                <td>Free</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>GRAND TOTAL</td>

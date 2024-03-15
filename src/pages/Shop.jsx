@@ -7,6 +7,7 @@ import { fetchallCategory } from '../services/CategoryApi/CategoryApi';
 import { fetchallTagProduct } from '../services/TagProductApi/TagProductApi';
 import { useCart } from 'react-use-cart';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify'
 import { wait } from '@testing-library/user-event/dist/utils';
 import Pagination from '../components/Pagination/Pagination';
 
@@ -24,6 +25,7 @@ function Shop() {
   const [totalProducts, setTotalProducts] = useState(0);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [limit, setLimit] = useState(6);
 
   useEffect(() => {
     getCategory();
@@ -33,16 +35,16 @@ function Shop() {
 
   useEffect(() => {
     fetchProducts();
-  }, [selectedCategory, selectedBrands, currentPage]);
+  }, [selectedCategory, selectedBrands, currentPage, limit]);
 
 
-  const fetchProducts = async (page, minPrice, maxPrice) => {
+  const fetchProducts = async (page) => {
     try {
       const response = await axios.get('http://localhost:8080/api/v1/products', {
         params: {
           keyword: '',
           page: currentPage - 1,
-          limit: 1,
+          limit: limit,
           minPrice: minPrice,
           maxPrice: maxPrice,
           brandIds: selectedBrands.map(brand => brand.id).join(','),
@@ -121,14 +123,22 @@ function Shop() {
   //   fetchProducts(1, minPrice, maxPrice);
   // };
   const handleSubmitPriceFilter = (event) => {
-    event.preventDefault(); // Ngăn chặn sự kiện mặc định của form
-    const minPriceInput = document.getElementById('price-min').value; // Lấy giá trị của ô nhập giá tiền tối thiểu
-    const maxPriceInput = document.getElementById('price-max').value; // Lấy giá trị của ô nhập giá tiền tối đa
-    setMinPrice(minPriceInput);
-    setMaxPrice(maxPriceInput);
-    const filter = { minPrice: minPriceInput, maxPrice: maxPriceInput };
-    fetchProducts(1, filter); // Gọi hàm fetchProducts với object filter
+    event.preventDefault();
+    if (minPrice < 0 || maxPrice < 0) {
+      toast.warning("Price cannot be negative.");
+      return;
+    }
+    if (minPrice && maxPrice && minPrice > maxPrice) {
+      toast.warning("Min price cannot be greater than max price.");
+      return;
+    }
+    // Gọi hàm fetchProducts khi người dùng submit form
+    fetchProducts();
   };
+  const handleLimitChange = (event) => {
+    setLimit(parseInt(event.target.value));
+  };
+
 
   return (
     <div>
@@ -306,12 +316,16 @@ function Shop() {
 
                                 <label for="price-min"></label>
 
-                                <input className="input-text input-text--primary-style" type="number" id="price-min" placeholder="Min" /></div>
+                                <input className="input-text input-text--primary-style" type="number" id="price-min" value={minPrice}
+                                  onChange={(e) => setMinPrice(e.target.value)}
+                                  placeholder="Min" /></div>
                               <div>
 
                                 <label for="price-max"></label>
 
-                                <input className="input-text input-text--primary-style" type="number" id="price-max" placeholder="Max" /></div>
+                                <input className="input-text input-text--primary-style" type="number" id="price-max" value={maxPrice}
+                                  onChange={(e) => setMaxPrice(e.target.value)}
+                                  placeholder="Max" /></div>
                               <div>
 
                                 <button className="btn btn--icon fas fa-angle-right btn--e-transparent-platinum-b-2" type="submit"></button></div>
@@ -469,7 +483,7 @@ function Shop() {
                         ))} */}
 
                         {minPrice && maxPrice && (
-                          <a className="gl-tag btn--e-brand-shadow" href="#">
+                          <a className="gl-tag btn--e-brand-shadow">
                             PRICE:&nbsp;
                             {`Price: $${minPrice} - $${maxPrice}`}
                           </a>
@@ -493,23 +507,27 @@ function Shop() {
 
                         <span className="js-shop-grid-target is-active">Grid</span>
 
-                        <span className="js-shop-list-target">List</span></div>
+                        {/* <span className="js-shop-list-target">List</span> */}
+                      </div>
                       <form>
                         <div className="tool-style__form-wrap">
-                          <div className="u-s-m-b-8"><select className="select-box select-box--transparent-b-2">
-                            <option>Show: 8</option>
-                            <option selected>Show: 12</option>
-                            <option>Show: 16</option>
-                            <option>Show: 28</option>
-                          </select></div>
-                          <div className="u-s-m-b-8"><select className="select-box select-box--transparent-b-2">
+                          <div className="u-s-m-b-8">
+                            <select className="select-box select-box--transparent-b-2" onChange={handleLimitChange}>
+                              <option value="1">Show: 1</option>
+                              <option value="12" selected>Show: 12</option>
+                              <option value="16">Show: 16</option>
+                              <option value="28">Show: 28</option>
+                            </select>
+                          </div>
+                          {/* <div className="u-s-m-b-8"><select className="select-box select-box--transparent-b-2">
                             <option selected>Sort By: Newest Items</option>
                             <option>Sort By: Latest Items</option>
                             <option>Sort By: Best Selling</option>
                             <option>Sort By: Best Rating</option>
                             <option>Sort By: Lowest Price</option>
                             <option>Sort By: Highest Price</option>
-                          </select></div>
+                          </select>
+                          </div> */}
                         </div>
                       </form>
                     </div>
@@ -576,30 +594,39 @@ function Shop() {
                   </div> */}
                   <div className="u-s-p-y-60">
                     <ul className="shop-p__pagination">
-                      {/* Hiển thị trang đầu tiên */}
-                      <li className={currentPage === 1 ? 'is-active' : ''}>
-                        <a onClick={() => handlePageChange(1)}>1</a>
+                      {/* Nút chuyển đến trang trước */}
+                      <li>
+                        <a className="fas fa-angle-left" onClick={() => handlePageChange(currentPage - 1)}></a>
                       </li>
-                      {/* Hiển thị dấu "..." nếu có nhiều hơn 5 trang */}
+                      {/* Hiển thị trang đầu tiên */}
+                      {currentPage > 1 && (
+                        <li>
+                          <a onClick={() => handlePageChange(1)}>1</a>
+                        </li>
+                      )}
+                      {/* Hiển thị dấu "..." nếu có nhiều hơn 5 trang và không nằm ở trang đầu tiên */}
                       {currentPage > 3 && <li><span>...</span></li>}
                       {/* Hiển thị 5 trang tiếp theo từ trang hiện tại */}
-                      {[...Array(totalPages).keys()].slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 2)).map(index => (
+                      {[...Array(totalPages).keys()].slice(Math.max(0, currentPage - 2), Math.min(totalPages, currentPage + 3)).map(index => (
                         <li key={index} className={currentPage === index + 1 ? 'is-active' : ''}>
                           <a onClick={() => handlePageChange(index + 1)}>{index + 1}</a>
                         </li>
                       ))}
-                      {/* Hiển thị dấu "..." nếu có nhiều hơn 5 trang và trang cuối cùng */}
+                      {/* Hiển thị dấu "..." nếu có nhiều hơn 5 trang và không nằm ở trang cuối cùng */}
                       {currentPage < totalPages - 2 && <li><span>...</span></li>}
                       {/* Hiển thị trang cuối cùng */}
-                      <li className={currentPage === totalPages ? 'is-active' : ''}>
-                        <a onClick={() => handlePageChange(totalPages)}>{totalPages}</a>
-                      </li>
+                      {currentPage < totalPages && (
+                        <li>
+                          <a onClick={() => handlePageChange(totalPages)}>{totalPages}</a>
+                        </li>
+                      )}
                       {/* Nút chuyển đến trang kế tiếp */}
                       <li>
                         <a className="fas fa-angle-right" onClick={() => handlePageChange(currentPage + 1)}></a>
                       </li>
                     </ul>
                   </div>
+
 
                 </div>
               </div>

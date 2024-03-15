@@ -9,7 +9,7 @@ const PrivateRounter = (props) => {
   const { user } = useContext(UserContext);
   console.log("Check User contextttt: ", user)
 
-  if (user && user.isAuthenticated === true) {
+  if (user && user.isAuthenticated === true && user.role === 'USER') {
     return <Outlet />;
   } else {
     return <Navigate to="/login" />;

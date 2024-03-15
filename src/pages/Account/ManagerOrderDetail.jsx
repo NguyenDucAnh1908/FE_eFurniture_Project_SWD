@@ -207,8 +207,8 @@ const ManagerOrderDetail = () => {
                                                             <div className="manage-o__description">
                                                                 <div className="description__container">
                                                                     <div className="description__img-wrap">
-                                                                        <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt /></div>
-                                                                    <div className="description-title">Yellow Wireless Headphone</div>
+                                                                        <img className="u-img-fluid" src={item.product.thumbnail} alt /></div>
+                                                                    <div className="description-title">{item.product.name}</div>
                                                                 </div>
                                                                 <div className="description__info-wrap">
                                                                     <div>

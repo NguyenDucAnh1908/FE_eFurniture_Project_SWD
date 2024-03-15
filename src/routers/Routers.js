@@ -47,33 +47,32 @@ function Routers() {
 
         <Route path='/login' element={<Login />} />
 
-        <Route path='/product-detail/:id' element={<ProductDetail />} />
+        {/* <Route path='/product-detail/:id' element={<ProductDetail />} /> */}
 
-        <Route path='/cart' element={<Cart />} />
+        {/* <Route path='/cart' element={<Cart />} /> */}
 
         {/* <Route path='/check-out' element={<CheckOut/>}/> */}
 
-        <Route path='/check-out/thank-you' element={<CheckOutSuccess />} />
+        {/* <Route path='/check-out/thank-you' element={<CheckOutSuccess />} /> */}
 
         <Route path='/blog' element={<Blog />} />
 
         <Route path='/blog-detail/:id' element={<BlogDetail />} />
 
-        <Route path='/my-profile' element={<MyProfile />} />
+        {/* <Route path='/my-profile' element={<MyProfile />} /> */}
 
         <Route path='/address-book' element={<AddressBook />} />
 
-        <Route path='/my-order' element={<MyOrder />} />
+        {/* <Route path='/my-order' element={<MyOrder />} /> */}
 
-        <Route path='/track-order' element={<TrackOrder />} />
+        {/* <Route path='/track-order' element={<TrackOrder />} /> */}
 
         <Route path='/cancellation' element={<Cancellation />} />
 
-        <Route path='/payment-option' element={<PaymentOption />} />
+        {/* <Route path='/payment-option' element={<PaymentOption />} /> */}
 
-        <Route path='/wish-list' element={<Wishlist />} />
+        {/* <Route path='/wish-list' element={<Wishlist />} /> */}
 
-        <Route path='/edit-address' element={<AddressBookEdit />} />
 
         <Route path='/booking-form' element={<BookingForm />} />
 
@@ -95,23 +94,12 @@ function Routers() {
 
         <Route path='/design/:id' element={<Design />} />
 
-        <Route path='/design-detail/:id' element={<DesignDetail />} />
 
         <Route path='/blog-detail/:id' element={<BlogDetail />} />
 
-        <Route path='/my-profile' element={<MyProfile />} />
-
         <Route path='/address-book' element={<AddressBook />} />
 
-        <Route path='/my-order' element={<MyOrder />} />
-
-        <Route path='/track-order' element={<TrackOrder />} />
-
-        <Route path='/manage-order/:id' element={<ManagerOrderDetail />} />
-
         <Route path='/cancellation' element={<Cancellation />} />
-
-        <Route path='/payment-option' element={<PaymentOption />} />
 
         <Route path='/product-category/:id' element={<ProductByCategory />} />
 
@@ -119,15 +107,32 @@ function Routers() {
 
         <Route path='/product-brand' element={<ProductByBrand />} />
 
-        <Route path='/edit-address' element={<AddressBookEdit />} />
 
-        <Route path='/view-list-projectbooking/:bookingId' element={<ProjectBooking />} />
+
+
 
         <Route path='*' element={<NotFound />} />
 
-        <Route path='/wish-list' element={<Wishlist />} />
-        
-        <Route path='/edit-address-detail/:id' element={<EditAddress />} />
+
+
+        <Route element={<PrivateRounter />}>
+        <Route path='/edit-address' element={<AddressBookEdit />} />
+
+          <Route path='/check-out' element={<CheckOut />} />
+          <Route path='/check-out/:id/thank-you' element={<CheckOutSuccess />} />
+          <Route path='/edit-address-detail/:id' element={<EditAddress />} />
+          <Route path='/wish-list' element={<Wishlist />} />
+          <Route path='/view-list-projectbooking/:bookingId' element={<ProjectBooking />} />
+          <Route path='/edit-address' element={<AddressBookEdit />} />
+          <Route path='/payment-option' element={<PaymentOption />} />
+          <Route path='/manage-order/:id' element={<ManagerOrderDetail />} />
+          <Route path='/my-order' element={<MyOrder />} />
+          <Route path='/track-order' element={<TrackOrder />} />
+          <Route path='/my-profile' element={<MyProfile />} />
+          <Route path='/design-detail/:id' element={<DesignDetail />} />
+
+        </Route>
+
 
 
         {/* {user && user.isLoading ?
@@ -135,7 +140,7 @@ function Routers() {
         
           
         } */}
-         {/* <Route
+        {/* <Route
           path="/thank" element={
             <PrivateRounter >
               <ThankYou />
@@ -143,7 +148,7 @@ function Routers() {
 
           }
         /> */}
-         {/* <Route path='/thank' element={<ThankYou />} /> */}
+        {/* <Route path='/thank' element={<ThankYou />} /> */}
         {/* <Route
           path="/check-out" element={
             <PrivateRounter >
@@ -152,12 +157,9 @@ function Routers() {
 
           }
         /> */}
-        <Route element={<PrivateRounter />}>
-            <Route path='/check-out' element={<CheckOut />} />
-            <Route path='/check-out/:id/thank-you' element={<CheckOutSuccess />} />
-        </Route>
-       
-        
+
+
+
         {/* <Route
           path="/check-out/thank-you" element={
             <PrivateRounter >

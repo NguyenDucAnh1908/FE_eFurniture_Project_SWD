@@ -37,13 +37,14 @@ const Login = (props) => {
         }
         let response = await loginUser(valueLogin, valuePassword);
         console.log("Check login",response);
-        if (response && response.staus === "Success") {
+        if (response && response.staus === "Success" && response.role === "USER") {
             let user = response.user;
             let tokenJwt = response.token;
             let data = {
                 isAuthenticated: true,
                 token: response.token,
                 refesh_token: response.refesh_token,
+                role: response.role,
                 account: { user }
             }
             localStorage.setItem("account", JSON.stringify(data));
@@ -75,7 +76,7 @@ const Login = (props) => {
         let local = localStorage.getItem('account');
         if (local) {
             navigate("/")
-            // window.location.reload();
+            // window.location.reload(); 
         }
     }, []);
     

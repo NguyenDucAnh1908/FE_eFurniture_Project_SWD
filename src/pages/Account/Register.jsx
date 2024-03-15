@@ -179,7 +179,7 @@ const Register = () => {
                                                     onChange={(event) => setEmail(event.target.value)} /></div>
                                             <div className="u-s-m-b-30">
                                                 <label className="gl-label" htmlFor="reg-password">PASSWORD *</label>
-                                                <input className="input-text input-text--primary-style" type="text"
+                                                <input className="input-text input-text--primary-style" type="password"
                                                     id="reg-password" placeholder="Enter Password"
                                                     value={password}
                                                     onChange={(event) => setPassword(event.target.value)} /></div>

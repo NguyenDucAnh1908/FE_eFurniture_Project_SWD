@@ -144,14 +144,14 @@ const CheckOutSuccess = () => {
                                                                     <div className="timeline-step">
                                                                         <div className="timeline-l-i timeline-l-i--finish">
                                                                             <span className="timeline-circle" /></div>
-                                                                        <span className="timeline-text">Processing</span>
+                                                                        <span className="timeline-text">Order</span>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 u-s-m-b-30">
                                                                     <div className="timeline-step">
-                                                                        <div className="timeline-l-i timeline-l-i--finish">
+                                                                        <div className="timeline-l-i">
                                                                             <span className="timeline-circle" /></div>
-                                                                        <span className="timeline-text">Shipped</span>
+                                                                        <span className="timeline-text">Confirm</span>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-lg-4 u-s-m-b-30">
@@ -168,8 +168,8 @@ const CheckOutSuccess = () => {
                                                             <div className="manage-o__description">
                                                                 <div className="description__container">
                                                                     <div className="description__img-wrap">
-                                                                        <img className="u-img-fluid" src="images/product/electronic/product3.jpg" alt /></div>
-                                                                    <div className="description-title">Yellow Wireless Headphone</div>
+                                                                        <img className="u-img-fluid" src={item.product.thumbnail} alt /></div>
+                                                                    <div className="description-title">{item.product.name}</div>
                                                                 </div>
                                                                 <div className="description__info-wrap">
                                                                     <div>

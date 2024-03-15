@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { UserContext } from '../../context/UserContext'
 
 const AddressBook = () => {
     const [addresses, setAddresses] = useState([]);
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
-
-        axios.get('http://localhost:8080/api/v1/address/get_all_address_by_id/1')
+        const user_id = user.account.user.id;
+        axios.get(`http://localhost:8080/api/v1/address/get_all_address_by_id/${user_id}` )
             .then(response => {
                 setAddresses(response.data.address);
+                console.log("Check address: ", response.data)
             })
+            
             .catch(error => {
                 console.error('Error fetching addresses:', error);
             });
@@ -18,7 +22,6 @@ const AddressBook = () => {
     return (
         <div>
             <div className="app-content">
-
                 {/*====== Section 1 ======*/}
                 <div className="u-s-p-y-60">
 
