@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import TextEditor from '../components/Editor/TextEditor';
 import { useFeedback } from '../Feedback/FeedbackContext';
+import { toast } from 'react-toastify'
+import { UserContext } from '../context/UserContext'
+
 
 function Feedback({ productId, onReviewSubmission }) {
+    const { user } = useContext(UserContext);
     const [reviews, setReviews] = useState([]);
     const [productDetail, setProductDetail] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
@@ -17,7 +21,7 @@ function Feedback({ productId, onReviewSubmission }) {
     const [replyText, setReplyText] = useState('');
     const { state, dispatch } = useFeedback();
     const [displayedItems, setDisplayedItems] = useState({});
-
+    const user_id = user.account.user.id;
 
     const handleRatingChange = (value) => {
         setRating(value);
@@ -96,8 +100,9 @@ function Feedback({ productId, onReviewSubmission }) {
                 status: 'Unconfirmed',
                 comment: reviewText,
                 productId: productId,
-                userId: 1,
+                userId: user_id,
             });
+
 
             dispatch({ type: 'ADD_FEEDBACKS', payload: response.data.content });
 
@@ -109,7 +114,7 @@ function Feedback({ productId, onReviewSubmission }) {
             setReviewText('');
             const ratingRadios = document.getElementsByName('rating');
             ratingRadios.forEach((radio) => (radio.checked = false));
-
+            toast.success("Feedback successful.");
             fetchFeedbackData(currentPage);
             onReviewSubmission();
             console.log('Review submitted successfully:', response.data);
@@ -129,7 +134,7 @@ function Feedback({ productId, onReviewSubmission }) {
             return newDisplayedItems;
         });
     };
-    
+
     const handleSubmitReply = async (event, feedbackId, replyText, level) => {
         event.preventDefault();
         console.log('FeedbackId:', feedbackId);
@@ -142,7 +147,7 @@ function Feedback({ productId, onReviewSubmission }) {
             const response = await axios.post(`http://localhost:8080/api/v1/feedbacks/reply/${feedbackId}/`, {
                 comment: replyText,
                 level: level + 1,
-                replierId: 1,
+                replierId: user_id,
             });
 
             dispatch({ type: 'ADD_REPLY', payload: { feedbackId, reply: response.data } });
@@ -244,7 +249,7 @@ function Feedback({ productId, onReviewSubmission }) {
 
                                             <p className="review-o__text" dangerouslySetInnerHTML={{ __html: review.comment }}></p>
 
-                                            {review.replies && review.replies.map((reply) => (
+                                            {review.replies && review.replies.slice(0, displayedItems[review.id] || 2).map((reply, replyIndex) => (
                                                 <div key={reply.id} className="review-o u-s-m-b-15" style={{ marginLeft: `${(reply.level + 1) * 48}px` }}>
                                                     <div className="review-o__info u-s-m-b-8">
                                                         <span className="review-o__name">Replier: {reply.userFullName}</span>
@@ -276,9 +281,9 @@ function Feedback({ productId, onReviewSubmission }) {
                                                     Load More
                                                 </a>
                                             )}
-
                                         </div>
                                     ))}
+
                                     {totalPages > 1 && (
                                         <div className="u-s-p-y-60">
                                             <ul className="shop-p__pagination">
