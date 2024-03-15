@@ -8,12 +8,12 @@ const AddressBook = () => {
 
     useEffect(() => {
         const user_id = user.account.user.id;
-        axios.get(`http://localhost:8080/api/v1/address/get_all_address_by_id/${user_id}` )
+        axios.get(`http://localhost:8080/api/v1/address/get_all_address_by_id/${user_id}`)
             .then(response => {
                 setAddresses(response.data.address);
                 console.log("Check address: ", response.data)
             })
-            
+
             .catch(error => {
                 console.error('Error fetching addresses:', error);
             });
@@ -131,13 +131,14 @@ const AddressBook = () => {
                                                     <h1 className="dash__h1">Address Book</h1>
                                                     <div>
 
-                                                        <span className="dash__link dash__link--black u-s-m-r-8">
+                                                        {/* <span className="dash__link dash__link--black u-s-m-r-8">
 
                                                             <a href="/address-make-default">Make default shipping address</a></span>
 
                                                         <span className="dash__link dash__link--black">
 
-                                                            <a href="/address-make-default">Make default shipping address</a></span></div>
+                                                            <a href="/address-make-default">Make default shipping address</a></span> */}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -151,7 +152,7 @@ const AddressBook = () => {
                                                             <th>Address</th>
 
                                                             <th>Phone Number</th>
-                                                            <th>Status</th>
+                                                            {/* <th>Status</th> */}
                                                         </tr>
                                                     </thead>
 
@@ -167,7 +168,7 @@ const AddressBook = () => {
                                                                 <td>{address.phoneNumber}</td>
                                                                 <td>
                                                                     <div className="gl-text"></div>
-                                                                   
+
                                                                 </td>
                                                             </tr>
                                                         ))}
@@ -179,7 +180,7 @@ const AddressBook = () => {
                                         </div>
                                         <div>
 
-                                            <a className="dash__custom-link btn--e-brand-b-2" href="/edit-address"><i className="fas fa-plus u-s-m-r-8"></i>
+                                            <a className="dash__custom-link btn--e-brand-b-2" href={`/edit-address/${user.account.user.id}`}><i className="fas fa-plus u-s-m-r-8"></i>
 
                                                 <span>Add New Address</span></a></div>
                                     </div>

@@ -123,7 +123,7 @@ function Routers() {
           <Route path='/edit-address-detail/:id' element={<EditAddress />} />
           <Route path='/wish-list' element={<Wishlist />} />
           <Route path='/view-list-projectbooking/:bookingId' element={<ProjectBooking />} />
-          <Route path='/edit-address' element={<AddressBookEdit />} />
+          <Route path='/edit-address/:id' element={<AddressBookEdit />} />
           <Route path='/payment-option' element={<PaymentOption />} />
           <Route path='/manage-order/:id' element={<ManagerOrderDetail />} />
           <Route path='/my-order' element={<MyOrder />} />

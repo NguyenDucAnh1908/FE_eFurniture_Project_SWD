@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom'; // Import useParams hook
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+
 
 const EditAddress = () => {
     const [formData, setFormData] = useState({
@@ -15,6 +18,8 @@ const EditAddress = () => {
         districtName: '',
         wardName: ''
     });
+
+    const navigate = useNavigate()
 
     const { id } = useParams(); // Extract the id parameter from the URL
 
@@ -156,6 +161,8 @@ const EditAddress = () => {
         try {
             await axios.put(`http://localhost:8080/api/v1/address/update/${id}`, formData);
             console.log('Địa chỉ đã được cập nhật thành công!');
+            navigate("/address-book");
+            toast.success("Update Address Success");
         } catch (error) {
             console.error('Đã xảy ra lỗi khi cập nhật địa chỉ:', error);
         }

@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+
+
 
 const AddressBookEdit = () => {
     const [formData, setFormData] = useState({
@@ -15,9 +20,12 @@ const AddressBookEdit = () => {
         wardName: ''
     });
 
+    const navigate = useNavigate()
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
+    const { id } = useParams();
+
 
     useEffect(() => {
         axios.get('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', {
@@ -114,9 +122,11 @@ const AddressBookEdit = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(`http://localhost:8080/api/v1/address/create_address/1`, formData)
+        axios.post(`http://localhost:8080/api/v1/address/create_address/${id}`, formData)
             .then(response => {
                 console.log('Address created successfully:', response.data);
+                navigate("/address-book");
+                toast.success("Add New Address Success");
             })
             .catch(error => {
                 console.error('Error creating address:', error);
