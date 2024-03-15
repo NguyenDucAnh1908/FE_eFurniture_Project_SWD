@@ -138,7 +138,7 @@ const DesignDetail = () => {
                                         {/*====== End - Dashboard Features ======*/}
                                     </div>
                                     <div className="col-lg-9 col-md-12">
-                                        <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+                                         <div className="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
 
                                             <div className="dash__pad-2">
                                                 {designDetail && (
@@ -214,7 +214,6 @@ const DesignDetail = () => {
                             </div>
                         </div>
                     </div>
-                    {/*====== End - Section Content ======*/}
                 </div>
                 {/*====== End - Section 2 ======*/}
             </div>
