@@ -169,8 +169,12 @@ const Booking = () => {
                                                                     <div>
                                                                         <div className="manage-o__text-2 u-c-secondary">Booking #{booking.id}</div>
                                                                         <div>
-                                                                            <div className="manage-o__text-2 u-c-secondary" ><span className="manage-o__text-2 u-c-silver">Meet time:   </span> August 05 2018 10:29 PM</div>
-                                                                        </div>                                                                    </div>
+                                                                            <div className="manage-o__text-2 u-c-secondary">
+                                                                                <span className="manage-o__text-2 u-c-silver">Meet time: </span>
+                                                                                {booking.schedule ? booking.schedule : "Not confirmed"}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                     <div>
                                                                         <div className="dash__link dash__link--brand">
 
@@ -180,10 +184,7 @@ const Booking = () => {
                                                             </div>
                                                             <div className="manage-o__description">
                                                                 <div className="description__container">
-                                                                    <div className="description__img-wrap">
-
-                                                                        <img className="u-img-fluid" src="images/product/women/product8.jpg" alt="" /></div>
-                                                                    <div className="description-title">New Dress D Nice Elegant</div>
+                                                                    <div className="description-title">{booking.firstName} {booking.lastName}</div>
                                                                 </div>
                                                                 <div className="description__info-wrap">
                                                                     <div>
