@@ -61,7 +61,7 @@ function Routers() {
 
         {/* <Route path='/my-profile' element={<MyProfile />} /> */}
 
-        <Route path='/address-book' element={<AddressBook />} />
+        
 
         {/* <Route path='/my-order' element={<MyOrder />} /> */}
 
@@ -74,9 +74,7 @@ function Routers() {
         {/* <Route path='/wish-list' element={<Wishlist />} /> */}
 
 
-        <Route path='/booking-form' element={<BookingForm />} />
 
-        <Route path='/booking' element={<Booking />} />
 
         <Route path='/dashboard' element={<Dashboard />} />
 
@@ -116,7 +114,7 @@ function Routers() {
 
 
         <Route element={<PrivateRounter />}>
-        <Route path='/edit-address' element={<AddressBookEdit />} />
+          <Route path='/edit-address' element={<AddressBookEdit />} />
 
           <Route path='/check-out' element={<CheckOut />} />
           <Route path='/check-out/:id/thank-you' element={<CheckOutSuccess />} />
@@ -130,7 +128,9 @@ function Routers() {
           <Route path='/track-order' element={<TrackOrder />} />
           <Route path='/my-profile' element={<MyProfile />} />
           <Route path='/design-detail/:id' element={<DesignDetail />} />
-
+          <Route path='/booking-form' element={<BookingForm />} />
+          <Route path='/booking' element={<Booking />} />
+          <Route path='/address-book' element={<AddressBook />} />
         </Route>
 
 
