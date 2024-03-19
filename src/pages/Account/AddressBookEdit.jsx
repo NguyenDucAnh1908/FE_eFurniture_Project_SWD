@@ -262,6 +262,7 @@ const AddressBookEdit = () => {
                                                                 onChange={handleChange}
                                                                 required
                                                             />
+                                                         
                                                         </div>
                                                         <div class="u-s-m-b-30">
 
@@ -292,6 +293,8 @@ const AddressBookEdit = () => {
                                                                 value={formData.phoneNumber}
                                                                 onChange={handleChange}
                                                                 required
+                                                                pattern="[0-9]{10,11}"
+                                                                title="Please enter a valid phone number with 10-11 digits"
                                                             />
 
                                                         </div>

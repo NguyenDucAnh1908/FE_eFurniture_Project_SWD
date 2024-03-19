@@ -297,6 +297,8 @@ const EditAddress = () => {
                                                                 value={formData.phoneNumber}
                                                                 onChange={handleChange}
                                                                 required
+                                                                pattern="[0-9]{10,11}"
+                                                                title="Please enter a valid phone number with 10-11 digits" 
                                                             /></div>
                                                         <div className="u-s-m-b-30">
                                                             <label className="gl-label" htmlFor="address-street">STREET ADDRESS *</label>
