@@ -514,9 +514,9 @@ function Shop() {
                           <div className="u-s-m-b-8">
                             <select className="select-box select-box--transparent-b-2" onChange={handleLimitChange}>
                               <option value="1">Show: 1</option>
-                              <option value="12" selected>Show: 12</option>
-                              <option value="16">Show: 16</option>
-                              <option value="28">Show: 28</option>
+                              <option value="6" selected>Show: 6</option>
+                              <option value="9">Show: 9</option>
+                              <option value="12">Show: 12</option>
                             </select>
                           </div>
                           {/* <div className="u-s-m-b-8"><select className="select-box select-box--transparent-b-2">

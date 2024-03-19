@@ -35,6 +35,7 @@ import DesignDetail from '../pages/DesignDetail'
 import ThankYou from '../components/CheckOutSuccess/ThankYou'
 import EditAddress from '../pages/Account/EditAddress'
 import ManagerOrderDetail from "../pages/Account/ManagerOrderDetail";
+import EditProfile from "../pages/Account/EditProfile";
 
 function Routers() {
   return (
@@ -131,6 +132,7 @@ function Routers() {
           <Route path='/booking-form' element={<BookingForm />} />
           <Route path='/booking' element={<Booking />} />
           <Route path='/address-book' element={<AddressBook />} />
+          <Route path='/edit-profile/:id' element={<EditProfile />} />
         </Route>
 
 

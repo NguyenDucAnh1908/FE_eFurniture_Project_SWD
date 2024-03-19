@@ -181,7 +181,7 @@ const MyProfile = () => {
                                                                 <a data-modal="modal" data-modal-id="#/newsletter">Subscribe Newsletter</a></div>
                                                             <div className="u-s-m-b-16">
 
-                                                                <a className="dash__custom-link btn--e-transparent-brand-b-2" href="/edit-profile">Edit Profile</a></div>
+                                                                <Link className="dash__custom-link btn--e-transparent-brand-b-2" to={`/edit-profile/${userDetail.id}`}>Edit Profile</Link></div>
                                                             <div>
 
                                                                 <a className="dash__custom-link btn--e-brand-b-2" href="#">Change Password</a></div>
