@@ -206,7 +206,7 @@ function Home() {
                                         <div className="promotion-o">
                                             <div className="aspect aspect--bg-grey aspect--square">
 
-                                                <img className="aspect__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-vecislavas-popa-1643383.jpg?alt=media&token=18f4aeb6-8151-49fa-a9d6-c62fd821985d" alt="" /></div>
+                                                <img className="aspect__img" src="https://res.cloudinary.com/dbzzkebfm/image/upload/v1710946007/1_fyqakb.jpg" alt="" /></div>
                                             <div className="promotion-o__content">
 
                                                 <a className="promotion-o__link btn--e-white-brand" href="/product-category">Efurniture category</a></div>
@@ -228,7 +228,7 @@ function Home() {
                                         <div className="promotion-o">
                                             <div className="aspect aspect--bg-grey aspect--square">
 
-                                                <img className="aspect__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-jonathan-borba-5570225.jpg?alt=media&token=524e401e-0de7-4706-a1d1-10a9e250e715" alt="" /></div>
+                                                <img className="aspect__img" src="https://res.cloudinary.com/dbzzkebfm/image/upload/v1710946005/3_sthkb5.jpg" alt="" /></div>
                                             <div className="promotion-o__content">
 
                                                 <a className="promotion-o__link btn--e-white-brand" href="/product-tag">Efurniture Material</a></div>
@@ -238,7 +238,7 @@ function Home() {
                                         <div className="promotion-o">
                                             <div className="aspect aspect--bg-grey aspect--square">
 
-                                                <img className="aspect__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-max-vakhtbovycn-6587896.jpg?alt=media&token=b6810c50-1ec8-4268-b2b8-1aec9369d0d4" alt="" /></div>
+                                                <img className="aspect__img" src="https://res.cloudinary.com/dbzzkebfm/image/upload/v1710946005/2_prig0p.jpg" alt="" /></div>
                                             <div className="promotion-o__content">
 
                                                 <a className="promotion-o__link btn--e-white-brand" href="/product-brand">Efurniture Brand</a></div>
@@ -265,7 +265,7 @@ function Home() {
                                             <a className="collection" href="/shop">
                                                 <div className="aspect aspect--bg-grey aspect--square">
 
-                                                    <img className="aspect__img collection__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-eric-mufasa-1350789.jpg?alt=media&token=72c30b16-868b-47c3-b418-f813138155de" alt="" /></div>
+                                                    <img className="aspect__img collection__img" src="https://res.cloudinary.com/dbzzkebfm/image/upload/v1710946200/pexels-donald-tong-133919_ctjnpu.jpg" alt="" /></div>
                                             </a>
                                         </div>
                                         <div className="col-lg-7 col-md-7 u-s-m-b-30">
@@ -273,7 +273,7 @@ function Home() {
                                             <a className="collection" href="/shop">
                                                 <div className="aspect aspect--bg-grey aspect--1286-890">
 
-                                                    <img className="aspect__img collection__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-jonathan-borba-3285193.jpg?alt=media&token=5dc39cfe-5613-4a61-8cb4-1e52e6a6dfb0" alt="" /></div>
+                                                    <img className="aspect__img collection__img" src="https://res.cloudinary.com/dbzzkebfm/image/upload/v1710946199/pexels-pixabay-37347_kdczd2.jpg" alt="" /></div>
                                             </a>
                                         </div>
                                         <div className="col-lg-4 col-md-5 u-s-m-b-30">
@@ -281,7 +281,7 @@ function Home() {
                                             <a className="collection" href="/shop">
                                                 <div className="aspect aspect--bg-grey aspect--square">
 
-                                                    <img className="aspect__img collection__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-f-h-13201475.jpg?alt=media&token=8781dd14-418e-4b95-a5b9-7d30b94cd3c5" alt="" /></div>
+                                                    <img className="aspect__img collection__img" src="https://res.cloudinary.com/dbzzkebfm/image/upload/v1710946199/pexels-sammsara-luxury-modern-home-1099816_1_n6hpep.jpg" alt="" /></div>
                                             </a>
                                         </div>
                                         {/* <div className="col-lg-4 col-md-7 u-s-m-b-30">
@@ -297,7 +297,7 @@ function Home() {
                                             <a className="collection" href="/shop">
                                                 <div className="aspect aspect--bg-grey aspect--square">
 
-                                                    <img className="aspect__img collection__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-freemockupsorg-775219.jpg?alt=media&token=e4d21dd0-377a-4602-a366-8e4a81767071" alt="" /></div>
+                                                    <img className="aspect__img collection__img" src="https://res.cloudinary.com/dbzzkebfm/image/upload/v1710946198/pexels-pixabay-275484_1_fy8em2.jpg" alt="" /></div>
                                             </a>
                                         </div>
                                         <div className="col-lg-4 col-md-5 u-s-m-b-30">
@@ -305,7 +305,7 @@ function Home() {
                                             <a className="collection" href="/shop">
                                                 <div className="aspect aspect--bg-grey aspect--square">
 
-                                                    <img className="aspect__img collection__img" src="https://firebasestorage.googleapis.com/v0/b/efurniturestorage.appspot.com/o/images_eFurniture%2Fpexels-pixabay-220749.jpg?alt=media&token=23c05da0-cdff-479b-836c-d5d5ec4fc2ae" alt="" /></div>
+                                                    <img className="aspect__img collection__img" src="https://res.cloudinary.com/dbzzkebfm/image/upload/v1710932160/pexels-fauxels-3184191_xra46i.jpg" alt="" /></div>
                                             </a>
                                         </div>
                                     </div>

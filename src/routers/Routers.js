@@ -116,7 +116,6 @@ function Routers() {
 
         <Route element={<PrivateRounter />}>
           <Route path='/edit-address' element={<AddressBookEdit />} />
-
           <Route path='/check-out' element={<CheckOut />} />
           <Route path='/check-out/:id/thank-you' element={<CheckOutSuccess />} />
           <Route path='/edit-address-detail/:id' element={<EditAddress />} />
@@ -172,7 +171,7 @@ function Routers() {
 
         <Route path='/test' element={<Test />} />
 
-        <Route exact path='/product-detail-test' element={<IndexProductDetail />} />
+        {/* <Route exact path='/product-detail-test' element={<IndexProductDetail />} /> */}
 
       </Routes>
       {/* </BrowserRouter> */}

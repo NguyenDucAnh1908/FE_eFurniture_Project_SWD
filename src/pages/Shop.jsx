@@ -539,7 +539,6 @@ function Shop() {
                         <div className="col-lg-4 col-md-6 col-sm-6">
                           <div key={product.id} className="product-m">
                             <div className="product-m__thumb">
-
                               <Link className="aspect aspect--bg-grey aspect--square u-d-block" to={`/product-detail/${product.id}`}>
 
                                 <img className="aspect__img" src={product.thumbnail} alt="" /></Link>
