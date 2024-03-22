@@ -15,6 +15,7 @@ const MyOrder = () => {
             const id = user.account.user.id;
             const res = await axios.get(`http://localhost:8080/api/v1/orders/user/${id}`)
             setOrderUsers(res.data)
+            console.log("Check my order: ", res.data)
         } catch (error) {
             console.error('Error fetching order detail:', error);
         }

@@ -195,10 +195,10 @@ const CheckOut = () => {
             // console.log("Check Check out order: ", res);
             // setTimeout(() => {
             //     setLoading(false);
+            emptyCart();
             navigate(`/check-out/${id}/thank-you`);
             // }, 1000);
             if (res && res.id) {
-                emptyCart();
                 setUserId('');
                 setPhoneNumber('');
                 setEmail('');
