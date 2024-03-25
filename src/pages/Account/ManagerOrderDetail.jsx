@@ -188,7 +188,7 @@ const ManagerOrderDetail = () => {
                                                                 </div>
                                                             </div>
                                                         </div> */}
-                                                        <div className="manage-o__timeline">
+                                                        {/* <div className="manage-o__timeline">
                                                             <div className="timeline-row">
                                                                 {statusOrder.map((status, index) => (
                                                                     <div className={`col-lg-4 u-s-m-b-30 ${index <= currentIndex ? 'timeline-active' : ''}`} key={status.id}>
@@ -201,7 +201,24 @@ const ManagerOrderDetail = () => {
                                                                     </div>
                                                                 ))}
                                                             </div>
-                                                        </div>
+                                                        </div> */}
+                                                        {orderDetail && (
+                                                            <div className="manage-o__timeline">
+                                                                <div className="timeline-row">
+                                                                    {statusOrder.map((status, index) => (
+                                                                        <div className={`col-lg-4 u-s-m-b-30 ${index <= currentIndex ? 'timeline-active' : ''}`} key={status.id}>
+                                                                            <div className="timeline-step">
+                                                                                <div className={`timeline-l-i ${index <= currentIndex ? 'timeline-l-i--finish' : ''}`}>
+                                                                                    <span className="timeline-circle" />
+                                                                                </div>
+                                                                                <span className="timeline-text">{status.name}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+
 
                                                         {orderDetail.order_details.map((item, index) => (
                                                             <div className="manage-o__description">
